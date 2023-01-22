@@ -13,9 +13,9 @@ class DBHandler:
         else:
             self.conn = sqlite3.connect(self.db_name)
             self.cursor = self.conn.cursor()
-            
+
         self.create_table("users", "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, contact TEXT, username TEXT, password TEXT")
-  
+
 
 
     def create_table(self, table_name, columns):
