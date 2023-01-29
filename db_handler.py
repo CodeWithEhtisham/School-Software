@@ -10,11 +10,9 @@ class DBHandler:
             # create db
             self.conn = sqlite3.connect(self.db_name)
             self.cursor = self.conn.cursor()
-            print(f"Database {self.db_name} created successfully")
         else:
             self.conn = sqlite3.connect(self.db_name)
             self.cursor = self.conn.cursor()
-            print(f"Database {self.db_name} already exists")
             
         self.create_table("users", "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, contact TEXT, username TEXT, password TEXT")
   
