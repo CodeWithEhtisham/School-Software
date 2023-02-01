@@ -28,7 +28,7 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
         self.btn_student.clicked.connect(self.student)
         self.btn_fees.clicked.connect(self.fees)
         self.btn_results.clicked.connect(self.results)
-        
+
         self.btn_add_fees.clicked.connect(self.add_fees)
         self.btn_add_result.clicked.connect(self.exam_details)
         self.btn_pay_fee.clicked.connect(self.pay_fee)
