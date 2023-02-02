@@ -19,7 +19,7 @@ from exam_details import ExamDetailsWindow
 from student_details import StudentDetailWindow
 from pay_fee import PayFeeWindow
 
-FORM_MAIN, _ = loadUiType('main_window.ui')
+FORM_MAIN, _ = loadUiType('ui/main_window.ui')
 
 
 class MainWindow(QMainWindow, FORM_MAIN):

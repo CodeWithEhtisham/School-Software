@@ -11,7 +11,7 @@ import sys
 from os import path
 from PyQt5.uic import loadUiType
 
-FORM_MAIN,_= loadUiType('add_student.ui')
+FORM_MAIN,_= loadUiType('ui/add_student.ui')
 
 
 class AddStudentWindow(QMainWindow, FORM_MAIN):

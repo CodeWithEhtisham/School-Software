@@ -11,7 +11,7 @@ import sys
 from os import path
 from PyQt5.uic import loadUiType
 
-FORM_MAIN, _ = loadUiType('pay_fee.ui')
+FORM_MAIN, _ = loadUiType('ui/pay_fee.ui')
 
 
 class PayFeeWindow(QMainWindow, FORM_MAIN):

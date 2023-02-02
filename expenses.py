@@ -11,7 +11,7 @@ import sys
 from os import path
 from PyQt5.uic import loadUiType
 
-FORM_MAIN, _ = loadUiType('expenses.ui')
+FORM_MAIN, _ = loadUiType('ui/expenses.ui')
 
 
 class ExpensesWindow(QMainWindow, FORM_MAIN):

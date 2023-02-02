@@ -14,7 +14,7 @@ from add_fees import AddFeesWindow
 from exam_details import ExamDetailsWindow
 from pay_fee import PayFeeWindow
 
-FORM_MAIN, _ = loadUiType('student_details.ui')
+FORM_MAIN, _ = loadUiType('ui/student_details.ui')
 
 
 class StudentDetailWindow(QMainWindow, FORM_MAIN):

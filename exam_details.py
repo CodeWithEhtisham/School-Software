@@ -11,7 +11,7 @@ import sys
 from os import path
 from PyQt5.uic import loadUiType
 
-FORM_MAIN, _ = loadUiType('exam_details.ui')
+FORM_MAIN, _ = loadUiType('ui/exam_details.ui')
 
 
 class ExamDetailsWindow(QMainWindow, FORM_MAIN):
