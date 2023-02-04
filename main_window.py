@@ -18,6 +18,8 @@ from expenses import ExpensesWindow
 from exam_details import ExamDetailsWindow
 from student_details import StudentDetailWindow
 from pay_fee import PayFeeWindow
+from db_handler import DBHandler
+
 
 FORM_MAIN, _ = loadUiType('ui/main_window.ui')
 
@@ -26,11 +28,17 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupUi(self)
+        self.db=DBHandler()
         self.showMaximized()
         self.Handle_Buttons()
+        # self.update()
 
      # HANDLE BUTTONS
     def Handle_Buttons(self):
+        self.btn_logout.clicked.connect(self.logout)
+        self.btn_change_password.clicked.connect(self.change_password)
+        self.btn_edit_user.clicked.connect(self.edit_user)
+        self.btn_add_school_details.clicked.connect(self.add_school_details)
         self.btn_home.clicked.connect(self.home)
         self.btn_students.clicked.connect(self.students)
         self.btn_class.clicked.connect(self.student_class)
@@ -54,6 +62,24 @@ class MainWindow(QMainWindow, FORM_MAIN):
         # self.btn_driver.clicked.connect(self.Driver)
         # self.btn_admin.clicked.connect(self.Admin)
 
+    # def udpate(self):
+    #     self.update_expense_table()
+    def update_expense_table(self):
+        data = self.db.select_all(
+            table_name='expenses',
+            columns="date,hoa,amount,payment_type,recipient_name"
+        )
+        if data:
+            amount = 0
+            self.expense_table.setRowCount(0)
+            for row, form in enumerate(data):
+                self.expense_table.insertRow(row)
+                amount += int(form[2])
+                for column, item in enumerate(form):
+                    self.expense_table.setItem(row, column, QTableWidgetItem(str(item)))
+        self.total_expense.setText(str(amount))
+
+
     def home(self):
         self.stackedWidget.setCurrentWidget(self.home_page)
 
@@ -68,6 +94,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def expenses(self):
         self.stackedWidget.setCurrentWidget(self.expense_page)
+        self.update_expense_table()
 
     def settings(self):
         self.stackedWidget.setCurrentWidget(self.settings_page)
@@ -100,10 +127,31 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def add_expense(self):
         self.add_expense_window = ExpensesWindow()
         self.add_expense_window.show()
+        self.add_expense_window.btn_save.clicked.connect(self.update_expense_table)
 
     def student_details(self):
         self.student_details_window = StudentDetailWindow()
         self.student_details_window.show()
+
+    def logout(self):
+        self.close()
+        from login_page import LoginWindow
+        self.login_window = LoginWindow()
+        self.login_window.show()
+
+    def change_password(self):
+        from update_password import ChangePasswordWindow
+        self.change_password_window = ChangePasswordWindow()
+        self.change_password_window.show()
+
+
+    def edit_user(self):
+        from update_user_details import UpdateUserWindow
+        self.update_user_window = UpdateUserWindow()
+        self.update_user_window.show()
+
+    def add_school_details(self):
+        pass
 
 
 def main():

@@ -15,7 +15,7 @@ class DBHandler:
             self.cursor = self.conn.cursor()
 
         self.create_table("users", "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, contact TEXT, username TEXT, password TEXT")
-
+        self.create_table("expenses", "id INTEGER PRIMARY KEY AUTOINCREMENT, hoa TEXT, amount REAL, date TEXT, payment_type TEXT, recipient_name TEXT, comment TEXT DEFAULT 'No Comment'")
 
 
     def create_table(self, table_name, columns):

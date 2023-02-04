@@ -6,7 +6,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QApplication
-
+from db_handler import DBHandler
 import sys
 from os import path
 from PyQt5.uic import loadUiType
@@ -18,25 +18,45 @@ class ExpensesWindow(QMainWindow, FORM_MAIN):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupUi(self)
-        # self.Handle_Buttons()
+        self.expense_date.setDate(QDate.currentDate())
+        self.db=DBHandler()
+        self.Handle_Buttons()
 
      # HANDLE BUTTONS
-    # def Handle_Buttons(self):
-    #     self.btn_home.clicked.connect(self.home)
-    #     self.btn_students.clicked.connect(self.students)
-    #     self.btn_add_student.clicked.connect(self.add_student)
-    #     # self.btn_driver.clicked.connect(self.Driver)
-    #     # self.btn_admin.clicked.connect(self.Admin)
+    def Handle_Buttons(self):
+        self.btn_save.clicked.connect(self.save_expense)
+        self.btn_cancel.clicked.connect(self.close)
+        self.txt_amount.textChanged.connect(self.amount_changed)
 
-    # def home(self):
-    #     self.stackedWidget.setCurrentWidget(self.home_page)
+    def amount_changed(self):
+        # add separator to amount
+        amount=self.txt_amount.text()
+        if amount:
+            amount=amount.replace(",","")
+            self.txt_amount.setText("{:,}".format(int(amount)))
 
-    # def students(self):
-    #     self.stackedWidget.setCurrentWidget(self.students_page)
+    def save_expense(self):
+        date=self.expense_date.date().toString("dd/MM/yyyy")
+        head_of_account=self.txt_hoa.text()
+        amount=self.txt_amount.text().replace(",","")
+        payment_type=self.txt_payment_type.text()
+        recipient=self.txt_recipient.text()
+        comment=self.txt_comment.text()
 
-    # def add_student(self):
-    #     self.add_student_window = AddStudnetWindow()
-    #     self.add_student_window.show()
+        if head_of_account and amount and payment_type and recipient:
+            try:
+                self.db.insert(
+                    table_name="expenses",
+                    columns="date,hoa,amount,payment_type,recipient_name,comment",
+                    values=f"'{date}','{head_of_account}','{int(amount)}','{payment_type}','{recipient}','{comment if comment else 'No comment'}'"
+                )
+                QMessageBox.information(self, "Success", "Expense added successfully")
+                self.close()
+            
+            except Exception as e:
+                QMessageBox.information(self, "Error", str(e))
+
+
 
 
 def main():

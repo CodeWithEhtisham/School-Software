@@ -1007,7 +1007,7 @@ QLineEdit {
          </widget>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget">
+         <widget class="QTableWidget" name="expense_table">
           <property name="selectionMode">
            <enum>QAbstractItemView::SingleSelection</enum>
           </property>
@@ -1119,7 +1119,7 @@ QLineEdit {
             </widget>
            </item>
            <item alignment="Qt::AlignLeft">
-            <widget class="QLabel" name="label_7">
+            <widget class="QLabel" name="total_expense">
              <property name="font">
               <font>
                <family>Calibri</family>
@@ -1701,7 +1701,7 @@ QLineEdit {
           </size>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="btn_edit_user">
          <property name="geometry">
           <rect>
            <x>810</x>
@@ -1738,7 +1738,7 @@ QLineEdit {
           </size>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="btn_change_password">
          <property name="geometry">
           <rect>
            <x>1060</x>
