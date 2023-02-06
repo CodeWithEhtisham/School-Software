@@ -7,20 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>500</height>
+    <height>550</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>500</width>
-    <height>500</height>
+    <height>550</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Pay Fee</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/icons/assets/icons/logo.png</normaloff>:/icons/assets/icons/logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -214,6 +214,19 @@ QComboBox {
            </widget>
           </item>
           <item>
+           <widget class="QLabel" name="label_2">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Description</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="label_14">
             <property name="font">
              <font>
@@ -287,6 +300,16 @@ QComboBox {
            </widget>
           </item>
           <item>
+           <widget class="QLineEdit" name="txt_description">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLineEdit" name="txt_total_remaining">
             <property name="font">
              <font>
@@ -301,6 +324,70 @@ QComboBox {
            </widget>
           </item>
          </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="widget" native="true">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="leftMargin">
+        <number>200</number>
+       </property>
+       <item>
+        <widget class="QCheckBox" name="cb_annual_fund">
+         <property name="font">
+          <font>
+           <family>Calibri</family>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Annual Fund</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cb_comp_lab_fee">
+         <property name="font">
+          <font>
+           <family>Calibri</family>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Computer Lab Fee</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cb_science_lab_fee">
+         <property name="font">
+          <font>
+           <family>Calibri</family>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Science Lab Fee</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cb_addmission_fee">
+         <property name="font">
+          <font>
+           <family>Calibri</family>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Addmission Fee</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -325,7 +412,7 @@ QComboBox {
         <number>15</number>
        </property>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="btn_save">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -344,7 +431,7 @@ QComboBox {
           <string>Save</string>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources.qrc">
            <normaloff>:/icons/assets/icons/save.png</normaloff>:/icons/assets/icons/save.png</iconset>
          </property>
          <property name="iconSize">
@@ -375,7 +462,7 @@ QComboBox {
           <string>Cancel</string>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources.qrc">
            <normaloff>:/icons/assets/icons/close.png</normaloff>:/icons/assets/icons/close.png</iconset>
          </property>
          <property name="iconSize">
@@ -393,7 +480,7 @@ QComboBox {
   </widget>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

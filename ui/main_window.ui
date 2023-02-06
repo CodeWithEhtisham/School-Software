@@ -17,7 +17,11 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Software</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/icons/assets/icons/logo.png</normaloff>:/icons/assets/icons/logo.png</iconset>
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
@@ -294,7 +298,7 @@ QDateEdit {
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>5</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="home_page">
        <property name="styleSheet">
@@ -347,7 +351,7 @@ QDateEdit {
            </font>
           </property>
           <property name="text">
-           <string>Home</string>
+           <string>Welcome</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -502,6 +506,7 @@ QDateEdit {
         <string notr="true">
 #lbl_students {
 	background-color: #81d4fa;
+	padding: 10px;
 }
 
 #student_upper_widget {
@@ -541,7 +546,7 @@ QDateEdit {
            <set>Qt::AlignCenter</set>
           </property>
           <property name="margin">
-           <number>10</number>
+           <number>0</number>
           </property>
          </widget>
         </item>
@@ -902,7 +907,7 @@ QDateEdit {
             </widget>
            </item>
            <item alignment="Qt::AlignLeft">
-            <widget class="QLabel" name="label_5">
+            <widget class="QLabel" name="lbl_total_students">
              <property name="font">
               <font>
                <family>Calibri</family>
@@ -932,6 +937,7 @@ QDateEdit {
         <string notr="true">
 #lbl_expenses {
 	background-color: #81d4fa;
+	padding: 10px;
 }
 
 #exp_upper_widget {
@@ -971,7 +977,7 @@ QDateEdit {
            <set>Qt::AlignCenter</set>
           </property>
           <property name="margin">
-           <number>10</number>
+           <number>0</number>
           </property>
          </widget>
         </item>
@@ -1025,6 +1031,35 @@ QDateEdit {
              </property>
              <property name="placeholderText">
               <string>Search Here</string>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignLeft">
+            <widget class="QPushButton" name="btn_expense_type">
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Calibri</family>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Expense Type</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../resources.qrc">
+               <normaloff>:/icons/assets/icons/sales.png</normaloff>:/icons/assets/icons/sales.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>30</width>
+               <height>30</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -1157,6 +1192,19 @@ QDateEdit {
             </font>
            </property>
           </column>
+          <column>
+           <property name="text">
+            <string>Comments</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Calibri</family>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
          </widget>
         </item>
         <item>
@@ -1206,6 +1254,7 @@ QDateEdit {
         <string notr="true">
 #lbl_class {
 	background-color: #81d4fa;
+	padding: 10px;
 }
 
 #class_upper_widget {
@@ -1245,7 +1294,7 @@ QDateEdit {
            <set>Qt::AlignCenter</set>
           </property>
           <property name="margin">
-           <number>10</number>
+           <number>0</number>
           </property>
          </widget>
         </item>
@@ -1284,7 +1333,7 @@ QDateEdit {
             </widget>
            </item>
            <item alignment="Qt::AlignLeft">
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="btn_edit_class">
              <property name="minimumSize">
               <size>
                <width>150</width>
@@ -1344,7 +1393,7 @@ QDateEdit {
             </widget>
            </item>
            <item alignment="Qt::AlignRight">
-            <widget class="QPushButton" name="pushButton_2">
+            <widget class="QPushButton" name="btn_edit_subject">
              <property name="minimumSize">
               <size>
                <width>150</width>
@@ -1631,7 +1680,7 @@ QDateEdit {
             </widget>
            </item>
            <item alignment="Qt::AlignLeft">
-            <widget class="QLabel" name="label_9">
+            <widget class="QLabel" name="lbl_total_classes">
              <property name="font">
               <font>
                <family>Calibri</family>
@@ -1665,7 +1714,7 @@ QDateEdit {
             </widget>
            </item>
            <item alignment="Qt::AlignLeft">
-            <widget class="QLabel" name="label_11">
+            <widget class="QLabel" name="lbl_total_subjects">
              <property name="font">
               <font>
                <family>Calibri</family>
@@ -1695,6 +1744,7 @@ QDateEdit {
         <string notr="true">
 #lbl_reports {
 	background-color: #81d4fa;
+	padding: 10px;
 }
 
 #reports_upper_widget {
@@ -1735,7 +1785,7 @@ QDateEdit {
            <set>Qt::AlignCenter</set>
           </property>
           <property name="margin">
-           <number>10</number>
+           <number>0</number>
           </property>
          </widget>
         </item>
@@ -1989,6 +2039,32 @@ QDateEdit {
           </column>
           <column>
            <property name="text">
+            <string>Class</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Calibri</family>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Challan No.</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Calibri</family>
+             <pointsize>14</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
             <string>Paid Amount</string>
            </property>
            <property name="font">
@@ -2216,6 +2292,7 @@ QDateEdit {
 
 #lbl_settings {
 	background-color: #81d4fa;
+	padding: 10px;
 }
 
 #settings_upper_widget {
@@ -2255,7 +2332,7 @@ QDateEdit {
            <set>Qt::AlignCenter</set>
           </property>
           <property name="margin">
-           <number>10</number>
+           <number>0</number>
           </property>
          </widget>
         </item>

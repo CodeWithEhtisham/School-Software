@@ -15,8 +15,11 @@ from add_fees import AddFeesWindow
 from add_class import AddClassWindow
 from add_subject import AddSubjectWindow
 from expenses import ExpensesWindow
+from expense_type import ExpenseTypeWindow
 from exam_details import ExamDetailsWindow
 from student_details import StudentDetailWindow
+from monthly_report import MonthlyReportWindow
+from yearly_report import YearlyReportWindow
 from pay_fee import PayFeeWindow
 from db_handler import DBHandler
 
@@ -28,7 +31,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupUi(self)
-        self.db=DBHandler()
+        self.db = DBHandler()
         self.showMaximized()
         self.Handle_Buttons()
         # self.update()
@@ -55,15 +58,19 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.btn_add_subject.clicked.connect(self.add_subject)
 
         self.btn_add_expense.clicked.connect(self.add_expense)
+        self.btn_expense_type.clicked.connect(self.expense_type)
+
+        self.btn_monthly.clicked.connect(self.monthly_report)
+        self.btn_yearly.clicked.connect(self.yearly_report)
 
         self.students_table.doubleClicked.connect(self.student_details)
-
 
         # self.btn_driver.clicked.connect(self.Driver)
         # self.btn_admin.clicked.connect(self.Admin)
 
     # def udpate(self):
     #     self.update_expense_table()
+
     def update_expense_table(self):
         data = self.db.select_all(
             table_name='expenses',
@@ -76,9 +83,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
                 self.expense_table.insertRow(row)
                 amount += int(form[2])
                 for column, item in enumerate(form):
-                    self.expense_table.setItem(row, column, QTableWidgetItem(str(item)))
+                    self.expense_table.setItem(
+                        row, column, QTableWidgetItem(str(item)))
         self.total_expense.setText(str(amount))
-
 
     def home(self):
         self.stackedWidget.setCurrentWidget(self.home_page)
@@ -98,7 +105,6 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def settings(self):
         self.stackedWidget.setCurrentWidget(self.settings_page)
-
 
     def add_student(self):
         self.add_student_window = AddStudentWindow()
@@ -127,7 +133,12 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def add_expense(self):
         self.add_expense_window = ExpensesWindow()
         self.add_expense_window.show()
-        self.add_expense_window.btn_save.clicked.connect(self.update_expense_table)
+        self.add_expense_window.btn_save.clicked.connect(
+            self.update_expense_table)
+
+    def expense_type(self):
+        self.expense_type_window = ExpenseTypeWindow()
+        self.expense_type_window.show()
 
     def student_details(self):
         self.student_details_window = StudentDetailWindow()
@@ -144,7 +155,6 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.change_password_window = ChangePasswordWindow()
         self.change_password_window.show()
 
-
     def edit_user(self):
         from update_user_details import UpdateUserWindow
         self.update_user_window = UpdateUserWindow()
@@ -152,6 +162,14 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def add_school_details(self):
         pass
+
+    def monthly_report(self):
+        self.monthly_report_window = MonthlyReportWindow()
+        self.monthly_report_window.show()
+
+    def yearly_report(self):
+        self.yearly_report_window = YearlyReportWindow()
+        self.yearly_report_window.show()
 
 
 def main():

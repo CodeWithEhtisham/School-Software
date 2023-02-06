@@ -20,7 +20,7 @@
    <string>Student Detail</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/icons/assets/icons/logo.png</normaloff>:/icons/assets/icons/logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -130,7 +130,7 @@ QComboBox {
           <string>Student</string>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources.qrc">
            <normaloff>:/icons/assets/icons/user.png</normaloff>:/icons/assets/icons/user.png</iconset>
          </property>
          <property name="iconSize">
@@ -161,7 +161,7 @@ QComboBox {
           <string>Fees</string>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources.qrc">
            <normaloff>:/icons/assets/icons/fee.png</normaloff>:/icons/assets/icons/fee.png</iconset>
          </property>
          <property name="iconSize">
@@ -192,7 +192,7 @@ QComboBox {
           <string>Result</string>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources.qrc">
            <normaloff>:/icons/assets/icons/results.png</normaloff>:/icons/assets/icons/results.png</iconset>
          </property>
          <property name="iconSize">
@@ -475,7 +475,7 @@ QComboBox {
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
-               <widget class="QLabel" name="label_30">
+               <widget class="QLabel" name="lbl_admission_date">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -488,7 +488,7 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_29">
+               <widget class="QLabel" name="lbl_admission_no">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -501,7 +501,7 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_27">
+               <widget class="QLabel" name="lbl_father_name">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -514,7 +514,7 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_26">
+               <widget class="QLabel" name="lbl_dob">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -527,7 +527,7 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_23">
+               <widget class="QLabel" name="lbl_address">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -540,7 +540,7 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_32">
+               <widget class="QLabel" name="lbl_contact">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -553,7 +553,7 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_24">
+               <widget class="QLabel" name="lbl_gender">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -566,7 +566,7 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_33">
+               <widget class="QLabel" name="lbl_class">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -579,7 +579,7 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_25">
+               <widget class="QLabel" name="lbl_section">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -592,7 +592,7 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_31">
+               <widget class="QLabel" name="lbl_last_school">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -605,7 +605,7 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_34">
+               <widget class="QLabel" name="lbl_special_case">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -638,16 +638,16 @@ QComboBox {
          <number>0</number>
         </property>
         <property name="leftMargin">
-         <number>5</number>
+         <number>0</number>
         </property>
         <property name="topMargin">
          <number>0</number>
         </property>
         <property name="rightMargin">
-         <number>5</number>
+         <number>0</number>
         </property>
         <property name="bottomMargin">
-         <number>5</number>
+         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="lbl_fees">
@@ -666,7 +666,7 @@ QComboBox {
            <set>Qt::AlignCenter</set>
           </property>
           <property name="margin">
-           <number>7</number>
+           <number>10</number>
           </property>
          </widget>
         </item>
@@ -702,7 +702,7 @@ QComboBox {
                  <string>Add Fees</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="resources.qrc">
+                 <iconset resource="../resources.qrc">
                   <normaloff>:/icons/assets/icons/results.png</normaloff>:/icons/assets/icons/results.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -733,7 +733,7 @@ QComboBox {
                  <string>Pay Fee</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="resources.qrc">
+                 <iconset resource="../resources.qrc">
                   <normaloff>:/icons/assets/icons/sales.png</normaloff>:/icons/assets/icons/sales.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -745,7 +745,7 @@ QComboBox {
                </widget>
               </item>
               <item alignment="Qt::AlignRight">
-               <widget class="QPushButton" name="pushButton">
+               <widget class="QPushButton" name="btn_edit_fee">
                 <property name="minimumSize">
                  <size>
                   <width>35</width>
@@ -756,7 +756,7 @@ QComboBox {
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="resources.qrc">
+                 <iconset resource="../resources.qrc">
                   <normaloff>:/icons/assets/icons/edit.png</normaloff>:/icons/assets/icons/edit.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -793,7 +793,7 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_3">
+               <widget class="QLabel" name="lbl_remaining_fee">
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -832,7 +832,7 @@ QComboBox {
             <number>0</number>
            </property>
            <item>
-            <widget class="QTableWidget" name="tableWidget_2">
+            <widget class="QTableWidget" name="fees_table">
              <property name="frameShape">
               <enum>QFrame::Box</enum>
              </property>
@@ -893,6 +893,19 @@ QComboBox {
              <column>
               <property name="text">
                <string>Challan No.</string>
+              </property>
+              <property name="font">
+               <font>
+                <family>Calibri</family>
+                <pointsize>14</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Description</string>
               </property>
               <property name="font">
                <font>
@@ -1221,7 +1234,7 @@ QComboBox {
                 <property name="minimumSize">
                  <size>
                   <width>150</width>
-                  <height>40</height>
+                  <height>35</height>
                  </size>
                 </property>
                 <property name="font">
@@ -1236,7 +1249,7 @@ QComboBox {
                  <string>Add Result</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="resources.qrc">
+                 <iconset resource="../resources.qrc">
                   <normaloff>:/icons/assets/icons/results.png</normaloff>:/icons/assets/icons/results.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -1248,11 +1261,11 @@ QComboBox {
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox">
+               <widget class="QComboBox" name="select_term">
                 <property name="minimumSize">
                  <size>
                   <width>150</width>
-                  <height>40</height>
+                  <height>35</height>
                  </size>
                 </property>
                 <property name="font">
@@ -1295,12 +1308,21 @@ QComboBox {
          </widget>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget">
+         <widget class="QTableWidget" name="table_1st_term">
           <property name="frameShape">
            <enum>QFrame::Box</enum>
           </property>
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
           </property>
           <property name="rowCount">
            <number>2</number>
@@ -1378,12 +1400,21 @@ QComboBox {
          </widget>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget_3">
+         <widget class="QTableWidget" name="table_2nd_term">
           <property name="frameShape">
            <enum>QFrame::Box</enum>
           </property>
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
           </property>
           <property name="rowCount">
            <number>2</number>
@@ -1474,12 +1505,21 @@ QComboBox {
          </widget>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget_4">
+         <widget class="QTableWidget" name="table_3rd_term">
           <property name="frameShape">
            <enum>QFrame::Box</enum>
           </property>
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
           </property>
           <property name="rowCount">
            <number>2</number>
@@ -1599,7 +1639,7 @@ QComboBox {
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_7">
+            <widget class="QLabel" name="lbl_total_marks">
              <property name="font">
               <font>
                <family>Calibri</family>
@@ -1633,7 +1673,7 @@ QComboBox {
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_8">
+            <widget class="QLabel" name="lbl_obtain_marks">
              <property name="font">
               <font>
                <family>Calibri</family>
@@ -1664,7 +1704,7 @@ QComboBox {
   </widget>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>
