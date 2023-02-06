@@ -67,19 +67,78 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
         # self.btn_driver.clicked.connect(self.Driver)
         # self.btn_admin.clicked.connect(self.Admin)
+        self.txt_expense_search.textChanged.connect(self.search_expense)
+        self.btn_expense_refresh.clicked.connect(self.update_expense_table)
+        self.class_table.doubleClicked.connect(self.update_subject_table)
+
+    def update_subject_table(self):
+        class_id = self.class_table.currentItem().text()
+        class_id = self.db.select(
+            table_name='classes',
+            columns="id",
+            condition=f"class_name = '{class_id}'")
+        class_id = class_id[0][0]
+        data = self.db.select(
+            table_name='subjects',
+            columns="subject_name,passing_mark,total_mark",
+            condition=f"class_id = '{class_id}'")
+        if data:
+            ln=str(len(data))
+            self.subjects_table.setRowCount(0)
+            for row, form in enumerate(data):
+                self.subjects_table.insertRow(row)
+                for column, item in enumerate(form):
+                    self.subjects_table.setItem(
+                        row, column, QTableWidgetItem(str(item)))
+            self.lbl_total_subjects.setText(ln)
+        else:
+            self.subjects_table.setRowCount(0)
+            self.lbl_total_subjects.setText("0")
+
+    def update_class_table(self,classes=None):
+        print("classes",classes)
+        if classes is None or classes==False:
+            classes = self.db.select_all(
+                table_name='classes',
+                columns="class_name",
+            )
+        if classes:
+            ln=str(len(classes))
+            self.class_table.setRowCount(0)
+            for row, form in enumerate(classes):
+                self.class_table.insertRow(row)
+                for column, item in enumerate(form):
+                    self.class_table.setItem(
+                        row, column, QTableWidgetItem(str(item)))
+
+            self.lbl_total_classes.setText(ln)
+
+
+
+    def search_expense(self):
+        search = self.txt_expense_search.text()
+        data = self.db.select(
+            table_name='expenses',
+            columns="date,hoa,amount,payment_type,recipient_name,comment",
+            condition=f"date LIKE '%{search}%' OR hoa LIKE '%{search}%' OR amount LIKE '%{search}%' OR payment_type LIKE '%{search}%' OR recipient_name LIKE '%{search}%' OR comment LIKE '%{search}%'")
+        if data:
+            self.update_expense_table(data)
+        else:
+            self.update_expense_table()
 
     # def udpate(self):
     #     self.update_expense_table()
 
-    def update_expense_table(self):
-        data = self.db.select_all(
-            table_name='expenses',
-            columns="date,hoa,amount,payment_type,recipient_name"
-        )
-        if data:
+    def update_expense_table(self,expense=None):
+        if expense is None or expense==False:
+            expense = self.db.select_all(
+                table_name='expenses',
+                columns="date,hoa,amount,payment_type,recipient_name,comment",
+            )
+        if expense:
             amount = 0
             self.expense_table.setRowCount(0)
-            for row, form in enumerate(data):
+            for row, form in enumerate(expense):
                 self.expense_table.insertRow(row)
                 amount += int(form[2])
                 for column, item in enumerate(form):
@@ -95,6 +154,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def student_class(self):
         self.stackedWidget.setCurrentWidget(self.class_page)
+        self.update_class_table()
 
     def reports(self):
         self.stackedWidget.setCurrentWidget(self.reports_page)
@@ -125,10 +185,20 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def add_class(self):
         self.add_class_window = AddClassWindow()
         self.add_class_window.show()
+        self.add_class_window.btn_save.clicked.connect(self.update_class_table)
 
     def add_subject(self):
-        self.add_subject_window = AddSubjectWindow()
-        self.add_subject_window.show()
+        selected_row = self.class_table.currentRow()
+        if selected_row == -1:
+            QMessageBox.warning(
+                self, "Error", "Please select a class to add subject")
+            return
+        selected_class = self.class_table.item(selected_row, 0).text()
+        if selected_class:
+            self.add_subject_window = AddSubjectWindow(selected_class)
+            self.add_subject_window.show()
+            self.add_subject_window.btn_save.clicked.connect(
+                self.update_subject_table)
 
     def add_expense(self):
         self.add_expense_window = ExpensesWindow()

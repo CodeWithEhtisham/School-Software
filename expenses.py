@@ -27,6 +27,9 @@ class ExpensesWindow(QMainWindow, FORM_MAIN):
         self.btn_save.clicked.connect(self.save_expense)
         self.btn_cancel.clicked.connect(self.close)
         self.txt_amount.textChanged.connect(self.amount_changed)
+        self.select_hoa.addItems(
+            [item[0] for item in self.db.select_all(table_name="expense_types", columns="head_of_account")]
+        )
 
     def amount_changed(self):
         # add separator to amount
@@ -37,7 +40,7 @@ class ExpensesWindow(QMainWindow, FORM_MAIN):
 
     def save_expense(self):
         date=self.expense_date.date().toString("dd/MM/yyyy")
-        head_of_account=self.txt_hoa.text()
+        head_of_account=self.select_hoa.currentText()
         amount=self.txt_amount.text().replace(",","")
         payment_type=self.txt_payment_type.text()
         recipient=self.txt_recipient.text()

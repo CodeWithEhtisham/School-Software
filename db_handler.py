@@ -16,7 +16,9 @@ class DBHandler:
 
         self.create_table("users", "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, contact TEXT, username TEXT, password TEXT")
         self.create_table("expenses", "id INTEGER PRIMARY KEY AUTOINCREMENT, hoa TEXT, amount REAL, date TEXT, payment_type TEXT, recipient_name TEXT, comment TEXT DEFAULT 'No Comment'")
-
+        self.create_table("expense_types", "id INTEGER PRIMARY KEY AUTOINCREMENT, head_of_account TEXT")
+        self.create_table("classes", "id INTEGER PRIMARY KEY AUTOINCREMENT, class_name TEXT")
+        self.create_table("subjects", "id INTEGER PRIMARY KEY AUTOINCREMENT, subject_name TEXT,passing_mark INTEGER,total_mark INTEGER,class_id INTEGER, FOREIGN KEY(class_id) REFERENCES classes(id)")
 
     def create_table(self, table_name, columns):
         self.cursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({columns})")
