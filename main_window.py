@@ -144,7 +144,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
                 for column, item in enumerate(form):
                     self.expense_table.setItem(
                         row, column, QTableWidgetItem(str(item)))
-        self.total_expense.setText(str(amount))
+            self.total_expense.setText(str(amount))
 
     def home(self):
         self.stackedWidget.setCurrentWidget(self.home_page)

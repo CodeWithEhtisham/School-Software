@@ -14,10 +14,11 @@ import os
 FORM_MAIN,_= loadUiType('ui/add_student.ui')
 
 
-class AddStudentWindow(QMainWindow, FORM_MAIN):
-    def __init__(self):
+class UpdateStudentWindow(QMainWindow, FORM_MAIN):
+    def __init__(self,student_id):
         QMainWindow.__init__(self)
         self.setupUi(self)
+        self.student_id = student_id
         self.db = DBHandler()
         self.update()
         self.Handle_Buttons()
@@ -26,11 +27,39 @@ class AddStudentWindow(QMainWindow, FORM_MAIN):
         # clear classes combobox
         self.select_class.clear()
         # add classes to combobox
-        self.select_class.addItems(["select Class"])
+        self.select_class.addItems(
+            [str(i[0]) for i in self.db.conn.execute(
+                f"SELECT c.class_name FROM classes c, students s WHERE s.class_id = c.id AND s.id = {self.student_id}")])
+        
         self.select_class.addItems(
             [str(i[0]) for i in self.db.conn.execute(
                 "SELECT class_name FROM classes ORDER BY class_name ASC"
             ).fetchall()])
+        student = self.db.conn.execute(
+            f"SELECT * FROM students WHERE id = {self.student_id}").fetchone()  
+        self.txt_admission_date.setText(student[1])
+        self.txt_admission_no.setText(student[2])
+        self.txt_student_name.setText(student[3])
+        self.txt_student_father_name.setText(student[4])
+        self.txt_student_dob.setText(student[5])
+        self.txt_student_address.setText(student[6])
+        self.txt_student_contact.setText(student[7])
+        self.txt_student_gender.setText(student[8])
+        # set section 
+        if student[9]=='A':
+            self.select_class_section.setCurrentIndex(0)
+        elif student[9]=='B':
+            self.select_class_section.setCurrentIndex(1)
+        elif student[9]=='C':
+            self.select_class_section.setCurrentIndex(2)
+            
+        # self.select_class_section.setText(student[9])
+        self.txt_last_school.setText(student[10])
+        self.txt_special_case.setText(student[11])
+        self.std_image.setPixmap(QPixmap(student[12]))
+        self.std_image.setScaledContents(True)
+        self.std_image.setAlignment(Qt.AlignCenter)
+
         
     def Handle_Buttons(self):
         self.btn_save.clicked.connect(self.save)
@@ -56,9 +85,6 @@ class AddStudentWindow(QMainWindow, FORM_MAIN):
         contact = self.txt_student_contact.text()
         gender = self.txt_student_gender.text()
         class_name = self.select_class.currentText()
-        if class_name == "select Class":
-            QMessageBox.warning(self, "Error", "Please select class")
-            return
         section = self.select_class_section.currentText()
         last_school = self.txt_last_school.text()
         special_case = self.txt_special_case.text()
@@ -74,12 +100,17 @@ class AddStudentWindow(QMainWindow, FORM_MAIN):
                 else:
                     image = ''
                 
-                self.db.insert(
-                    table_name='students',
-                    columns="addmission_date,addmission_no,name,f_name,dob,address,contact,gender,section,last_school,special_case,student_image,class_id",
-                    values=f"'{addmission_date}','{addmission_no}','{name}','{father_name}','{dob}','{address}','{contact}','{gender}','{section if section else ''}','{last_school if last_school else ''}','{special_case if special_case else ''}','{image}',{self.db.conn.execute('SELECT id FROM classes WHERE class_name=?', (class_name,)).fetchone()[0]}"
+                # self.db.update(
+                #     table_name='students',
+                #     columns="addmission_date,addmission_no,name,f_name,dob,address,contact,gender,section,last_school,special_case,student_image,class_id",
+                #     values=f"'{addmission_date}','{addmission_no}','{name}','{father_name}','{dob}','{address}','{contact}','{gender}','{section if section else ''}','{last_school if last_school else ''}','{special_case if special_case else ''}','{image}',{self.db.conn.execute('SELECT id FROM classes WHERE class_name=?', (class_name,)).fetchone()[0]}",
+                #     condition=f"id = {self.student_id}"
+                # )
+                self.db.conn.execute(
+                    f"UPDATE students SET addmission_date='{addmission_date}',addmission_no='{addmission_no}',name='{name}',f_name='{father_name}',dob='{dob}',address='{address}',contact='{contact}',gender='{gender}',section='{section if section else ''}',last_school='{last_school if last_school else ''}',special_case='{special_case if special_case else ''}',class_id={self.db.conn.execute('SELECT id FROM classes WHERE class_name=?', (class_name,)).fetchone()[0]} WHERE id = {self.student_id}"
                 )
-                QMessageBox.information(self, "Success", "Student added successfully")
+                self.db.conn.commit()
+                QMessageBox.information(self, "Success", "Student update successfully")
                 self.close()
             except Exception as e:
                 QMessageBox.warning(self, "Error", str(e))
@@ -94,7 +125,7 @@ class AddStudentWindow(QMainWindow, FORM_MAIN):
 
 def main():
     app = QApplication(sys.argv)
-    window = AddStudentWindow()
+    window = UpdateStudentWindow(1)
     window.show()
     app.exec_()
 
