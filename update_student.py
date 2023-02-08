@@ -36,27 +36,27 @@ class UpdateStudentWindow(QMainWindow, FORM_MAIN):
                 "SELECT class_name FROM classes ORDER BY class_name ASC"
             ).fetchall()])
         student = self.db.conn.execute(
-            f"SELECT * FROM students WHERE id = {self.student_id}").fetchone()  
-        self.txt_admission_date.setText(student[1])
-        self.txt_admission_no.setText(student[2])
-        self.txt_student_name.setText(student[3])
-        self.txt_student_father_name.setText(student[4])
-        self.txt_student_dob.setText(student[5])
-        self.txt_student_address.setText(student[6])
-        self.txt_student_contact.setText(student[7])
-        self.txt_student_gender.setText(student[8])
+            f"SELECT addmission_date,addmission_no,name,f_name,dob,address,contact,gender,section,last_school,special_case,student_image FROM students WHERE id = {self.student_id}").fetchone()
+        self.txt_admission_date.setText(student[0])
+        self.txt_admission_no.setText(student[1])
+        self.txt_student_name.setText(student[2])
+        self.txt_student_father_name.setText(student[3])
+        self.txt_student_dob.setText(student[4])
+        self.txt_student_address.setText(student[5])
+        self.txt_student_contact.setText(student[6])
+        self.txt_student_gender.setText(student[7])
         # set section 
-        if student[9]=='A':
+        if student[8]=='A':
             self.select_class_section.setCurrentIndex(0)
-        elif student[9]=='B':
+        elif student[8]=='B':
             self.select_class_section.setCurrentIndex(1)
-        elif student[9]=='C':
+        elif student[8]=='C':
             self.select_class_section.setCurrentIndex(2)
             
         # self.select_class_section.setText(student[9])
-        self.txt_last_school.setText(student[10])
-        self.txt_special_case.setText(student[11])
-        self.std_image.setPixmap(QPixmap(student[12]))
+        self.txt_last_school.setText(student[9])
+        self.txt_special_case.setText(student[10])
+        self.std_image.setPixmap(QPixmap(student[11]))
         self.std_image.setScaledContents(True)
         self.std_image.setAlignment(Qt.AlignCenter)
 

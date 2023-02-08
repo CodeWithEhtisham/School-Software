@@ -678,7 +678,7 @@ QDateEdit {
             </widget>
            </item>
            <item alignment="Qt::AlignLeft">
-            <widget class="QLineEdit" name="txt_search">
+            <widget class="QLineEdit" name="txt_search_student">
              <property name="minimumSize">
               <size>
                <width>400</width>
@@ -696,8 +696,8 @@ QDateEdit {
              </property>
             </widget>
            </item>
-           <item alignment="Qt::AlignLeft">
-            <widget class="QPushButton" name="btn_search">
+           <!-- <item alignment="Qt::AlignLeft">
+            <widget class="QPushButton" name="btn_search_student">
              <property name="minimumSize">
               <size>
                <width>40</width>
@@ -726,9 +726,9 @@ QDateEdit {
               </size>
              </property>
             </widget>
-           </item>
+           </item> -->
            <item alignment="Qt::AlignRight">
-            <widget class="QPushButton" name="btn_refresh">
+            <widget class="QPushButton" name="btn_refresh_student">
              <property name="minimumSize">
               <size>
                <width>40</width>

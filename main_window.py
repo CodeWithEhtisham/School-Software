@@ -70,6 +70,54 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.txt_expense_search.textChanged.connect(self.search_expense)
         self.btn_expense_refresh.clicked.connect(self.update_expense_table)
         self.class_table.doubleClicked.connect(self.update_subject_table)
+        self.btn_refresh_student.clicked.connect(self.update_student_table)
+        self.txt_search_student.textChanged.connect(self.search_student)
+
+
+    def search_student(self):
+        search = self.txt_search_student.text()
+        print(search)
+        if search != '':
+            students = self.db.conn.execute(
+                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee FROM students s INNER JOIN classes c ON s.class_id=c.id WHERE s.name LIKE '%{search}%' OR s.f_name LIKE '%{search}%' OR c.class_name LIKE '%{search}%' OR s.addmission_no LIKE '%{search}%' OR s.addmission_date LIKE '%{search}%'").fetchall()
+            if students:
+                self.update_student_table(students)
+            else:
+                self.students_table.setRowCount(0)
+            # self.update_student_table(students)
+        else:
+            self.update_student_table()
+
+
+    def update_student_table(self,students=None):
+        print(students)
+        if students is None or students==False:
+            students = self.db.conn.execute(
+                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
+        if students:
+            ln=str(len(students))
+            self.students_table.setRowCount(0)
+            for row, form in enumerate(students):
+                self.students_table.insertRow(row)
+                for column, item in enumerate(form):
+                    if column == 5:
+                        if item == None:
+                            item = 'images/default.png'
+                        self.students_table.setCellWidget(
+                            row, column, QLabel())
+                        self.students_table.cellWidget(
+                            row, column).setPixmap(QPixmap(item))
+                        self.students_table.cellWidget(
+                            row, column).setScaledContents(True)
+                        self.students_table.cellWidget(
+                            row, column).setAlignment(QtCore.Qt.AlignCenter)
+                    else:
+                        self.students_table.setItem(
+                            row, column, QTableWidgetItem(str(item)))
+                    # self.students_table.setItem(
+                        # row, column, QTableWidgetItem(str(item)))
+            self.lbl_total_students.setText(ln)
+
 
     def update_subject_table(self):
         class_id = self.class_table.currentItem().text()
@@ -151,6 +199,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def students(self):
         self.stackedWidget.setCurrentWidget(self.students_page)
+        self.update_student_table()
 
     def student_class(self):
         self.stackedWidget.setCurrentWidget(self.class_page)
@@ -169,9 +218,21 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def add_student(self):
         self.add_student_window = AddStudentWindow()
         self.add_student_window.show()
+        self.add_student_window.btn_save.clicked.connect(self.update_student_table)
 
     def add_fees(self):
-        self.add_fees_window = AddFeesWindow()
+        selected_row = self.students_table.currentRow()
+        if selected_row == -1:
+            QMessageBox.warning(
+                self, "Error", "Please select a student to view details")
+            return
+        registration_no = self.students_table.item(selected_row, 1).text()
+        student_id = self.db.select(
+            table_name='students',
+            columns='id',
+            condition=f"addmission_no='{registration_no}'"
+        )[0][0]
+        self.add_fees_window = AddFeesWindow(student_id)
         self.add_fees_window.show()
 
     def pay_fee(self):
@@ -211,7 +272,18 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.expense_type_window.show()
 
     def student_details(self):
-        self.student_details_window = StudentDetailWindow()
+        selected_row = self.students_table.currentRow()
+        if selected_row == -1:
+            QMessageBox.warning(
+                self, "Error", "Please select a student to view details")
+            return
+        registration_no = self.students_table.item(selected_row, 1).text()
+        student_id = self.db.select(
+            table_name='students',
+            columns='id',
+            condition=f"addmission_no='{registration_no}'"
+        )[0][0]
+        self.student_details_window = StudentDetailWindow(student_id)
         self.student_details_window.show()
 
     def logout(self):
