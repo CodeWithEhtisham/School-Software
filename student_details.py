@@ -86,7 +86,7 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
 
 def main():
     app = QApplication(sys.argv)
-    window = StudentDetailWindow()
+    window = StudentDetailWindow(1)
     window.show()
     app.exec_()
 

@@ -67,8 +67,8 @@ class AddFeesWindow(QMainWindow, FORM_MAIN):
                 
                 self.db.insert(
                     table_name='transactions',
-                    columns="paid_fee,date,challan_no,description,fee_id",
-                    values=f"'{0}','{add_fee_date}','-','Add Fee','{last_id}'"
+                    columns="paid_fee,date,challan_no,description,fee_id,remaining_fee",
+                    values=f"'{0}','{add_fee_date}','-','Add Fee','{last_id}','{total}'"
                 )
                 QMessageBox.information(self, "Success", "Fee Added Successfully")
                 self.close()
