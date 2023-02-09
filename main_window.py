@@ -236,7 +236,13 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.add_fees_window.show()
 
     def pay_fee(self):
-        self.pay_fee_window = PayFeeWindow()
+        selected_row = self.students_table.currentRow()
+        if selected_row == -1:
+            QMessageBox.warning(
+                self, "Error", "Please select a student to view details")
+            return
+        registration_no = self.students_table.item(selected_row, 1).text()
+        self.pay_fee_window = PayFeeWindow(registration_no)
         self.pay_fee_window.show()
 
     def exam_details(self):

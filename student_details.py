@@ -29,6 +29,36 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
                 columns="name",
                 condition=f"id = '{self.std_id}'")[0][0])
         self.Handle_Buttons()
+        self.update_fee()
+        
+    def update_fee(self):
+        fee = self.db.select(
+            table_name='fee',
+            columns="*",
+            condition=f"std_id = '{self.std_id}'")[-1]
+        
+        self.lbl_addmission_fee.setText(str(fee[1]))
+        self.lbl_monthly_fee.setText(str(fee[2]))
+        self.lbl_annual_fund.setText(str(fee[3]))
+        self.lbl_comp_lab_fee.setText(str(fee[4]))
+        self.lbl_sci_lab_fee.setText(str(fee[5]))
+        self.lbl_total_fee.setText(str(fee[7]))
+
+        transactions = self.db.select(
+            table_name='transactions',
+            columns="date,paid_fee,challan_no,description,remaining_fee",
+            condition=f"fee_id = '{fee[0]}'")
+        
+        self.fees_table.setRowCount(0)
+        remaining_fee = 0
+        for row_number, row_data in enumerate(transactions):
+            self.fees_table.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                if column_number == 4:
+                    remaining_fee = data
+                self.fees_table.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+        self.lbl_remaining_fee.setText(str(remaining_fee))
+
 
      # HANDLE BUTTONS
     def Handle_Buttons(self):
