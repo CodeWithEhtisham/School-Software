@@ -2091,7 +2091,7 @@ QDateEdit {
           </column>
           <column>
            <property name="text">
-            <string>Month</string>
+            <string>Description</string>
            </property>
            <property name="font">
             <font>

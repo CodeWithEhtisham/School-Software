@@ -193,6 +193,36 @@ class MainWindow(QMainWindow, FORM_MAIN):
                     self.expense_table.setItem(
                         row, column, QTableWidgetItem(str(item)))
             self.total_expense.setText(str(amount))
+    
+    def update_daily_report_table(self,reports=None):
+        if reports is None or reports==False:
+            reports = self.db.conn.execute(
+                f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{QDate.currentDate().toString('dd/MM/yyyy')}' and t.paid_fee != 0").fetchall()
+        # print(reports)
+        if reports:
+            reciceved = 0
+            self.daily_reports_table.setRowCount(0)
+            for row, form in enumerate(reports):
+                self.daily_reports_table.insertRow(row)
+                for column, item in enumerate(form):
+                    if column == 4:
+                        reciceved += int(item)
+                    self.daily_reports_table.setItem(
+                        row, column, QTableWidgetItem(str(item)))
+            self.lbl_total_amount_received.setText(str(reciceved))
+            remaining=self.db.conn.execute(
+                # f"SELECT SUM(remaining_fee) FROM transactions WHERE date = '{QDate.currentDate().toString('dd/MM/yyyy')}'").fetchone()
+                f"SELECT SUM(remaining_fee) FROM students").fetchone()
+            self.lbl_total_amount_remaining.setText(str(remaining[0]))
+            expense=self.db.conn.execute(
+                f"SELECT SUM(amount) FROM expenses WHERE date = '{QDate.currentDate().toString('dd/MM/yyyy')}'").fetchone()
+            print(expense)
+            if expense[0] is not None:
+                self.lbl_total_expense.setText(str(expense[0]))
+                self.lbl_net_balance.setText(str(reciceved-expense[0]))
+            else:
+                self.lbl_total_expense.setText("0")
+                self.lbl_net_balance.setText(str(reciceved))
 
     def home(self):
         self.stackedWidget.setCurrentWidget(self.home_page)
@@ -207,6 +237,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def reports(self):
         self.stackedWidget.setCurrentWidget(self.reports_page)
+        self.update_daily_report_table()
 
     def expenses(self):
         self.stackedWidget.setCurrentWidget(self.expense_page)
