@@ -51,9 +51,10 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
                 columns='sum(amount)',
                 condition=f"date = '{day}'"
             )
+            print(received,expense)
             if received[0][0] or expense[0][0]:
                 report.append([day,received[0][0],expense[0][0]])
-        
+        # print(report)
         self.monthly_accounts_table.setRowCount(len(report))
         for index , row in enumerate(report):
             for col_index, item in enumerate(row):
@@ -78,21 +79,26 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
             columns='sum(paid_fee)',
             condition=f"date BETWEEN '{start_date}' AND '{end_date}'"
         )[0][0]
+        if not amount_received:
+            amount_received=0
         self.lbl_total_amount_received.setText(str(amount_received))
         remaining=self.db.select(
             table_name='transactions',
             columns='sum(remaining_fee)',
             condition=f"date BETWEEN '{start_date}' AND '{end_date}'"
         )[0][0]
+        if not remaining:
+            remaining=0
         self.lbl_total_amount_remaining.setText(str(remaining))
         expensees=self.db.select(
             table_name='expenses',
             columns='sum(amount)',
             condition=f"date BETWEEN '{start_date}' AND '{end_date}'"
         )[0][0]
+        if not expensees:
+            expensees=0
         self.lbl_total_expense.setText(str(expensees))
         self.lbl_net_balance.setText(str(amount_received-expensees))
-
 
 
 
