@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1211</width>
-    <height>752</height>
+    <width>1200</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -188,6 +188,12 @@ QDateEdit {
     </item>
     <item>
      <widget class="QTableWidget" name="accounts_table">
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
       </property>
@@ -201,7 +207,7 @@ QDateEdit {
        <number>5</number>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>180</number>
+       <number>150</number>
       </attribute>
       <row/>
       <row/>

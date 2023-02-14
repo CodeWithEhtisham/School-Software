@@ -110,7 +110,7 @@ QComboBox {
        <enum>Qt::LeftToRight</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item alignment="Qt::AlignRight">
+       <item alignment="Qt::AlignLeft">
         <widget class="QPushButton" name="btn_student">
          <property name="minimumSize">
           <size>
@@ -141,7 +141,7 @@ QComboBox {
          </property>
         </widget>
        </item>
-       <item alignment="Qt::AlignHCenter">
+       <item alignment="Qt::AlignLeft">
         <widget class="QPushButton" name="btn_fees">
          <property name="minimumSize">
           <size>
@@ -203,13 +203,44 @@ QComboBox {
          </property>
         </widget>
        </item>
+       <item alignment="Qt::AlignRight">
+        <widget class="QPushButton" name="btn_student_leaving">
+         <property name="minimumSize">
+          <size>
+           <width>160</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Calibri</family>
+           <pointsize>14</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Change Status</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resources.qrc">
+           <normaloff>:/icons/assets/icons/logout.png</normaloff>:/icons/assets/icons/logout.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="student_page">
        <property name="styleSheet">
@@ -269,8 +300,8 @@ QComboBox {
             <widget class="QLabel" name="std_image">
              <property name="minimumSize">
               <size>
-               <width>100</width>
-               <height>100</height>
+               <width>120</width>
+               <height>120</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -310,7 +341,7 @@ QComboBox {
            </sizepolicy>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
+           <item alignment="Qt::AlignTop">
             <widget class="QFrame" name="frame_6">
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
@@ -462,10 +493,49 @@ QComboBox {
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QLabel" name="label_3">
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Status</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_8">
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>School Leaving Date</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_24">
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>School Leaving Purpose</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>
-           <item>
+           <item alignment="Qt::AlignTop">
             <widget class="QFrame" name="frame_7">
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
@@ -614,6 +684,47 @@ QComboBox {
                 </property>
                 <property name="text">
                  <string>none</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_7">
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Active</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_23">
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>1/1/1</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_25">
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>completed</string>
                 </property>
                </widget>
               </item>
@@ -833,6 +944,12 @@ QComboBox {
            </property>
            <item>
             <widget class="QTableWidget" name="fees_table">
+             <property name="font">
+              <font>
+               <family>Calibri</family>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
              <property name="frameShape">
               <enum>QFrame::Box</enum>
              </property>
@@ -955,7 +1072,7 @@ QComboBox {
               <property name="bottomMargin">
                <number>0</number>
               </property>
-              <item>
+              <item alignment="Qt::AlignTop">
                <widget class="QFrame" name="frame_5">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1053,7 +1170,7 @@ QComboBox {
                 </layout>
                </widget>
               </item>
-              <item>
+              <item alignment="Qt::AlignTop">
                <widget class="QFrame" name="frame_8">
                 <property name="frameShape">
                  <enum>QFrame::StyledPanel</enum>
@@ -1071,7 +1188,7 @@ QComboBox {
                     </font>
                    </property>
                    <property name="text">
-                    <string>0000</string>
+                    <string>0</string>
                    </property>
                   </widget>
                  </item>
@@ -1309,6 +1426,12 @@ QComboBox {
         </item>
         <item>
          <widget class="QTableWidget" name="table_1st_term">
+          <property name="font">
+           <font>
+            <family>Calibri</family>
+            <pointsize>14</pointsize>
+           </font>
+          </property>
           <property name="frameShape">
            <enum>QFrame::Box</enum>
           </property>
@@ -1401,6 +1524,12 @@ QComboBox {
         </item>
         <item>
          <widget class="QTableWidget" name="table_2nd_term">
+          <property name="font">
+           <font>
+            <family>Calibri</family>
+            <pointsize>14</pointsize>
+           </font>
+          </property>
           <property name="frameShape">
            <enum>QFrame::Box</enum>
           </property>
@@ -1506,6 +1635,12 @@ QComboBox {
         </item>
         <item>
          <widget class="QTableWidget" name="table_3rd_term">
+          <property name="font">
+           <font>
+            <family>Calibri</family>
+            <pointsize>14</pointsize>
+           </font>
+          </property>
           <property name="frameShape">
            <enum>QFrame::Box</enum>
           </property>

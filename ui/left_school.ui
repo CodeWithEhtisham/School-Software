@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PayFeeWindow</class>
- <widget class="QMainWindow" name="PayFeeWindow">
+ <class>LeftSchoolWindow</class>
+ <widget class="QMainWindow" name="LeftSchoolWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>550</height>
+    <width>600</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>500</width>
-    <height>550</height>
+    <width>600</width>
+    <height>300</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>600</width>
+    <height>300</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>Pay Fee</string>
+   <string>Left School</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
@@ -28,9 +34,6 @@
     <string notr="true">* {
 	background-color: #e3f2fd;
 }
-#std_image {
-	background-color: #fff;
-}
 
 #header_frame, #label {
 	background-color: #90caf9;
@@ -40,7 +43,6 @@
 	background-color: #90caf9;
 	color: red;
 }
-
 
 #bottom_widget {
 	background-color: #b3e5fc;
@@ -115,7 +117,7 @@ QComboBox {
           </font>
          </property>
          <property name="text">
-          <string>Pay Fee</string>
+          <string>School Leaving</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -183,61 +185,7 @@ QComboBox {
              </font>
             </property>
             <property name="text">
-             <string>Remaining Fee</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_11">
-            <property name="font">
-             <font>
-              <family>Calibri</family>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Paid Fee</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_15">
-            <property name="font">
-             <font>
-              <family>Calibri</family>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Challan No.</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="font">
-             <font>
-              <family>Calibri</family>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Description</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_14">
-            <property name="font">
-             <font>
-              <family>Calibri</family>
-              <pointsize>14</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Total Remaining Fee</string>
+             <string>School Leaving Purpose</string>
             </property>
            </widget>
           </item>
@@ -254,7 +202,7 @@ QComboBox {
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QDateEdit" name="txt_pay_fee_date">
+           <widget class="QDateEdit" name="txt_leaving_date">
             <property name="font">
              <font>
               <family>Calibri</family>
@@ -267,59 +215,18 @@ QComboBox {
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="txt_remaining_fee">
+           <widget class="QLineEdit" name="txt_leaving_purpose">
             <property name="font">
              <font>
               <family>Calibri</family>
               <pointsize>14</pointsize>
-             </font>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="txt_paid_fee">
-            <property name="font">
-             <font>
-              <family>Calibri</family>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="txt_challan_no">
-            <property name="font">
-             <font>
-              <family>Calibri</family>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="txt_description">
-            <property name="font">
-             <font>
-              <family>Calibri</family>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="txt_total_remaining">
-            <property name="font">
-             <font>
-              <pointsize>14</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
              </font>
             </property>
             <property name="readOnly">
              <bool>false</bool>
+            </property>
+            <property name="placeholderText">
+             <string>enter purpose</string>
             </property>
            </widget>
           </item>
@@ -329,70 +236,6 @@ QComboBox {
       </layout>
      </widget>
     </item>
-    <!-- <item>
-     <widget class="QWidget" name="widget" native="true">
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <property name="leftMargin">
-        <number>200</number>
-       </property>
-       <item>
-        <widget class="QCheckBox" name="cb_annual_fund">
-         <property name="font">
-          <font>
-           <family>Calibri</family>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Annual Fund</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="cb_comp_lab_fee">
-         <property name="font">
-          <font>
-           <family>Calibri</family>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Computer Lab Fee</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="cb_science_lab_fee">
-         <property name="font">
-          <font>
-           <family>Calibri</family>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Science Lab Fee</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="cb_addmission_fee">
-         <property name="font">
-          <font>
-           <family>Calibri</family>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Addmission Fee</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item> -->
     <item alignment="Qt::AlignBottom">
      <widget class="QWidget" name="bottom_widget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -416,7 +259,7 @@ QComboBox {
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>40</height>
+           <height>35</height>
           </size>
          </property>
          <property name="font">
@@ -447,7 +290,7 @@ QComboBox {
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>40</height>
+           <height>35</height>
           </size>
          </property>
          <property name="font">

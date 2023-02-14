@@ -6,7 +6,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QApplication
-
+from PyQt5 import QtGui, QtPrintSupport
 import sys
 from os import path
 from PyQt5.uic import loadUiType
@@ -21,6 +21,8 @@ from student_details import StudentDetailWindow
 from monthly_report import MonthlyReportWindow
 from yearly_report import YearlyReportWindow
 from pay_fee import PayFeeWindow
+from school_details import SchoolDetailsWindow
+# from create_user import CreateUserWindow
 from db_handler import DBHandler
 
 
@@ -36,12 +38,32 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.Handle_Buttons()
         # self.update()
 
+        self.students_table.setColumnWidth(0, 120)
+        self.students_table.setColumnWidth(1, 170)
+        self.students_table.setColumnWidth(2, 180)
+        self.students_table.setColumnWidth(3, 180)
+        self.students_table.setColumnWidth(4, 120)
+        self.students_table.setColumnWidth(5, 120)
+        self.students_table.setColumnWidth(6, 140)
+        self.students_table.setColumnWidth(7, 120)
+
+        # REPORTS TABLE
+        self.daily_reports_table.setColumnWidth(0, 180)
+        self.daily_reports_table.setColumnWidth(1, 180)
+
+        # EXPENSE TABLE
+        self.expense_table.setColumnWidth(3, 200)
+        self.expense_table.setColumnWidth(4, 200)
+        self.expense_table.setColumnWidth(5, 300)
+
      # HANDLE BUTTONS
+
     def Handle_Buttons(self):
         self.btn_logout.clicked.connect(self.logout)
         self.btn_change_password.clicked.connect(self.change_password)
         self.btn_edit_user.clicked.connect(self.edit_user)
         self.btn_add_school_details.clicked.connect(self.add_school_details)
+        # self.btn_add_user.clicked.connect(self.add_users)
         self.btn_home.clicked.connect(self.home)
         self.btn_students.clicked.connect(self.students)
         self.btn_class.clicked.connect(self.student_class)
@@ -63,6 +85,10 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.btn_monthly.clicked.connect(self.monthly_report)
         self.btn_yearly.clicked.connect(self.yearly_report)
 
+        self.btn_reports_print.clicked.connect(self.print_daily_report)
+        self.btn_print_expense.clicked.connect(self.print_expense)
+        self.btn_print_student.clicked.connect(self.print_students)
+
         self.students_table.doubleClicked.connect(self.student_details)
 
         # self.btn_driver.clicked.connect(self.Driver)
@@ -72,7 +98,6 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.class_table.doubleClicked.connect(self.update_subject_table)
         self.btn_refresh_student.clicked.connect(self.update_student_table)
         self.txt_search_student.textChanged.connect(self.search_student)
-
 
     def search_student(self):
         search = self.txt_search_student.text()
@@ -88,14 +113,13 @@ class MainWindow(QMainWindow, FORM_MAIN):
         else:
             self.update_student_table()
 
-
-    def update_student_table(self,students=None):
+    def update_student_table(self, students=None):
         print(students)
-        if students is None or students==False:
+        if students is None or students == False:
             students = self.db.conn.execute(
                 f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
         if students:
-            ln=str(len(students))
+            ln = str(len(students))
             self.students_table.setRowCount(0)
             for row, form in enumerate(students):
                 self.students_table.insertRow(row)
@@ -118,7 +142,6 @@ class MainWindow(QMainWindow, FORM_MAIN):
                         # row, column, QTableWidgetItem(str(item)))
             self.lbl_total_students.setText(ln)
 
-
     def update_subject_table(self):
         class_id = self.class_table.currentItem().text()
         class_id = self.db.select(
@@ -131,7 +154,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             columns="subject_name,passing_mark,total_mark",
             condition=f"class_id = '{class_id}'")
         if data:
-            ln=str(len(data))
+            ln = str(len(data))
             self.subjects_table.setRowCount(0)
             for row, form in enumerate(data):
                 self.subjects_table.insertRow(row)
@@ -143,15 +166,15 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.subjects_table.setRowCount(0)
             self.lbl_total_subjects.setText("0")
 
-    def update_class_table(self,classes=None):
-        print("classes",classes)
-        if classes is None or classes==False:
+    def update_class_table(self, classes=None):
+        print("classes", classes)
+        if classes is None or classes == False:
             classes = self.db.select_all(
                 table_name='classes',
                 columns="class_name",
             )
         if classes:
-            ln=str(len(classes))
+            ln = str(len(classes))
             self.class_table.setRowCount(0)
             for row, form in enumerate(classes):
                 self.class_table.insertRow(row)
@@ -160,8 +183,6 @@ class MainWindow(QMainWindow, FORM_MAIN):
                         row, column, QTableWidgetItem(str(item)))
 
             self.lbl_total_classes.setText(ln)
-
-
 
     def search_expense(self):
         search = self.txt_expense_search.text()
@@ -177,8 +198,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
     # def udpate(self):
     #     self.update_expense_table()
 
-    def update_expense_table(self,expense=None):
-        if expense is None or expense==False:
+    def update_expense_table(self, expense=None):
+        if expense is None or expense == False:
             expense = self.db.select_all(
                 table_name='expenses',
                 columns="date,hoa,amount,payment_type,recipient_name,comment",
@@ -193,9 +214,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
                     self.expense_table.setItem(
                         row, column, QTableWidgetItem(str(item)))
             self.total_expense.setText(str(amount))
-    
-    def update_daily_report_table(self,reports=None):
-        if reports is None or reports==False:
+
+    def update_daily_report_table(self, reports=None):
+        if reports is None or reports == False:
             reports = self.db.conn.execute(
                 f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{QDate.currentDate().toString('dd/MM/yyyy')}' and t.paid_fee != 0").fetchall()
         # print(reports)
@@ -210,11 +231,11 @@ class MainWindow(QMainWindow, FORM_MAIN):
                     self.daily_reports_table.setItem(
                         row, column, QTableWidgetItem(str(item)))
             self.lbl_total_amount_received.setText(str(reciceved))
-            remaining=self.db.conn.execute(
+            remaining = self.db.conn.execute(
                 # f"SELECT SUM(remaining_fee) FROM transactions WHERE date = '{QDate.currentDate().toString('dd/MM/yyyy')}'").fetchone()
                 f"SELECT SUM(remaining_fee) FROM students").fetchone()
             self.lbl_total_amount_remaining.setText(str(remaining[0]))
-            expense=self.db.conn.execute(
+            expense = self.db.conn.execute(
                 f"SELECT SUM(amount) FROM expenses WHERE date = '{QDate.currentDate().toString('dd/MM/yyyy')}'").fetchone()
             print(expense)
             if expense[0] is not None:
@@ -249,7 +270,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def add_student(self):
         self.add_student_window = AddStudentWindow()
         self.add_student_window.show()
-        self.add_student_window.btn_save.clicked.connect(self.update_student_table)
+        self.add_student_window.btn_save.clicked.connect(
+            self.update_student_table)
 
     def add_fees(self):
         selected_row = self.students_table.currentRow()
@@ -340,7 +362,12 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.update_user_window.show()
 
     def add_school_details(self):
-        pass
+        self.add_school_window = SchoolDetailsWindow()
+        self.add_school_window.show()
+        
+    # def add_users(self):
+    #     self.add_users_window = CreateUserWindow()
+    #     self.add_users_window.show()
 
     def monthly_report(self):
         self.monthly_report_window = MonthlyReportWindow()
@@ -349,6 +376,304 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def yearly_report(self):
         self.yearly_report_window = YearlyReportWindow()
         self.yearly_report_window.show()
+
+    # PRINT DAILY REPORTS
+    def print_daily_report(self):
+        filename = QFileDialog.getSaveFileName(
+            self, "Save File", "", "PDF(*.pdf)")
+        if filename[0]:
+            printer = QtPrintSupport.QPrinter(
+                QtPrintSupport.QPrinter.PrinterResolution)
+            printer.setOutputFormat(QtPrintSupport.QPrinter.PdfFormat)
+            printer.setPaperSize(QtPrintSupport.QPrinter.A4)
+            printer.setPageMargins(
+                1, 1, 1, 1, QtPrintSupport.QPrinter.Millimeter)
+            printer.setOrientation(QtPrintSupport.QPrinter.Portrait)
+            printer.setOutputFileName(filename[0])
+            document = QtGui.QTextDocument()
+            style_sheet = """
+                body {
+                    width: 100vw;
+                    height: 100vh;
+                    margin: 0;
+                    padding: 0;
+                }
+                h1 {
+                    text-align: center;
+                }
+                h2 {
+                    text-align: right;
+                    font-weight: 400;
+                    font-size: 12px;
+                    margin: 0px;
+                }
+                h3 {
+                    text-align: left;
+                    margin: 1px;
+                }
+                p {
+                    text-align: center;
+                    font-size: 12px;
+                }
+                table {
+                  border-collapse: collapse;
+                  width: 100%;
+                }
+                th, td {
+                    border: 1px solid black;
+                    padding: 4px;
+                    font-size: 10px;
+                    text-align: left;
+                }
+                th {
+                  background-color: #29b6f6;
+                  font-weight: bold;
+                  font-size: 10px;
+                }
+                
+            """
+            html = """
+            <!DOCTYPE html>
+            <html lang="en">
+            <body>
+                <h1> Business Name</h1>
+                <p> Address </p>
+                <h2>Contact : </h2>
+                <h1> Daily Report </h1>
+                <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Father Name</th>
+                            <th>Class</th>
+                            <th>Challan No.</th>
+                            <th>Paid Amount</th>
+                            <th>Remaining Fee</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 10px;">
+                    """
+            for i in range(self.daily_reports_table.rowCount()):
+                html += """<tr>"""
+                for j in range(self.daily_reports_table.columnCount()):
+                    html += """<td>""" + \
+                        self.daily_reports_table.item(i, j).text()+"</td>"
+                html += "</tr>"
+            html += """
+                    </tbody>
+    
+                </table>
+                
+                <h2>Total Amount Received: </h2>
+                <h2>Total Amount Remaining: </h2>
+                <h2>Total Expense: </h2>
+                <h2>Net Balance: </h2>
+            </body>
+            </html>
+            """
+
+            document.setDefaultStyleSheet(style_sheet)
+            document.setHtml(html)
+            document.print_(printer)
+            QMessageBox.information(self, "Success", "PDF Saved Successfully")
+
+    # PRINT EXPENSE
+    def print_expense(self):
+        filename = QFileDialog.getSaveFileName(
+            self, "Save File", "", "PDF(*.pdf)")
+        if filename[0]:
+            printer = QtPrintSupport.QPrinter(
+                QtPrintSupport.QPrinter.PrinterResolution)
+            printer.setOutputFormat(QtPrintSupport.QPrinter.PdfFormat)
+            printer.setPaperSize(QtPrintSupport.QPrinter.A4)
+            printer.setPageMargins(
+                1, 1, 1, 1, QtPrintSupport.QPrinter.Millimeter)
+            printer.setOrientation(QtPrintSupport.QPrinter.Portrait)
+            printer.setOutputFileName(filename[0])
+            document = QtGui.QTextDocument()
+            style_sheet = """
+                body {
+                    width: 100vw;
+                    height: 100vh;
+                    margin: 0;
+                    padding: 0;
+                }
+                h1 {
+                    text-align: center;
+                }
+                h2 {
+                    text-align: right;
+                    font-weight: 400;
+                    font-size: 12px;
+                    margin: 0px;
+                }
+                h3 {
+                    text-align: left;
+                    margin: 1px;
+                }
+                p {
+                    text-align: center;
+                    font-size: 12px;
+                }
+                table {
+                  border-collapse: collapse;
+                  width: 100%;
+                }
+                th, td {
+                    border: 1px solid black;
+                    padding: 4px;
+                    font-size: 10px;
+                    text-align: left;
+                }
+                th {
+                  background-color: #29b6f6;
+                  font-weight: bold;
+                  font-size: 10px;
+                }
+            """
+            html = """
+            <!DOCTYPE html>
+            <html lang="en">
+            <body>
+                <h1> Business Name</h1>
+                <p> Address </p>
+                <h2>Contact : </h2>
+                <h1>Expense</h1>
+
+                <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Head of Account</th>
+                            <th>Amount</th>
+                            <th>Payment Type</th>
+                            <th>Recipient Name</th>
+                            <th>Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    """
+            for i in range(self.expense_table.rowCount()):
+                html += """<tr>"""
+                for j in range(self.expense_table.columnCount()):
+                    html += """<td>""" + \
+                        self.expense_table.item(i, j).text()+"</td>"
+                html += "</tr>"
+            html += """
+                    </tbody>
+    
+                </table>
+            </body>
+            </html>
+            """
+
+            document.setDefaultStyleSheet(style_sheet)
+            document.setHtml(html)
+            document.print_(printer)
+            QMessageBox.information(self, "Success", "PDF Saved Successfully")
+
+    # PRINT STUDENTS
+    def print_students(self):
+        filename = QFileDialog.getSaveFileName(
+            self, "Save File", "", "PDF(*.pdf)")
+        if filename[0]:
+            printer = QtPrintSupport.QPrinter(
+                QtPrintSupport.QPrinter.PrinterResolution)
+            printer.setOutputFormat(QtPrintSupport.QPrinter.PdfFormat)
+            printer.setPaperSize(QtPrintSupport.QPrinter.A4)
+            printer.setPageMargins(
+                1, 1, 1, 1, QtPrintSupport.QPrinter.Millimeter)
+            printer.setOrientation(QtPrintSupport.QPrinter.Portrait)
+            printer.setOutputFileName(filename[0])
+            document = QtGui.QTextDocument()
+            style_sheet = """
+                body {
+                    width: 100vw;
+                    height: 100vh;
+                    margin: 0;
+                    padding: 0;
+                }
+                h1 {
+                    text-align: center;
+                }
+                h2 {
+                    text-align: right;
+                    font-weight: 400;
+                    font-size: 12px;
+                    margin: 0px;
+                }
+                h3 {
+                    text-align: left;
+                    margin: 1px;
+                }
+                p {
+                    text-align: center;
+                    font-size: 12px;
+                }
+                table {
+                  border-collapse: collapse;
+                  width: 100%;
+                }
+                th, td {
+                    border: 1px solid black;
+                    padding: 4px;
+                    font-size: 10px;
+                    text-align: left;
+                }
+                th {
+                  background-color: #29b6f6;
+                  font-weight: bold;
+                  font-size: 10px;
+                }
+                
+            """
+            html = """
+            <!DOCTYPE html>
+            <html lang="en">
+            <body>
+                <h1> Business Name</h1>
+                <p> Address </p>
+                <h2>Contact : </h2>
+                <h1>Students</h1>
+
+                <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Admission Date</th>
+                            <th>Registration / Admission No</th>
+                            <th>Student Name</th>
+                            <th>Father Name</th>
+                            <th>Class</th>
+                            <th>Image</th>
+                            <th>Remaining Fee</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    """
+            for i in range(self.students_table.rowCount()):
+                html += """<tr>"""
+                for j in range(self.students_table.columnCount()):
+                    html += """<td>""" + \
+                        self.students_table.item(i, j).text()+"</td>"
+                html += "</tr>"
+            html += """
+                    </tbody>
+    
+                </table>
+            
+            </body>
+            </html>
+            """
+
+            document.setDefaultStyleSheet(style_sheet)
+            document.setHtml(html)
+            document.print_(printer)
+            QMessageBox.information(self, "Success", "PDF Saved Successfully")
 
 
 def main():

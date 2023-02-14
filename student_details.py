@@ -13,12 +13,13 @@ from PyQt5.uic import loadUiType
 from add_fees import AddFeesWindow
 from exam_details import ExamDetailsWindow
 from pay_fee import PayFeeWindow
+from left_school import LeftSchoolWindow
 
 FORM_MAIN, _ = loadUiType('ui/student_details.ui')
 
 
 class StudentDetailWindow(QMainWindow, FORM_MAIN):
-    def __init__(self,std_id):
+    def __init__(self, std_id):
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.std_id = std_id
@@ -30,13 +31,13 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
                 condition=f"id = '{self.std_id}'")[0][0])
         self.Handle_Buttons()
         self.update_fee()
-        
+
     def update_fee(self):
         fee = self.db.select(
             table_name='fee',
             columns="*",
             condition=f"std_id = '{self.std_id}'")[-1]
-        
+
         self.lbl_addmission_fee.setText(str(fee[1]))
         self.lbl_monthly_fee.setText(str(fee[2]))
         self.lbl_annual_fund.setText(str(fee[3]))
@@ -48,7 +49,7 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
             table_name='transactions',
             columns="date,paid_fee,challan_no,description,remaining_fee",
             condition=f"fee_id = '{fee[0]}'")
-        
+
         self.fees_table.setRowCount(0)
         remaining_fee = 0
         for row_number, row_data in enumerate(transactions):
@@ -56,11 +57,12 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
             for column_number, data in enumerate(row_data):
                 if column_number == 4:
                     remaining_fee = data
-                self.fees_table.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                self.fees_table.setItem(
+                    row_number, column_number, QTableWidgetItem(str(data)))
         self.lbl_remaining_fee.setText(str(remaining_fee))
 
-
      # HANDLE BUTTONS
+
     def Handle_Buttons(self):
         self.btn_student.clicked.connect(self.student)
         self.btn_fees.clicked.connect(self.fees)
@@ -69,9 +71,10 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
         self.btn_add_fees.clicked.connect(self.add_fees)
         self.btn_add_result.clicked.connect(self.exam_details)
         self.btn_pay_fee.clicked.connect(self.pay_fee)
+        self.btn_student_leaving.clicked.connect(self.student_leaving)
         # self.btn_driver.clicked.connect(self.Driver)
         # self.btn_admin.clicked.connect(self.Admin)
-    
+
     def update_student_details(self):
         student = self.db.conn.execute(
             f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,s.dob,s.address,s.contact,s.gender,s.section,s.last_school,s.special_case,s.student_image,c.class_name FROM students s INNER JOIN classes c ON s.class_id = c.id WHERE s.id = '{self.std_id}'").fetchone()
@@ -89,7 +92,6 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
         self.std_image.setPixmap(QPixmap(student[11]))
         self.std_image.setScaledContents(True)
         self.std_image.setAlignment(Qt.AlignCenter)
-
 
     def student(self):
         self.stackedWidget.setCurrentWidget(self.student_page)
@@ -112,6 +114,10 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
     def exam_details(self):
         self.exam_details_window = ExamDetailsWindow()
         self.exam_details_window.show()
+
+    def student_leaving(self):
+        self.school_leaving_window = LeftSchoolWindow()
+        self.school_leaving_window.show()
 
 
 def main():
