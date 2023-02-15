@@ -22,9 +22,12 @@ from monthly_report import MonthlyReportWindow
 from yearly_report import YearlyReportWindow
 from pay_fee import PayFeeWindow
 from school_details import SchoolDetailsWindow
+from update_class import UpdateClassWindow
+from update_subject import UpdateSubjectWindow
 # from create_user import CreateUserWindow
 from db_handler import DBHandler
-
+from update_expense import UpdateExpensesWindow
+from update_student import UpdateStudentWindow
 
 FORM_MAIN, _ = loadUiType('ui/main_window.ui')
 
@@ -98,13 +101,85 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.class_table.doubleClicked.connect(self.update_subject_table)
         self.btn_refresh_student.clicked.connect(self.update_student_table)
         self.txt_search_student.textChanged.connect(self.search_student)
+        self.select_class.currentIndexChanged.connect(self.student_search_class)
+        self.btn_edit_class.clicked.connect(self.edit_class)
+        self.btn_edit_subject.clicked.connect(self.edit_subject)
+        self.btn_edit_expense.clicked.connect(self.edit_expense)
+        self.btn_edit_student.clicked.connect(self.edit_student)
+
+    def edit_student(self):
+        row = self.students_table.currentRow()
+        if row == -1:
+            QMessageBox.warning(self, 'Warning', 'Please select a student to edit')
+            return
+        reg_no = self.students_table.item(row, 1).text()
+        student_id = self.db.conn.execute(
+            f"SELECT id FROM students WHERE addmission_no='{reg_no}'").fetchone()[0]
+        self.edit_student_window = UpdateStudentWindow(student_id)
+        self.edit_student_window.show()
+        self.edit_student_window.btn_save.clicked.connect(self.update_student_table)
+    def edit_expense(self):
+        row = self.expense_table.currentRow()
+        if row == -1:
+            QMessageBox.warning(self, 'Warning', 'Please select a expense to edit')
+            return
+        date= self.expense_table.item(row, 0).text()
+        hoa= self.expense_table.item(row, 1).text()
+        payment_type= self.expense_table.item(row, 3).text()
+        recipient_name= self.expense_table.item(row, 4).text()
+        expense_id = self.db.conn.execute(
+            f"SELECT id FROM expenses WHERE date='{date}' and hoa='{hoa}' and payment_type='{payment_type}' and recipient_name='{recipient_name}'").fetchone()[0]
+        self.edit_expense_window = UpdateExpensesWindow(expense_id)
+        self.edit_expense_window.show()
+        self.edit_expense_window.btn_save.clicked.connect(self.update_expense_table)
+        self.edit_expense_window.btn_delete.clicked.connect(self.update_expense_table)
+
+    def edit_subject(self):
+        row = self.subjects_table.currentRow()
+        if row == -1:
+            QMessageBox.warning(self, 'Warning', 'Please select a subject to edit')
+            return
+        subject_name = self.subjects_table.item(row, 0).text()
+        row = self.class_table.currentRow()
+        class_name = self.class_table.item(row, 0).text()
+        class_id = self.db.conn.execute(
+            f"SELECT id FROM classes WHERE class_name='{class_name}'").fetchone()[0]
+        subject_id = self.db.conn.execute(
+            f"SELECT id FROM subjects WHERE subject_name='{subject_name}' and class_id={class_id}").fetchone()[0]
+        self.edit_subject_window = UpdateSubjectWindow(subject_id)
+        self.edit_subject_window.show()
+        self.edit_subject_window.btn_save.clicked.connect(self.update_subject_table)
+
+    def edit_class(self):
+        row = self.class_table.currentRow()
+        if row == -1:
+            QMessageBox.warning(self, 'Warning', 'Please select a class to edit')
+            return
+        class_name = self.class_table.item(row, 0).text()
+        class_id = self.db.conn.execute(
+            f"SELECT id FROM classes WHERE class_name='{class_name}'").fetchone()[0]
+        self.edit_class_window = UpdateClassWindow(class_id)
+        self.edit_class_window.show()
+        self.edit_class_window.btn_save.clicked.connect(self.update_class_table)
+
+    def student_search_class(self):
+        class_name=self.select_class.currentText()
+        if class_name != 'Select Class':
+            students = self.db.conn.execute(
+                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id WHERE c.class_name LIKE '%{class_name}%'").fetchall()
+            if students:
+                self.update_student_table(students)
+            else:
+                self.students_table.setRowCount(0)
+        else:
+            self.students_table.setRowCount(0)
 
     def search_student(self):
         search = self.txt_search_student.text()
         print(search)
         if search != '':
             students = self.db.conn.execute(
-                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee FROM students s INNER JOIN classes c ON s.class_id=c.id WHERE s.name LIKE '%{search}%' OR s.f_name LIKE '%{search}%' OR c.class_name LIKE '%{search}%' OR s.addmission_no LIKE '%{search}%' OR s.addmission_date LIKE '%{search}%'").fetchall()
+                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id WHERE s.name LIKE '%{search}%' OR s.f_name LIKE '%{search}%' OR c.class_name LIKE '%{search}%' OR s.addmission_no LIKE '%{search}%' OR s.addmission_date LIKE '%{search}%'").fetchall()
             if students:
                 self.update_student_table(students)
             else:
@@ -114,10 +189,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.update_student_table()
 
     def update_student_table(self, students=None):
-        print(students)
         if students is None or students == False:
             students = self.db.conn.execute(
-                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
+                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
         if students:
             ln = str(len(students))
             self.students_table.setRowCount(0)
@@ -247,9 +321,14 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def home(self):
         self.stackedWidget.setCurrentWidget(self.home_page)
-
+    def add_select_class(self):
+        self.select_class.clear()
+        self.select_class.addItem('Select Class')
+        self.select_class.addItems([i[0] for i in self.db.conn.execute(
+            f"SELECT class_name FROM classes").fetchall()])
     def students(self):
         self.stackedWidget.setCurrentWidget(self.students_page)
+        self.add_select_class()
         self.update_student_table()
 
     def student_class(self):
@@ -297,6 +376,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         registration_no = self.students_table.item(selected_row, 1).text()
         self.pay_fee_window = PayFeeWindow(registration_no)
         self.pay_fee_window.show()
+        self.pay_fee_window.btn_save.clicked.connect(self.update_student_table)
 
     def exam_details(self):
         self.exam_details_window = ExamDetailsWindow()
@@ -342,6 +422,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             columns='id',
             condition=f"addmission_no='{registration_no}'"
         )[0][0]
+        print(student_id)
         self.student_details_window = StudentDetailWindow(student_id)
         self.student_details_window.show()
 
@@ -658,6 +739,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
             for i in range(self.students_table.rowCount()):
                 html += """<tr>"""
                 for j in range(self.students_table.columnCount()):
+                    if j == 5:
+                        html += "<td>-</td>"
+                        continue
                     html += """<td>""" + \
                         self.students_table.item(i, j).text()+"</td>"
                 html += "</tr>"

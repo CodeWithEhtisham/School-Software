@@ -14,6 +14,7 @@ from add_fees import AddFeesWindow
 from exam_details import ExamDetailsWindow
 from pay_fee import PayFeeWindow
 from left_school import LeftSchoolWindow
+from update_fees import UpdatePayFeeWindow
 
 FORM_MAIN, _ = loadUiType('ui/student_details.ui')
 
@@ -30,7 +31,36 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
                 columns="name",
                 condition=f"id = '{self.std_id}'")[0][0])
         self.Handle_Buttons()
-        self.update_fee()
+        self.update_student_details()
+
+
+    def Handle_Buttons(self):
+        self.btn_student.clicked.connect(self.student)
+        self.btn_fees.clicked.connect(self.fees)
+        self.btn_results.clicked.connect(self.results)
+
+        self.btn_add_fees.clicked.connect(self.add_fees)
+        self.btn_add_result.clicked.connect(self.exam_details)
+        self.btn_pay_fee.clicked.connect(self.pay_fee)
+        self.btn_student_leaving.clicked.connect(self.student_leaving)
+        self.btn_edit_fee.clicked.connect(self.edit_fee)
+
+    def edit_fee(self):
+        row = self.fees_table.currentRow()
+        if row == -1:
+            QMessageBox.warning(self, "Error", "Please select a row")
+            return
+        date = self.fees_table.item(row, 0).text()
+        challan_no = self.fees_table.item(row, 2).text()
+        description = self.fees_table.item(row, 3).text()
+        fee_id = self.db.select(
+            table_name='transactions',
+            columns="id,fee_id",
+            condition=f"date = '{date}' and challan_no = '{challan_no}' and description = '{description}'")[0]
+        self.edit_fee_window = UpdatePayFeeWindow(self.std_id, fee_id[1], fee_id[0])
+        self.edit_fee_window.show()
+        self.edit_fee_window.btn_save.clicked.connect(self.update_fee)
+
 
     def update_fee(self):
         fee = self.db.select(
@@ -63,21 +93,11 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
 
      # HANDLE BUTTONS
 
-    def Handle_Buttons(self):
-        self.btn_student.clicked.connect(self.student)
-        self.btn_fees.clicked.connect(self.fees)
-        self.btn_results.clicked.connect(self.results)
-
-        self.btn_add_fees.clicked.connect(self.add_fees)
-        self.btn_add_result.clicked.connect(self.exam_details)
-        self.btn_pay_fee.clicked.connect(self.pay_fee)
-        self.btn_student_leaving.clicked.connect(self.student_leaving)
-        # self.btn_driver.clicked.connect(self.Driver)
-        # self.btn_admin.clicked.connect(self.Admin)
+    
 
     def update_student_details(self):
         student = self.db.conn.execute(
-            f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,s.dob,s.address,s.contact,s.gender,s.section,s.last_school,s.special_case,s.student_image,c.class_name FROM students s INNER JOIN classes c ON s.class_id = c.id WHERE s.id = '{self.std_id}'").fetchone()
+            f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,s.dob,s.address,s.contact,s.gender,s.section,s.last_school,s.special_case,s.student_image,c.class_name,s.status FROM students s INNER JOIN classes c ON s.class_id = c.id WHERE s.id = '{self.std_id}'").fetchone()
         self.lbl_admission_date.setText(student[0])
         self.lbl_admission_no.setText(student[1])
         self.lbl_father_name.setText(student[3])
@@ -92,6 +112,7 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
         self.std_image.setPixmap(QPixmap(student[11]))
         self.std_image.setScaledContents(True)
         self.std_image.setAlignment(Qt.AlignCenter)
+        self.label_7.setText(student[-1])
 
     def student(self):
         self.stackedWidget.setCurrentWidget(self.student_page)
@@ -99,25 +120,35 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
 
     def fees(self):
         self.stackedWidget.setCurrentWidget(self.fees_page)
+        self.update_fee()
 
     def results(self):
         self.stackedWidget.setCurrentWidget(self.result_page)
 
     def add_fees(self):
-        self.add_fees_window = AddFeesWindow()
+        self.add_fees_window = AddFeesWindow(self.std_id)
         self.add_fees_window.show()
+        self.add_fees_window.btn_save.clicked.connect(self.update_fee)
 
     def pay_fee(self):
-        self.pay_fee_window = PayFeeWindow()
+        reg_no = self.db.select(
+            table_name='students',
+            columns="addmission_no",
+            condition=f"id = '{self.std_id}'")[0][0]
+        self.pay_fee_window = PayFeeWindow(reg_no)
         self.pay_fee_window.show()
+        self.pay_fee_window.btn_save.clicked.connect(self.update_fee)
 
     def exam_details(self):
+        
         self.exam_details_window = ExamDetailsWindow()
         self.exam_details_window.show()
+        
 
     def student_leaving(self):
         self.school_leaving_window = LeftSchoolWindow()
         self.school_leaving_window.show()
+
 
 
 def main():
