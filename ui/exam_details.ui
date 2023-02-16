@@ -245,7 +245,7 @@ QComboBox {
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QComboBox" name="comboBox">
+           <widget class="QComboBox" name="select_term">
             <property name="font">
              <font>
               <family>Calibri</family>
@@ -367,7 +367,7 @@ QComboBox {
         <number>15</number>
        </property>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="btn_save">
          <property name="minimumSize">
           <size>
            <width>0</width>

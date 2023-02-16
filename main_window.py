@@ -176,7 +176,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def search_student(self):
         search = self.txt_search_student.text()
-        print(search)
+        # print(search)
         if search != '':
             students = self.db.conn.execute(
                 f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id WHERE s.name LIKE '%{search}%' OR s.f_name LIKE '%{search}%' OR c.class_name LIKE '%{search}%' OR s.addmission_no LIKE '%{search}%' OR s.addmission_date LIKE '%{search}%'").fetchall()
@@ -189,7 +189,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.update_student_table()
 
     def update_student_table(self, students=None):
-        print(students)
+        # print(students)
         if students is None or students == False or QtGui.QCloseEvent:
             students = self.db.conn.execute(
                 f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
@@ -242,7 +242,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.lbl_total_subjects.setText("0")
 
     def update_class_table(self, classes=None):
-        print("classes", classes)
+        # print("classes", classes)
         if classes is None or classes == False:
             classes = self.db.select_all(
                 table_name='classes',
@@ -314,7 +314,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.lbl_total_amount_remaining.setText(str(remaining[0]))
             expense = self.db.conn.execute(
                 f"SELECT SUM(amount) FROM expenses WHERE date = '{QDate.currentDate().toString('dd/MM/yyyy')}'").fetchone()
-            print(expense)
+            # print(expense)
             if expense[0] is not None:
                 self.lbl_total_expense.setText(str(expense[0]))
                 self.lbl_net_balance.setText(str(reciceved-expense[0]))
@@ -382,7 +382,18 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.pay_fee_window.btn_save.clicked.connect(self.update_student_table)
 
     def exam_details(self):
-        self.exam_details_window = ExamDetailsWindow()
+        row = self.students_table.currentRow()
+        if row == -1:
+            QMessageBox.warning(
+                self, "Error", "Please select a student to view details")
+            return
+        registration_no = self.students_table.item(row, 1).text()
+        student_id = self.db.select(
+            table_name='students',
+            columns='id',
+            condition=f"addmission_no='{registration_no}'"
+        )[0][0]
+        self.exam_details_window = ExamDetailsWindow(student_id)
         self.exam_details_window.show()
 
     def add_class(self):
@@ -425,7 +436,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             columns='id',
             condition=f"addmission_no='{registration_no}'"
         )[0][0]
-        print(student_id)
+        # print(student_id)
         self.student_details_window = StudentDetailWindow(student_id)
         self.student_details_window.show()
         # when pressin red x button on student details window
