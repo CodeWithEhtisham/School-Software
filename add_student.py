@@ -21,6 +21,7 @@ class AddStudentWindow(QMainWindow, FORM_MAIN):
         self.db = DBHandler()
         self.update()
         self.Handle_Buttons()
+        self.txt_admission_date.setDate(QtCore.QDate.currentDate())
 
     def update(self):
         # clear classes combobox
@@ -47,7 +48,7 @@ class AddStudentWindow(QMainWindow, FORM_MAIN):
             self.std_image.setAlignment(Qt.AlignCenter)
 
     def save(self):
-        addmission_date= self.txt_admission_date.text()
+        addmission_date= self.txt_admission_date.date().toString("dd/MM/yyyy")
         addmission_no= self.txt_admission_no.text()
         name = self.txt_student_name.text()
         father_name = self.txt_student_father_name.text()
