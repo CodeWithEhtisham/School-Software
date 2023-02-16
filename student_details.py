@@ -146,8 +146,9 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
         
 
     def student_leaving(self):
-        self.school_leaving_window = LeftSchoolWindow()
+        self.school_leaving_window = LeftSchoolWindow(self.std_id)
         self.school_leaving_window.show()
+        self.school_leaving_window.btn_save.clicked.connect(self.close)
 
 
 

@@ -94,8 +94,6 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
         self.students_table.doubleClicked.connect(self.student_details)
 
-        # self.btn_driver.clicked.connect(self.Driver)
-        # self.btn_admin.clicked.connect(self.Admin)
         self.txt_expense_search.textChanged.connect(self.search_expense)
         self.btn_expense_refresh.clicked.connect(self.update_expense_table)
         self.class_table.doubleClicked.connect(self.update_subject_table)
@@ -106,6 +104,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.btn_edit_subject.clicked.connect(self.edit_subject)
         self.btn_edit_expense.clicked.connect(self.edit_expense)
         self.btn_edit_student.clicked.connect(self.edit_student)
+
+
 
     def edit_student(self):
         row = self.students_table.currentRow()
@@ -189,7 +189,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.update_student_table()
 
     def update_student_table(self, students=None):
-        if students is None or students == False:
+        print(students)
+        if students is None or students == False or QtGui.QCloseEvent:
             students = self.db.conn.execute(
                 f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
         if students:
@@ -267,7 +268,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
         if data:
             self.update_expense_table(data)
         else:
-            self.update_expense_table()
+            self.expense_table.setRowCount(0)
+            self.total_expense.setText("0")
+
 
     # def udpate(self):
     #     self.update_expense_table()
@@ -425,6 +428,17 @@ class MainWindow(QMainWindow, FORM_MAIN):
         print(student_id)
         self.student_details_window = StudentDetailWindow(student_id)
         self.student_details_window.show()
+        # when pressin red x button on student details window
+        self.student_details_window.closeEvent = self.update_student_table
+
+        # self.student_details_window.edit_fee_window.btn_save.clicked.connect(
+        #     self.update_student_table)
+        # self.add_fees_window.btn_save.clicked.connect(
+        #     self.update_student_table)
+        # self.pay_fee_window.btn_save.clicked.connect(
+        #     self.update_student_table)
+        # self.school_leaving_window.btn_save.clicked.connect(
+        #     self.update_student_table)
 
     def logout(self):
         self.close()
