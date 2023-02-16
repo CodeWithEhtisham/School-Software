@@ -139,7 +139,7 @@ QComboBox {
             </property>
            </widget>
           </item>
-          <item>
+          <!-- <item>
            <widget class="QLabel" name="label_2">
             <property name="font">
              <font>
@@ -216,8 +216,8 @@ QComboBox {
              <string>Subject 6</string>
             </property>
            </widget>
-          </item>
-          <item>
+          </item> -->
+          <!-- <item>
            <widget class="QLabel" name="label_9">
             <property name="font">
              <font>
@@ -231,7 +231,7 @@ QComboBox {
              <string>Total</string>
             </property>
            </widget>
-          </item>
+          </item> -->
          </layout>
         </widget>
        </item>
@@ -269,7 +269,8 @@ QComboBox {
             </item>
            </widget>
           </item>
-          <item>
+          
+          <!-- <item>
            <widget class="QLineEdit" name="lineEdit">
             <property name="font">
              <font>
@@ -340,7 +341,7 @@ QComboBox {
              </font>
             </property>
            </widget>
-          </item>
+          </item> -->
          </layout>
         </widget>
        </item>
