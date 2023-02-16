@@ -184,8 +184,11 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
             for i in range(self.monthly_accounts_table.rowCount()):
                 html += """<tr>"""
                 for j in range(self.monthly_accounts_table.columnCount()):
-                    html += """<td>""" + \
-                        self.monthly_accounts_table.item(i, j).text()+"</td>"
+                    html += """<td>""" 
+                    if self.monthly_accounts_table.item(i, j) is None:
+                        html += """-</td>"""
+                    else:
+                        html+=self.monthly_accounts_table.item(i, j).text()+"</td>"
                 html += "</tr>"
             html += """
                     </tbody>
@@ -205,15 +208,18 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
             for i in range(self.monthly_expense_table.rowCount()):
                 html += """<tr>"""
                 for j in range(self.monthly_expense_table.columnCount()):
-                    html += """<td>""" + \
-                        self.monthly_expense_table.item(i, j).text()+"</td>"
+                    html += """<td>""" 
+                    if self.monthly_expense_table.item(i, j) is None:
+                        html += """-</td>"""
+                    else:
+                        html+=self.monthly_expense_table.item(i, j).text()+"</td>"
                 html += "</tr>"
             html += """
                     </tbody>
     
                 </table>
                 
-                <h2>Total Amount Received: </h2>
+                <h2>Total Amount Received:"""+self.lbl_total_amount_received.text()+"""</h2>
                 <h2>Total Amount Remaining: </h2>
                 <h2>Total Expense: </h2>
                 <hr>

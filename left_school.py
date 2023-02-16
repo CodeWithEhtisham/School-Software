@@ -21,6 +21,9 @@ class LeftSchoolWindow(QMainWindow, FORM_MAIN):
         self.std_id = std_id
         self.db = DBHandler()
         self.Handle_Buttons()
+        self.lbl_student_name.setText(
+            self.db.select(table_name='students', columns='name', condition=f"id = '{self.std_id}'")[0][0]
+        )
 
     def Handle_Buttons(self):
         self.btn_save.clicked.connect(self.left_school)
@@ -34,7 +37,7 @@ class LeftSchoolWindow(QMainWindow, FORM_MAIN):
         if date and reason:
             try:
                 self.db.conn.execute(
-                    f"update students set  description = '{reason}',addmission_date='{date}',remaining_fee=0, status = 'InActive' where id = '{self.std_id}'")
+                    f"update students set  description = '{reason}',addmission_date='{date}',remaining_fee=0, status = 'Left' where id = '{self.std_id}'")
                 self.db.conn.commit()
                 QMessageBox.information(self, "Success", "Student left school")
                 self.close()

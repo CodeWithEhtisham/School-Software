@@ -46,7 +46,7 @@ class PayFeeWindow(QMainWindow, FORM_MAIN):
             challan_no= self.txt_challan_no.text()
             description= self.txt_description.text()
             remaining_fee= float(self.txt_total_remaining.text())
-            if paid_fee and date and challan_no and description and remaining_fee:
+            if paid_fee and date and challan_no and description:
                 fee_id = self.db.select(
                     table_name='fee',
                     columns='id',

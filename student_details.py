@@ -45,7 +45,55 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
         self.btn_pay_fee.clicked.connect(self.pay_fee)
         self.btn_student_leaving.clicked.connect(self.student_leaving)
         self.btn_edit_fee.clicked.connect(self.edit_fee)
+        self.select_term.currentTextChanged.connect(self.update_exam_details)
         # self.btn_add_result
+    def update_exam_details(self):
+        try:
+            selected=self.select_term.currentText()
+            if selected == "1st Term":
+                print(selected)
+                # get all optained marks and total marks from the table_1st_term
+                total_mark=0
+                obtained_mark=0
+                for i in range(self.table_1st_term.rowCount()):
+                    total_mark+=int(self.table_1st_term.item(i,1).text())
+                    obtained_mark+=int(self.table_1st_term.item(i,3).text())
+                self.lbl_total_marks.setText(str(total_mark))
+                self.lbl_obtain_marks.setText(str(obtained_mark))
+            
+            elif selected == "2nd Term":
+                print(selected)
+                # get all optained marks and total marks from the table_2nd_term
+                total_mark=0
+                obtained_mark=0
+                for i in range(self.table_2nd_term.rowCount()):
+                    total_mark+=int(self.table_2nd_term.item(i,1).text())
+                    obtained_mark+=int(self.table_2nd_term.item(i,3).text())
+                self.lbl_total_marks.setText(str(total_mark))
+                self.lbl_obtain_marks.setText(str(obtained_mark))
+
+            elif selected == "3rd Term":
+                print(selected)
+                # get all optained marks and total marks from the table_3rd_term
+                total_mark=0
+                obtained_mark=0
+                for i in range(self.table_3rd_term.rowCount()):
+                    total_mark+=int(self.table_3rd_term.item(i,1).text())
+                    obtained_mark+=int(self.table_3rd_term.item(i,3).text())
+                self.lbl_total_marks.setText(str(total_mark))
+                self.lbl_obtain_marks.setText(str(obtained_mark))
+
+            else:
+                print("else")
+                self.lbl_total_marks.setText(str('0'))
+                self.lbl_obtain_marks.setText(str('0'))
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"no data found {e}")
+                
+            
+
+
+
 
     def edit_fee(self):
         row = self.fees_table.currentRow()
@@ -65,41 +113,43 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
 
 
     def update_fee(self):
-        fee = self.db.select(
-            table_name='fee',
-            columns="*",
-            condition=f"std_id = '{self.std_id}'")[-1]
+        try:
+            fee = self.db.select(
+                table_name='fee',
+                columns="*",
+                condition=f"std_id = '{self.std_id}'")[-1]
 
-        self.lbl_addmission_fee.setText(str(fee[1]))
-        self.lbl_monthly_fee.setText(str(fee[2]))
-        self.lbl_annual_fund.setText(str(fee[3]))
-        self.lbl_comp_lab_fee.setText(str(fee[4]))
-        self.lbl_sci_lab_fee.setText(str(fee[5]))
-        self.lbl_total_fee.setText(str(fee[7]))
+            self.lbl_addmission_fee.setText(str(fee[1]))
+            self.lbl_monthly_fee.setText(str(fee[2]))
+            self.lbl_annual_fund.setText(str(fee[3]))
+            self.lbl_comp_lab_fee.setText(str(fee[4]))
+            self.lbl_sci_lab_fee.setText(str(fee[5]))
+            self.lbl_total_fee.setText(str(fee[7]))
 
-        transactions = self.db.select(
-            table_name='transactions',
-            columns="date,paid_fee,challan_no,description,remaining_fee",
-            condition=f"fee_id = '{fee[0]}'")
+            transactions = self.db.select(
+                table_name='transactions',
+                columns="date,paid_fee,challan_no,description,remaining_fee",
+                condition=f"fee_id = '{fee[0]}'")
 
-        self.fees_table.setRowCount(0)
-        remaining_fee = 0
-        for row_number, row_data in enumerate(transactions):
-            self.fees_table.insertRow(row_number)
-            for column_number, data in enumerate(row_data):
-                if column_number == 4:
-                    remaining_fee = data
-                self.fees_table.setItem(
-                    row_number, column_number, QTableWidgetItem(str(data)))
-        self.lbl_remaining_fee.setText(str(remaining_fee))
-
+            self.fees_table.setRowCount(0)
+            remaining_fee = 0
+            for row_number, row_data in enumerate(transactions):
+                self.fees_table.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    if column_number == 4:
+                        remaining_fee = data
+                    self.fees_table.setItem(
+                        row_number, column_number, QTableWidgetItem(str(data)))
+            self.lbl_remaining_fee.setText(str(remaining_fee))
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"no data found {e}")
      # HANDLE BUTTONS
 
     
 
     def update_student_details(self):
         student = self.db.conn.execute(
-            f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,s.dob,s.address,s.contact,s.gender,s.section,s.last_school,s.special_case,s.student_image,c.class_name,s.status FROM students s INNER JOIN classes c ON s.class_id = c.id WHERE s.id = '{self.std_id}'").fetchone()
+            f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,s.dob,s.address,s.contact,s.gender,s.section,s.last_school,s.special_case,s.student_image,c.class_name,s.status,s.addmission_date,description FROM students s INNER JOIN classes c ON s.class_id = c.id WHERE s.id = '{self.std_id}'").fetchone()
         self.lbl_admission_date.setText(student[0])
         self.lbl_admission_no.setText(student[1])
         self.lbl_father_name.setText(student[3])
@@ -107,14 +157,20 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
         self.lbl_address.setText(student[5])
         self.lbl_contact.setText(student[6])
         self.lbl_gender.setText(student[7])
-        self.lbl_class.setText(student[-1])
+        self.lbl_class.setText(student[12])
         self.lbl_section.setText(student[8])
         self.lbl_last_school.setText(student[9])
         self.lbl_special_case.setText(student[10])
         self.std_image.setPixmap(QPixmap(student[11]))
         self.std_image.setScaledContents(True)
         self.std_image.setAlignment(Qt.AlignCenter)
-        self.label_7.setText(student[-1])
+        self.label_7.setText(student[13])
+        if student[13] == 'InActive':
+            self.label_23.setText(str(student[14]))
+            self.label_25.setText(str(student[15]))
+        else:
+            self.label_23.setText(str(''))
+            self.label_25.setText(str(''))
 
     def student(self):
         self.stackedWidget.setCurrentWidget(self.student_page)

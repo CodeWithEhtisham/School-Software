@@ -58,6 +58,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.expense_table.setColumnWidth(3, 200)
         self.expense_table.setColumnWidth(4, 200)
         self.expense_table.setColumnWidth(5, 300)
+        self.report_from_date.setDate(QDate.currentDate())
+        self.report_to_date.setDate(QDate.currentDate())
 
      # HANDLE BUTTONS
 
@@ -99,45 +101,105 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.class_table.doubleClicked.connect(self.update_subject_table)
         self.btn_refresh_student.clicked.connect(self.update_student_table)
         self.txt_search_student.textChanged.connect(self.search_student)
-        self.select_class.currentIndexChanged.connect(self.student_search_class)
+        self.select_class.currentIndexChanged.connect(
+            self.student_search_class)
         self.btn_edit_class.clicked.connect(self.edit_class)
         self.btn_edit_subject.clicked.connect(self.edit_subject)
         self.btn_edit_expense.clicked.connect(self.edit_expense)
         self.btn_edit_student.clicked.connect(self.edit_student)
+        self.btn_date_search.clicked.connect(self.search_date_report)
+        self.btn_reports_refresh.clicked.connect(
+            self.update_daily_report_table)
+        self.txt_search_report.textChanged.connect(self.search_report)
+        self.btn_defaulters.clicked.connect(self.defaulters)
+
+    def defaulters(self):
+        # get only last transaction of each student
+        # reports = self.db.conn.execute(
+        #     f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,s.remaining_fee,t.date FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id ORDER BY s.remaining_fee DESC").fetchall()
+        reports = self.db.conn.execute(
+            """
+                SELECT DISTINCT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, t.date
+FROM students s
+INNER JOIN classes c ON s.class_id = c.id
+INNER JOIN (
+    SELECT std_id, MAX(id) AS max_id
+    FROM fee
+    GROUP BY std_id
+) f ON s.id = f.std_id
+INNER JOIN transactions t ON f.max_id = t.fee_id
+ORDER BY s.remaining_fee DESC
 
 
+                """).fetchall()
+        if reports:
+            # reciceved = 0
+            self.daily_reports_table.setRowCount(0)
+            for row, form in enumerate(reports):
+                self.daily_reports_table.insertRow(row)
+                for column, item in enumerate(form):
+                    if column == 4 or column == 3:
+                        self.daily_reports_table.setItem(
+                            row, column, QTableWidgetItem(str('-')))
+                        # continue
+                    else:
+                        # reciceved += int(item)
+                        self.daily_reports_table.setItem(
+                            row, column, QTableWidgetItem(str(item)))
+
+            # self.lbl_total_amount_received.setText(str(reciceved))
+            # remaining = self.db.conn.execute(
+            #     # f"SELECT SUM(remaining_fee) FROM transactions WHERE date = '{QDate.currentDate().toString('dd/MM/yyyy')}'").fetchone()
+            #     f"SELECT SUM(remaining_fee) FROM students").fetchone()
+            # self.lbl_total_amount_remaining.setText(str(remaining[0]))
+            # expense = self.db.conn.execute(
+            #     f"SELECT SUM(amount) FROM expenses WHERE date = '{QDate.currentDate().toString('dd/MM/yyyy')}'").fetchone()
+            # # print(expense)
+            # if expense[0] is not None:
+            #     self.lbl_total_expense.setText(str(expense[0]))
+            #     self.lbl_net_balance.setText(str(reciceved-expense[0]))
+            # else:
+            #     self.lbl_total_expense.setText("0")
+            #     self.lbl_net_balance.setText(str(reciceved))
 
     def edit_student(self):
         row = self.students_table.currentRow()
         if row == -1:
-            QMessageBox.warning(self, 'Warning', 'Please select a student to edit')
+            QMessageBox.warning(
+                self, 'Warning', 'Please select a student to edit')
             return
         reg_no = self.students_table.item(row, 1).text()
         student_id = self.db.conn.execute(
             f"SELECT id FROM students WHERE addmission_no='{reg_no}'").fetchone()[0]
         self.edit_student_window = UpdateStudentWindow(student_id)
         self.edit_student_window.show()
-        self.edit_student_window.btn_save.clicked.connect(self.update_student_table)
+        self.edit_student_window.btn_save.clicked.connect(
+            self.update_student_table)
+
     def edit_expense(self):
         row = self.expense_table.currentRow()
         if row == -1:
-            QMessageBox.warning(self, 'Warning', 'Please select a expense to edit')
+            QMessageBox.warning(
+                self, 'Warning', 'Please select a expense to edit')
             return
-        date= self.expense_table.item(row, 0).text()
-        hoa= self.expense_table.item(row, 1).text()
-        payment_type= self.expense_table.item(row, 3).text()
-        recipient_name= self.expense_table.item(row, 4).text()
+        date = self.expense_table.item(row, 0).text()
+        hoa = self.expense_table.item(row, 1).text()
+        payment_type = self.expense_table.item(row, 3).text()
+        recipient_name = self.expense_table.item(row, 4).text()
         expense_id = self.db.conn.execute(
             f"SELECT id FROM expenses WHERE date='{date}' and hoa='{hoa}' and payment_type='{payment_type}' and recipient_name='{recipient_name}'").fetchone()[0]
         self.edit_expense_window = UpdateExpensesWindow(expense_id)
         self.edit_expense_window.show()
-        self.edit_expense_window.btn_save.clicked.connect(self.update_expense_table)
-        self.edit_expense_window.btn_delete.clicked.connect(self.update_expense_table)
+        self.edit_expense_window.btn_save.clicked.connect(
+            self.update_expense_table)
+        self.edit_expense_window.btn_delete.clicked.connect(
+            self.update_expense_table)
 
     def edit_subject(self):
         row = self.subjects_table.currentRow()
         if row == -1:
-            QMessageBox.warning(self, 'Warning', 'Please select a subject to edit')
+            QMessageBox.warning(
+                self, 'Warning', 'Please select a subject to edit')
             return
         subject_name = self.subjects_table.item(row, 0).text()
         row = self.class_table.currentRow()
@@ -148,25 +210,29 @@ class MainWindow(QMainWindow, FORM_MAIN):
             f"SELECT id FROM subjects WHERE subject_name='{subject_name}' and class_id={class_id}").fetchone()[0]
         self.edit_subject_window = UpdateSubjectWindow(subject_id)
         self.edit_subject_window.show()
-        self.edit_subject_window.btn_save.clicked.connect(self.update_subject_table)
+        self.edit_subject_window.btn_save.clicked.connect(
+            self.update_subject_table)
 
     def edit_class(self):
         row = self.class_table.currentRow()
         if row == -1:
-            QMessageBox.warning(self, 'Warning', 'Please select a class to edit')
+            QMessageBox.warning(
+                self, 'Warning', 'Please select a class to edit')
             return
         class_name = self.class_table.item(row, 0).text()
         class_id = self.db.conn.execute(
             f"SELECT id FROM classes WHERE class_name='{class_name}'").fetchone()[0]
         self.edit_class_window = UpdateClassWindow(class_id)
         self.edit_class_window.show()
-        self.edit_class_window.btn_save.clicked.connect(self.update_class_table)
+        self.edit_class_window.btn_save.clicked.connect(
+            self.update_class_table)
 
     def student_search_class(self):
-        class_name=self.select_class.currentText()
+        class_name = self.select_class.currentText()
         if class_name != 'Select Class':
             students = self.db.conn.execute(
                 f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id WHERE c.class_name LIKE '%{class_name}%'").fetchall()
+            # print(students)
             if students:
                 self.update_student_table(students)
             else:
@@ -179,7 +245,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         # print(search)
         if search != '':
             students = self.db.conn.execute(
-                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id WHERE s.name LIKE '%{search}%' OR s.f_name LIKE '%{search}%' OR c.class_name LIKE '%{search}%' OR s.addmission_no LIKE '%{search}%' OR s.addmission_date LIKE '%{search}%'").fetchall()
+                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id WHERE s.name LIKE '%{search}%' OR s.f_name LIKE '%{search}%' OR c.class_name LIKE '%{search}%' OR s.addmission_no LIKE '%{search}%' OR s.addmission_date LIKE '%{search}%' OR s.status LIKE '%{search}%'").fetchall()
             if students:
                 self.update_student_table(students)
             else:
@@ -189,10 +255,12 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.update_student_table()
 
     def update_student_table(self, students=None):
-        # print(students)
-        if students is None or students == False or QtGui.QCloseEvent:
+        # print("before", students)
+        if students == None or students == False or QtGui.QCloseEvent == False:
+            # print('if')
             students = self.db.conn.execute(
                 f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
+        # print('after',students)
         if students:
             ln = str(len(students))
             self.students_table.setRowCount(0)
@@ -271,7 +339,6 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.expense_table.setRowCount(0)
             self.total_expense.setText("0")
 
-
     # def udpate(self):
     #     self.update_expense_table()
 
@@ -322,13 +389,52 @@ class MainWindow(QMainWindow, FORM_MAIN):
                 self.lbl_total_expense.setText("0")
                 self.lbl_net_balance.setText(str(reciceved))
 
+    def search_date_report(self):
+        from_date = self.report_from_date.date().toString('dd/MM/yyyy')
+        to_date = self.report_to_date.date().toString('dd/MM/yyyy')
+        reports = self.db.conn.execute(
+            f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date BETWEEN '{from_date}' and '{to_date}' and t.paid_fee != 0").fetchall()
+        if reports:
+            self.update_daily_report_table(reports)
+        else:
+            self.daily_reports_table.setRowCount(0)
+            self.lbl_total_amount_received.setText("0")
+            self.lbl_total_amount_remaining.setText("0")
+            self.lbl_total_expense.setText("0")
+            self.lbl_net_balance.setText("0")
+
+    def search_report(self):
+        search = self.txt_search_report.text()
+        reports = self.db.conn.execute(
+            f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{QDate.currentDate().toString('dd/MM/yyyy')}' and t.paid_fee != 0 and s.name LIKE '%{search}%' or s.f_name LIKE '%{search}%' or c.class_name LIKE '%{search}%' or t.challan_no LIKE '%{search}%' or t.description LIKE '%{search}%'").fetchall()
+        if reports:
+            self.update_daily_report_table(reports)
+        else:
+            self.daily_reports_table.setRowCount(0)
+            self.lbl_total_amount_received.setText("0")
+            self.lbl_total_amount_remaining.setText("0")
+            self.lbl_total_expense.setText("0")
+            self.lbl_net_balance.setText("0")
+
     def home(self):
         self.stackedWidget.setCurrentWidget(self.home_page)
+        school_info = self.db.select_all(
+            table_name='school_info',
+            columns="school_name,contact,address,logo",
+        )
+        if school_info:
+            self.lbl_school_name.setText(school_info[0][0])
+            self.lbl_school_contact.setText(school_info[0][1])
+            self.lbl_school_address.setText(school_info[0][2])
+            self.lbl_logo.setPixmap(QPixmap(school_info[0][3]))
+            self.lbl_logo.setScaledContents(True)
+
     def add_select_class(self):
         self.select_class.clear()
         self.select_class.addItem('Select Class')
         self.select_class.addItems([i[0] for i in self.db.conn.execute(
             f"SELECT class_name FROM classes").fetchall()])
+
     def students(self):
         self.stackedWidget.setCurrentWidget(self.students_page)
         self.add_select_class()
@@ -369,6 +475,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
         )[0][0]
         self.add_fees_window = AddFeesWindow(student_id)
         self.add_fees_window.show()
+        self.add_fees_window.btn_save.clicked.connect(
+            self.update_student_table)
 
     def pay_fee(self):
         selected_row = self.students_table.currentRow()
@@ -470,7 +578,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def add_school_details(self):
         self.add_school_window = SchoolDetailsWindow()
         self.add_school_window.show()
-        
+
     # def add_users(self):
     #     self.add_users_window = CreateUserWindow()
     #     self.add_users_window.show()
@@ -683,6 +791,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     # PRINT STUDENTS
     def print_students(self):
+        school_info = self.db.select_all(
+            table_name="school_info", columns="school_name, contact, address")
+
         filename = QFileDialog.getSaveFileName(
             self, "Save File", "", "PDF(*.pdf)")
         if filename[0]:
@@ -740,9 +851,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
             <!DOCTYPE html>
             <html lang="en">
             <body>
-                <h1> Business Name</h1>
-                <p> Address </p>
-                <h2>Contact : </h2>
+                <h1> """+school_info[0][0]+"""</h1>
+                <p> """+school_info[0][2]+""" </p>
+                <h2>"""+school_info[0][1]+""" : </h2>
                 <h1>Students</h1>
 
                 <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>

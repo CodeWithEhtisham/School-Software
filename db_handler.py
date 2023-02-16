@@ -24,6 +24,7 @@ class DBHandler:
         self.create_table("transactions", "id INTEGER PRIMARY KEY AUTOINCREMENT, paid_fee REAL,date TEXT,challan_no TEXT,description TEXT,remaining_fee INTERGER, fee_id INTEGER, FOREIGN KEY(fee_id) REFERENCES fee(id)")
         self.create_table("exams", "id INTEGER PRIMARY KEY AUTOINCREMENT, exam_name TEXT, date TEXT, class_id INTEGER, student_id INTEGER, FOREIGN KEY(class_id) REFERENCES classes(id), FOREIGN KEY(student_id) REFERENCES students(id)")
         self.create_table("exam_details", "id INTEGER PRIMARY KEY AUTOINCREMENT, exam_id INTEGER, subject_id INTEGER, marks INTEGER, FOREIGN KEY(exam_id) REFERENCES exams(id), FOREIGN KEY(subject_id) REFERENCES subjects(id)")
+        self.create_table("school_info", "id INTEGER PRIMARY KEY AUTOINCREMENT, school_name TEXT, contact TEXT, address TEXT, logo TEXT")
 
     def create_table(self, table_name, columns):
         self.cursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({columns})")
