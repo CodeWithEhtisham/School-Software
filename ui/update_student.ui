@@ -24,6 +24,12 @@
     <normaloff>:/icons/assets/icons/logo.png</normaloff>:/icons/assets/icons/logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="font">
+    <font>
+     <family>Calibri</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
    <property name="styleSheet">
     <string notr="true">* {
 	background-color: #e3f2fd;
@@ -52,7 +58,7 @@ QPushButton {
 	color: #fff;
 }
 
-QLineEdit {
+QLineEdit, QDateEdit {
 	background-color: #fff;
 	border-radius: 5px;
 	border: 1px solid #039be5;
@@ -335,12 +341,15 @@ QComboBox {
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QLineEdit" name="txt_admission_date">
+           <widget class="QDateEdit" name="txt_admission_date">
             <property name="font">
              <font>
               <family>Calibri</family>
               <pointsize>14</pointsize>
              </font>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
