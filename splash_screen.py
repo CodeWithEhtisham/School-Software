@@ -30,7 +30,7 @@ class Ui_SplashScreen(object):
         self.dropShadowFrame = QFrame(self.centralwidget)
         self.dropShadowFrame.setObjectName(u"dropShadowFrame")
         self.dropShadowFrame.setStyleSheet(u"QFrame {	\n"
-"	background-color: rgb(56, 58, 89);	\n"
+"	background-color: #00bcd4;	\n"
 "	color: rgb(220, 220, 220);\n"
 "	border-radius: 10px;\n"
 "}")
@@ -43,7 +43,7 @@ class Ui_SplashScreen(object):
         font.setFamily(u"Segoe UI")
         font.setPointSize(40)
         self.label_title.setFont(font)
-        self.label_title.setStyleSheet(u"color: rgb(254, 121, 199);")
+        self.label_title.setStyleSheet(u"color: #154c79;")
         self.label_title.setAlignment(Qt.AlignCenter)
         self.label_description = QLabel(self.dropShadowFrame)
         self.label_description.setObjectName(u"label_description")
@@ -74,8 +74,8 @@ class Ui_SplashScreen(object):
         self.label_loading.setObjectName(u"label_loading")
         self.label_loading.setGeometry(QRect(0, 320, 661, 21))
         font2 = QFont()
-        font2.setFamily(u"Segoe UI")
-        font2.setPointSize(12)
+        font2.setFamily(u"Calibri")
+        font2.setPointSize(14)
         self.label_loading.setFont(font2)
         self.label_loading.setStyleSheet(u"color: rgb(98, 114, 164);")
         self.label_loading.setAlignment(Qt.AlignCenter)
@@ -83,25 +83,21 @@ class Ui_SplashScreen(object):
         self.label_credits.setObjectName(u"label_credits")
         self.label_credits.setGeometry(QRect(20, 350, 621, 21))
         font3 = QFont()
-        font3.setFamily(u"Segoe UI")
-        font3.setPointSize(10)
+        font3.setFamily(u"Calibri")
+        font3.setPointSize(14)
         self.label_credits.setFont(font3)
         self.label_credits.setStyleSheet(u"color: rgb(98, 114, 164);")
         self.label_credits.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-
         self.verticalLayout.addWidget(self.dropShadowFrame)
-
         SplashScreen.setCentralWidget(self.centralwidget)
-
         self.retranslateUi(SplashScreen)
-
         QMetaObject.connectSlotsByName(SplashScreen)
     # setupUi
 
     def retranslateUi(self, SplashScreen):
         SplashScreen.setWindowTitle(QCoreApplication.translate("SplashScreen", u"MainWindow", None))
-        self.label_title.setText(QCoreApplication.translate("SplashScreen", u"<strong>Digital</strong> Khata", None))
+        self.label_title.setText(QCoreApplication.translate("SplashScreen", u"<strong>School</strong> Software", None))
         self.label_description.setText(QCoreApplication.translate("SplashScreen", u"<strong>APP</strong> DESCRIPTION", None))
         self.label_loading.setText(QCoreApplication.translate("SplashScreen", u"loading...", None))
-        self.label_credits.setText(QCoreApplication.translate("SplashScreen", u"<strong>Created</strong>: SAM & CODERS", None))
+        self.label_credits.setText(QCoreApplication.translate("SplashScreen", u"<strong>Powered By: </strong> ComPy Softwares Quetta", None))
     # retranslateUi

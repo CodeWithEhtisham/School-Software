@@ -22,6 +22,10 @@ class AddStudentWindow(QMainWindow, FORM_MAIN):
         self.update()
         self.Handle_Buttons()
         self.txt_admission_date.setDate(QtCore.QDate.currentDate())
+        
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Return:
+            self.save()
 
     def update(self):
         # clear classes combobox
@@ -86,11 +90,6 @@ class AddStudentWindow(QMainWindow, FORM_MAIN):
                 QMessageBox.warning(self, "Error", str(e))
         else:
             QMessageBox.warning(self, "Error", "Please fill all fields")
-
-
-
-        
-
 
 
 def main():

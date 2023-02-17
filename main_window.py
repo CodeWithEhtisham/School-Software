@@ -40,6 +40,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.showMaximized()
         self.Handle_Buttons()
         # self.update()
+        self.home()
 
         self.students_table.setColumnWidth(0, 120)
         self.students_table.setColumnWidth(1, 170)
@@ -255,12 +256,9 @@ ORDER BY s.remaining_fee DESC
             self.update_student_table()
 
     def update_student_table(self, students=None):
-        # print("before", students)
         if students == None or students == False or QtGui.QCloseEvent == False:
-            # print('if')
             students = self.db.conn.execute(
                 f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
-        # print('after',students)
         if students:
             ln = str(len(students))
             self.students_table.setRowCount(0)
@@ -458,8 +456,7 @@ ORDER BY s.remaining_fee DESC
     def add_student(self):
         self.add_student_window = AddStudentWindow()
         self.add_student_window.show()
-        self.add_student_window.btn_save.clicked.connect(
-            self.update_student_table)
+        self.add_student_window.btn_save.clicked.connect(self.update_student_table)
 
     def add_fees(self):
         selected_row = self.students_table.currentRow()
@@ -593,6 +590,9 @@ ORDER BY s.remaining_fee DESC
 
     # PRINT DAILY REPORTS
     def print_daily_report(self):
+        school_info = self.db.select_all(
+            table_name="school_info", columns="school_name, contact, address")
+        
         filename = QFileDialog.getSaveFileName(
             self, "Save File", "", "PDF(*.pdf)")
         if filename[0]:
@@ -650,9 +650,9 @@ ORDER BY s.remaining_fee DESC
             <!DOCTYPE html>
             <html lang="en">
             <body>
-                <h1> Business Name</h1>
-                <p> Address </p>
-                <h2>Contact : </h2>
+                <h1> """+school_info[0][0]+"""</h1>
+                <p> """+school_info[0][2]+""" </p>
+                <h2> Contact : """+school_info[0][1]+""" </h2>
                 <h1> Daily Report </h1>
                 <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>
                 <table>
@@ -668,22 +668,26 @@ ORDER BY s.remaining_fee DESC
                         </tr>
                     </thead>
                     <tbody style="font-size: 10px;">
-                    """
+            """
             for i in range(self.daily_reports_table.rowCount()):
                 html += """<tr>"""
                 for j in range(self.daily_reports_table.columnCount()):
-                    html += """<td>""" + \
-                        self.daily_reports_table.item(i, j).text()+"</td>"
+                    html += """<td>""" 
+                    if self.daily_reports_table.item(i, j) is None:
+                        html += """-</td>"""
+                    else:
+                        html += self.daily_reports_table.item(
+                            i, j).text()+"</td>"
                 html += "</tr>"
             html += """
                     </tbody>
     
                 </table>
                 
-                <h2>Total Amount Received: </h2>
-                <h2>Total Amount Remaining: </h2>
-                <h2>Total Expense: </h2>
-                <h2>Net Balance: </h2>
+                <h2>Total Amount Received: """+self.lbl_total_amount_received.text()+"""</h2>
+                <h2>Total Amount Remaining: """+self.lbl_total_amount_remaining.text()+"""</h2>
+                <h2>Total Expense: """+self.lbl_total_expense.text()+"""</h2>
+                <h2>Net Balance: """+self.lbl_net_balance.text()+"""</h2>
             </body>
             </html>
             """
@@ -695,6 +699,8 @@ ORDER BY s.remaining_fee DESC
 
     # PRINT EXPENSE
     def print_expense(self):
+        school_info = self.db.select_all(
+            table_name="school_info", columns="school_name, contact, address")
         filename = QFileDialog.getSaveFileName(
             self, "Save File", "", "PDF(*.pdf)")
         if filename[0]:
@@ -751,9 +757,9 @@ ORDER BY s.remaining_fee DESC
             <!DOCTYPE html>
             <html lang="en">
             <body>
-                <h1> Business Name</h1>
-                <p> Address </p>
-                <h2>Contact : </h2>
+                <h1> """+school_info[0][0]+"""</h1>
+                <p> """+school_info[0][2]+""" </p>
+                <h2> Contact : """+school_info[0][1]+""" </h2>
                 <h1>Expense</h1>
 
                 <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>
@@ -853,7 +859,7 @@ ORDER BY s.remaining_fee DESC
             <body>
                 <h1> """+school_info[0][0]+"""</h1>
                 <p> """+school_info[0][2]+""" </p>
-                <h2>"""+school_info[0][1]+""" : </h2>
+                <h2> Contact : """+school_info[0][1]+""" </h2>
                 <h1>Students</h1>
 
                 <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>
@@ -878,8 +884,7 @@ ORDER BY s.remaining_fee DESC
                     if j == 5:
                         html += "<td>-</td>"
                         continue
-                    html += """<td>""" + \
-                        self.students_table.item(i, j).text()+"</td>"
+                    html += """<td>""" +self.students_table.item(i, j).text()+"</td>"
                 html += "</tr>"
             html += """
                     </tbody>

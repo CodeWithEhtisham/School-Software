@@ -23,6 +23,9 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
         self.db = DBHandler()
         self.Handle_Buttons()
         self.update(month=None, year=None)
+        
+        self.monthly_accounts_table.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Fixed)
 
     def Handle_Buttons(self):
         self.select_month.dateChanged.connect(self.month_changed)
@@ -107,6 +110,9 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
 
     # PRINT MONTHLY
     def print_report(self):
+        school_info = self.db.select_all(
+            table_name="school_info", columns="school_name, contact, address")
+
         filename = QFileDialog.getSaveFileName(
             self, "Save File", "", "PDF(*.pdf)")
         if filename[0]:
@@ -147,6 +153,10 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
                   border-collapse: collapse;
                   width: 100%;
                 }
+                .full-width {
+                    width: 100%;
+                    background-color: #00bcd4;
+                }
                 th, td {
                     border: 1px solid black;
                     padding: 4px;
@@ -164,14 +174,13 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
             <!DOCTYPE html>
             <html lang="en">
             <body>
-                <h1> Business Name</h1>
-                <p> Address </p>
-                <h2>Contact : </h2>
+                <h1> """+school_info[0][0]+"""</h1>
+                <p> """+school_info[0][2]+""" </p>
+                <h2> Contact : """+school_info[0][1]+""" </h2>
                 <h1>Monthly Report</h1>
-
                 <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>
                 <p> Summary of the Month </p>
-                <table>
+                <table class="full-width">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -184,11 +193,12 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
             for i in range(self.monthly_accounts_table.rowCount()):
                 html += """<tr>"""
                 for j in range(self.monthly_accounts_table.columnCount()):
-                    html += """<td>""" 
+                    html += """<td>"""
                     if self.monthly_accounts_table.item(i, j) is None:
                         html += """-</td>"""
                     else:
-                        html+=self.monthly_accounts_table.item(i, j).text()+"</td>"
+                        html += self.monthly_accounts_table.item(
+                            i, j).text()+"</td>"
                 html += "</tr>"
             html += """
                     </tbody>
@@ -208,22 +218,23 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
             for i in range(self.monthly_expense_table.rowCount()):
                 html += """<tr>"""
                 for j in range(self.monthly_expense_table.columnCount()):
-                    html += """<td>""" 
+                    html += """<td>"""
                     if self.monthly_expense_table.item(i, j) is None:
                         html += """-</td>"""
                     else:
-                        html+=self.monthly_expense_table.item(i, j).text()+"</td>"
+                        html += self.monthly_expense_table.item(
+                            i, j).text()+"</td>"
                 html += "</tr>"
             html += """
                     </tbody>
     
                 </table>
-                
-                <h2>Total Amount Received:"""+self.lbl_total_amount_received.text()+"""</h2>
-                <h2>Total Amount Remaining: </h2>
-                <h2>Total Expense: </h2>
                 <hr>
-                <h2>Net Balance: </h2>
+                <h2>Total Amount Received:"""+self.lbl_total_amount_received.text()+"""</h2>
+                <h2>Total Amount Remaining:"""+self.lbl_total_amount_remaining.text()+""" </h2>
+                <h2>Total Expense: """+self.lbl_total_expense.text()+"""</h2>
+                <hr>
+                <h2>Net Balance: """+self.lbl_net_balance.text()+"""</h2>
             </body>
             </html>
             """

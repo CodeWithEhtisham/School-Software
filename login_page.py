@@ -23,6 +23,19 @@ class LoginWindow(QMainWindow, FORM_MAIN):
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.Handle_Buttons()
+        
+        self.txt_password.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.show_password.toggled.connect(self.toggle_password_visibility)
+        
+    def toggle_password_visibility(self, checked):
+        if checked:
+            self.txt_password.setEchoMode(QtWidgets.QLineEdit.Normal)
+        else:
+            self.txt_password.setEchoMode(QtWidgets.QLineEdit.Password)
+    
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Return:
+            self.login_user()
     
     def Handle_Buttons(self):
         self.btn_save.clicked.connect(self.login_user)

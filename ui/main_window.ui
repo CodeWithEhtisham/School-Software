@@ -298,7 +298,7 @@ QDateEdit {
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="home_page">
        <property name="styleSheet">
@@ -829,9 +829,6 @@ QDateEdit {
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
           </property>
-          <property name="rowCount">
-           <number>15</number>
-          </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>180</number>
           </attribute>
@@ -841,21 +838,7 @@ QDateEdit {
           <attribute name="verticalHeaderMinimumSectionSize">
            <number>35</number>
           </attribute>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
+         
           <column>
            <property name="text">
             <string>Adm Date</string>
@@ -1257,27 +1240,9 @@ QDateEdit {
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
           </property>
-          <property name="rowCount">
-           <number>15</number>
-          </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>150</number>
           </attribute>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
           <column>
            <property name="text">
             <string>Date</string>
@@ -2232,25 +2197,12 @@ QDateEdit {
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
           </property>
-          <property name="rowCount">
-           <number>10</number>
-          </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>150</number>
           </attribute>
           <attribute name="horizontalHeaderStretchLastSection">
            <bool>true</bool>
           </attribute>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
-          <row/>
           <column>
            <property name="text">
             <string>Name</string>

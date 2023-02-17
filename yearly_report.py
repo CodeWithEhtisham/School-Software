@@ -104,6 +104,9 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
 
     # PRINT YEARLY
     def print_report(self):
+        school_info = self.db.select_all(
+            table_name="school_info", columns="school_name, contact, address")
+        
         filename = QFileDialog.getSaveFileName(
             self, "Save File", "", "PDF(*.pdf)")
         if filename[0]:
@@ -161,9 +164,9 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
             <!DOCTYPE html>
             <html lang="en">
             <body>
-                <h1> Business Name</h1>
-                <p> Address </p>
-                <h2>Contact : </h2>
+                <h1> """+school_info[0][0]+"""</h1>
+                <p> """+school_info[0][2]+""" </p>
+                <h2> Contact : """+school_info[0][1]+""" </h2>
                 <h1>Yearly Report</h1>
 
                 <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>
@@ -177,12 +180,16 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
                         </tr>
                     </thead>
                     <tbody>
-                    """
+            """
             for i in range(self.accounts_table.rowCount()):
                 html += """<tr>"""
                 for j in range(self.accounts_table.columnCount()):
-                    html += """<td>""" + \
-                        self.accounts_table.item(i, j).text()+"</td>"
+                    html += """<td>"""
+                    if self.accounts_table.item(i, j) is None:
+                        html += """-</td>"""
+                    else:
+                        html += self.accounts_table.item(
+                            i, j).text()+"</td>"
                 html += "</tr>"
             html += """
                     </tbody>
@@ -198,23 +205,28 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
                         </tr>
                     </thead>
                     <tbody>
-                    """
+            """
             for i in range(self.expense_table.rowCount()):
                 html += """<tr>"""
                 for j in range(self.expense_table.columnCount()):
-                    html += """<td>""" + \
-                        self.expense_table.item(i, j).text()+"</td>"
+                    html += """<td>"""
+                    if self.expense_table.item(i, j) is None:
+                        html += """-</td>"""
+                    else:
+                        html += self.expense_table.item(
+                            i, j).text()+"</td>"
                 html += "</tr>"
             html += """
                     </tbody>
     
                 </table>
                 
-                <h2>Total Amount Received: </h2>
-                <h2>Total Amount Remaining: </h2>
-                <h2>Total Expense: </h2>
                 <hr>
-                <h2>Net Balance: </h2>
+                <h2>Total Amount Received:"""+self.lbl_total_amount_received.text()+"""</h2>
+                <h2>Total Amount Remaining:"""+self.lbl_total_amount_remaining.text()+""" </h2>
+                <h2>Total Expense: """+self.lbl_total_expense.text()+"""</h2>
+                <hr>
+                <h2>Net Balance: """+self.lbl_net_balance.text()+"""</h2>
             </body>
             </html>
             """

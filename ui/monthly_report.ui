@@ -203,9 +203,9 @@ QDateEdit {
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
-      <property name="rowCount">
+      <!-- <property name="rowCount">
        <number>5</number>
-      </property>
+      </property> -->
       <attribute name="horizontalHeaderDefaultSectionSize">
        <number>180</number>
       </attribute>
@@ -291,9 +291,9 @@ QDateEdit {
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
-      <property name="rowCount">
+      <!-- <property name="rowCount">
        <number>5</number>
-      </property>
+      </property> -->
       <attribute name="horizontalHeaderDefaultSectionSize">
        <number>150</number>
       </attribute>
