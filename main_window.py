@@ -283,6 +283,35 @@ ORDER BY s.remaining_fee DESC
                         # row, column, QTableWidgetItem(str(item)))
             self.lbl_total_students.setText(ln)
 
+    def update_student_table_x_button(self,students=None):
+        # if students == None or students == False or QtGui.QCloseEvent == False:
+        students = self.db.conn.execute(
+                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
+        if students:
+            ln = str(len(students))
+            self.students_table.setRowCount(0)
+            for row, form in enumerate(students):
+                self.students_table.insertRow(row)
+                for column, item in enumerate(form):
+                    if column == 5:
+                        if item == None:
+                            item = 'images/default.png'
+                        self.students_table.setCellWidget(
+                            row, column, QLabel())
+                        self.students_table.cellWidget(
+                            row, column).setPixmap(QPixmap(item))
+                        self.students_table.cellWidget(
+                            row, column).setScaledContents(True)
+                        self.students_table.cellWidget(
+                            row, column).setAlignment(QtCore.Qt.AlignCenter)
+                    else:
+                        self.students_table.setItem(
+                            row, column, QTableWidgetItem(str(item)))
+                    # self.students_table.setItem(
+                        # row, column, QTableWidgetItem(str(item)))
+            self.lbl_total_students.setText(ln)
+    
+
     def update_subject_table(self):
         class_id = self.class_table.currentItem().text()
         class_id = self.db.select(
@@ -545,7 +574,7 @@ ORDER BY s.remaining_fee DESC
         self.student_details_window = StudentDetailWindow(student_id)
         self.student_details_window.show()
         # when pressin red x button on student details window
-        self.student_details_window.closeEvent = self.update_student_table
+        self.student_details_window.closeEvent = self.update_student_table_x_button
 
         # self.student_details_window.edit_fee_window.btn_save.clicked.connect(
         #     self.update_student_table)
