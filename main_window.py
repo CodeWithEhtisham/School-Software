@@ -28,7 +28,7 @@ from update_subject import UpdateSubjectWindow
 from db_handler import DBHandler
 from update_expense import UpdateExpensesWindow
 from update_student import UpdateStudentWindow
-
+import datetime
 FORM_MAIN, _ = loadUiType('ui/main_window.ui')
 
 
@@ -118,21 +118,23 @@ class MainWindow(QMainWindow, FORM_MAIN):
         # get only last transaction of each student
         # reports = self.db.conn.execute(
         #     f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,s.remaining_fee,t.date FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id ORDER BY s.remaining_fee DESC").fetchall()
-        reports = self.db.conn.execute(
-            """
-                SELECT DISTINCT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, t.date
+        first_date_of_this_month = datetime.date.today().replace(day=1).strftime(
+            "%d/%m/%Y")[1:]
+        print(first_date_of_this_month)
+
+        query = f"""SELECT s.name, s.f_name, c.class_name,t.challan_no,t.paid_fee,s.remaining_fee, t.last_transaction_date
 FROM students s
-INNER JOIN classes c ON s.class_id = c.id
-INNER JOIN (
-    SELECT std_id, MAX(id) AS max_id
-    FROM fee
-    GROUP BY std_id
-) f ON s.id = f.std_id
-INNER JOIN transactions t ON f.max_id = t.fee_id
-ORDER BY s.remaining_fee DESC
-
-
-                """).fetchall()
+LEFT JOIN classes c ON s.class_id = c.id
+LEFT JOIN (
+    SELECT f.std_id, MAX(t.date) AS last_transaction_date,t.challan_no,t.paid_fee
+    FROM fee f
+    INNER JOIN transactions t ON f.id = t.fee_id
+    GROUP BY f.std_id
+) AS t ON s.id = t.std_id
+WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
+"""
+        reports = self.db.conn.execute(query).fetchall()
+        print(reports)
         if reports:
             # reciceved = 0
             self.daily_reports_table.setRowCount(0)
