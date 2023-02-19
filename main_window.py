@@ -118,21 +118,19 @@ class MainWindow(QMainWindow, FORM_MAIN):
         # get only last transaction of each student
         # reports = self.db.conn.execute(
         #     f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,s.remaining_fee,t.date FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id ORDER BY s.remaining_fee DESC").fetchall()
-        first_date_of_this_month = datetime.date.today().replace(day=1).strftime(
-            "%d/%m/%Y")[1:]
+        first_date_of_this_month = datetime.date.today().replace(day=1).strftime("%Y/%m/%d")
         print(first_date_of_this_month)
 
-        query = f"""SELECT s.name, s.f_name, c.class_name,t.challan_no,t.paid_fee,s.remaining_fee, t.last_transaction_date
-FROM students s
-LEFT JOIN classes c ON s.class_id = c.id
-LEFT JOIN (
-    SELECT f.std_id, MAX(t.date) AS last_transaction_date,t.challan_no,t.paid_fee
-    FROM fee f
-    INNER JOIN transactions t ON f.id = t.fee_id
-    GROUP BY f.std_id
-) AS t ON s.id = t.std_id
-WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
-"""
+        query = f"SELECT s.name, s.f_name, c.class_name,t.challan_no,t.paid_fee,s.remaining_fee, MAX(t.date) as last_transaction_date FROM students s LEFT JOIN fee f ON s.id = f.std_id LEFT JOIN transactions t ON f.id = t.fee_id   INNER JOIN classes c ON s.class_id = c.id WHERE t.date < '{first_date_of_this_month}' GROUP BY s.id;"
+        print(query)
+#         SELECT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, MAX(t.date) as last_transaction_date ,t.id
+# FROM students s 
+# LEFT JOIN fee f ON s.id = f.std_id 
+# LEFT JOIN transactions t ON f.id = t.fee_id   
+# INNER JOIN classes c ON s.class_id = c.id 
+# -- WHERE t.date < '2023/02/01' 
+# -- AND (t.date >= '2023/02/01' OR t.date IS NULL)
+# GROUP BY s.id;
         reports = self.db.conn.execute(query).fetchall()
         print(reports)
         if reports:
@@ -152,11 +150,11 @@ WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
 
             # self.lbl_total_amount_received.setText(str(reciceved))
             # remaining = self.db.conn.execute(
-            #     # f"SELECT SUM(remaining_fee) FROM transactions WHERE date = '{QDate.currentDate().toString('dd/MM/yyyy')}'").fetchone()
+            #     # f"SELECT SUM(remaining_fee) FROM transactions WHERE date = '{QDate.currentDate().toString('yyyy/MM/dd')}'").fetchone()
             #     f"SELECT SUM(remaining_fee) FROM students").fetchone()
             # self.lbl_total_amount_remaining.setText(str(remaining[0]))
             # expense = self.db.conn.execute(
-            #     f"SELECT SUM(amount) FROM expenses WHERE date = '{QDate.currentDate().toString('dd/MM/yyyy')}'").fetchone()
+            #     f"SELECT SUM(amount) FROM expenses WHERE date = '{QDate.currentDate().toString('yyyy/MM/dd')}'").fetchone()
             # # print(expense)
             # if expense[0] is not None:
             #     self.lbl_total_expense.setText(str(expense[0]))
@@ -285,10 +283,10 @@ WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
                         # row, column, QTableWidgetItem(str(item)))
             self.lbl_total_students.setText(ln)
 
-    def update_student_table_x_button(self,students=None):
+    def update_student_table_x_button(self, students=None):
         # if students == None or students == False or QtGui.QCloseEvent == False:
         students = self.db.conn.execute(
-                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
+            f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
         if students:
             ln = str(len(students))
             self.students_table.setRowCount(0)
@@ -312,7 +310,6 @@ WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
                     # self.students_table.setItem(
                         # row, column, QTableWidgetItem(str(item)))
             self.lbl_total_students.setText(ln)
-    
 
     def update_subject_table(self):
         class_id = self.class_table.currentItem().text()
@@ -391,7 +388,7 @@ WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
     def update_daily_report_table(self, reports=None):
         if reports is None or reports == False:
             reports = self.db.conn.execute(
-                f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{QDate.currentDate().toString('dd/MM/yyyy')}' and t.paid_fee != 0").fetchall()
+                f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{QDate.currentDate().toString('yyyy/MM/dd')}' and t.paid_fee != 0").fetchall()
         # print(reports)
         if reports:
             reciceved = 0
@@ -405,11 +402,11 @@ WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
                         row, column, QTableWidgetItem(str(item)))
             self.lbl_total_amount_received.setText(str(reciceved))
             remaining = self.db.conn.execute(
-                # f"SELECT SUM(remaining_fee) FROM transactions WHERE date = '{QDate.currentDate().toString('dd/MM/yyyy')}'").fetchone()
+                # f"SELECT SUM(remaining_fee) FROM transactions WHERE date = '{QDate.currentDate().toString('yyyy/MM/dd')}'").fetchone()
                 f"SELECT SUM(remaining_fee) FROM students").fetchone()
             self.lbl_total_amount_remaining.setText(str(remaining[0]))
             expense = self.db.conn.execute(
-                f"SELECT SUM(amount) FROM expenses WHERE date = '{QDate.currentDate().toString('dd/MM/yyyy')}'").fetchone()
+                f"SELECT SUM(amount) FROM expenses WHERE date = '{QDate.currentDate().toString('yyyy/MM/dd')}'").fetchone()
             # print(expense)
             if expense[0] is not None:
                 self.lbl_total_expense.setText(str(expense[0]))
@@ -419,8 +416,8 @@ WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
                 self.lbl_net_balance.setText(str(reciceved))
 
     def search_date_report(self):
-        from_date = self.report_from_date.date().toString('dd/MM/yyyy')
-        to_date = self.report_to_date.date().toString('dd/MM/yyyy')
+        from_date = self.report_from_date.date().toString('yyyy/MM/dd')
+        to_date = self.report_to_date.date().toString('yyyy/MM/dd')
         reports = self.db.conn.execute(
             f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date BETWEEN '{from_date}' and '{to_date}' and t.paid_fee != 0").fetchall()
         if reports:
@@ -435,7 +432,7 @@ WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
     def search_report(self):
         search = self.txt_search_report.text()
         reports = self.db.conn.execute(
-            f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{QDate.currentDate().toString('dd/MM/yyyy')}' and t.paid_fee != 0 and s.name LIKE '%{search}%' or s.f_name LIKE '%{search}%' or c.class_name LIKE '%{search}%' or t.challan_no LIKE '%{search}%' or t.description LIKE '%{search}%'").fetchall()
+            f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{QDate.currentDate().toString('yyyy/MM/dd')}' and t.paid_fee != 0 and s.name LIKE '%{search}%' or s.f_name LIKE '%{search}%' or c.class_name LIKE '%{search}%' or t.challan_no LIKE '%{search}%' or t.description LIKE '%{search}%'").fetchall()
         if reports:
             self.update_daily_report_table(reports)
         else:
@@ -487,7 +484,8 @@ WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
     def add_student(self):
         self.add_student_window = AddStudentWindow()
         self.add_student_window.show()
-        self.add_student_window.btn_save.clicked.connect(self.update_student_table)
+        self.add_student_window.btn_save.clicked.connect(
+            self.update_student_table)
 
     def add_fees(self):
         selected_row = self.students_table.currentRow()
@@ -623,7 +621,7 @@ WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
     def print_daily_report(self):
         school_info = self.db.select_all(
             table_name="school_info", columns="school_name, contact, address")
-        
+
         filename = QFileDialog.getSaveFileName(
             self, "Save File", "", "PDF(*.pdf)")
         if filename[0]:
@@ -703,7 +701,7 @@ WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
             for i in range(self.daily_reports_table.rowCount()):
                 html += """<tr>"""
                 for j in range(self.daily_reports_table.columnCount()):
-                    html += """<td>""" 
+                    html += """<td>"""
                     if self.daily_reports_table.item(i, j) is None:
                         html += """-</td>"""
                     else:
@@ -915,7 +913,8 @@ WHERE t.last_transaction_date < '01/01/2023' OR t.last_transaction_date IS NULL;
                     if j == 5:
                         html += "<td>-</td>"
                         continue
-                    html += """<td>""" +self.students_table.item(i, j).text()+"</td>"
+                    html += """<td>""" + \
+                        self.students_table.item(i, j).text()+"</td>"
                 html += "</tr>"
             html += """
                     </tbody>

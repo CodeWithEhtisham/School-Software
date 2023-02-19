@@ -14,17 +14,18 @@ class DBHandler:
             self.conn = sqlite3.connect(self.db_name)
             self.cursor = self.conn.cursor()
 
-        self.create_table("users", "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, contact TEXT, username TEXT, password TEXT")
-        self.create_table("expenses", "id INTEGER PRIMARY KEY AUTOINCREMENT, hoa TEXT, amount REAL, date TEXT, payment_type TEXT, recipient_name TEXT, comment TEXT DEFAULT 'No Comment'")
+        self.create_table("users", "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, contact TEXT, username TEXT, password TEXT,is_admin INTEGER DEFAULT 0")
+        self.create_table("expenses", "id INTEGER PRIMARY KEY AUTOINCREMENT, hoa TEXT, amount REAL, date DATE, payment_type TEXT, recipient_name TEXT, comment TEXT DEFAULT 'No Comment'")
         self.create_table("expense_types", "id INTEGER PRIMARY KEY AUTOINCREMENT, head_of_account TEXT")
         self.create_table("classes", "id INTEGER PRIMARY KEY AUTOINCREMENT, class_name TEXT")
         self.create_table("subjects", "id INTEGER PRIMARY KEY AUTOINCREMENT, subject_name TEXT,passing_mark INTEGER,total_mark INTEGER,class_id INTEGER, FOREIGN KEY(class_id) REFERENCES classes(id)")
-        self.create_table("students", "id INTEGER PRIMARY KEY AUTOINCREMENT, addmission_date TEXT,addmission_no TEXT,name TEXT,f_name TEXT,dob TEXT,address TEXT,contact TEXT,gender TEXT,section TEXT,last_school TEXT DEFAULT '',student_image TEXT, special_case TEXT DEFAULT '',remaining_fee REAL DEFAULT 0,status TEXT DEFAULT 'Active',description TEXT DEFAULT '', class_id INTEGER, FOREIGN KEY(class_id) REFERENCES classes(id)")
-        self.create_table("fee", "id INTEGER PRIMARY KEY AUTOINCREMENT, addmission_fee REAL,monthly_fee REAL,annual_fund REAL,computer_lab_fee REAL,science_lab_fee REAL,date TEXT,total REAL,std_id INTEGER, FOREIGN KEY(std_id) REFERENCES students(id)")
-        self.create_table("transactions", "id INTEGER PRIMARY KEY AUTOINCREMENT, paid_fee REAL,date TEXT,challan_no TEXT,description TEXT,remaining_fee INTERGER, fee_id INTEGER, FOREIGN KEY(fee_id) REFERENCES fee(id)")
-        self.create_table("exams", "id INTEGER PRIMARY KEY AUTOINCREMENT, exam_name TEXT, date TEXT, class_id INTEGER, student_id INTEGER, FOREIGN KEY(class_id) REFERENCES classes(id), FOREIGN KEY(student_id) REFERENCES students(id)")
+        self.create_table("students", "id INTEGER PRIMARY KEY AUTOINCREMENT, addmission_date DATE,addmission_no TEXT,name TEXT,f_name TEXT,dob TEXT,address TEXT,contact TEXT,gender TEXT,section TEXT,last_school TEXT DEFAULT '',student_image TEXT, special_case TEXT DEFAULT '',remaining_fee REAL DEFAULT 0,status TEXT DEFAULT 'Active',description TEXT DEFAULT '', class_id INTEGER, FOREIGN KEY(class_id) REFERENCES classes(id)")
+        self.create_table("fee", "id INTEGER PRIMARY KEY AUTOINCREMENT, addmission_fee REAL,monthly_fee REAL,annual_fund REAL,computer_lab_fee REAL,science_lab_fee REAL,date DATE,total REAL,std_id INTEGER, FOREIGN KEY(std_id) REFERENCES students(id)")
+        self.create_table("transactions", "id INTEGER PRIMARY KEY AUTOINCREMENT, paid_fee REAL,date DATE,challan_no TEXT,description TEXT,remaining_fee INTERGER, fee_id INTEGER, FOREIGN KEY(fee_id) REFERENCES fee(id)")
+        self.create_table("exams", "id INTEGER PRIMARY KEY AUTOINCREMENT, exam_name TEXT, date DATE, class_id INTEGER, student_id INTEGER, FOREIGN KEY(class_id) REFERENCES classes(id), FOREIGN KEY(student_id) REFERENCES students(id)")
         self.create_table("exam_details", "id INTEGER PRIMARY KEY AUTOINCREMENT, exam_id INTEGER, subject_id INTEGER, marks INTEGER, FOREIGN KEY(exam_id) REFERENCES exams(id), FOREIGN KEY(subject_id) REFERENCES subjects(id)")
         self.create_table("school_info", "id INTEGER PRIMARY KEY AUTOINCREMENT, school_name TEXT, contact TEXT, address TEXT, logo TEXT")
+
         # CREATE TABLE transactions (
 #   id INTEGER PRIMARY KEY AUTOINCREMENT, 
 #   paid_fee REAL,

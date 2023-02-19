@@ -52,7 +52,7 @@ class AddFeesWindow(QMainWindow, FORM_MAIN):
 
     def add_fee(self):
         # get date from date edit
-        add_fee_date = self.txt_add_fee_date.date().toString("dd/MM/yyyy")
+        add_fee_date = self.txt_add_fee_date.date().toString("yyyy/MM/dd")
         monthly_fee = self.txt_monthly_fee.text()
         annual_fund = self.txt_annual_fund.text()
         com_lab_fee = self.txt_comp_lab_fee.text()

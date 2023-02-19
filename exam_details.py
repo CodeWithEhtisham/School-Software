@@ -64,10 +64,10 @@ class ExamDetailsWindow(QMainWindow, FORM_MAIN):
             self.db.insert(
                 table_name='exams',
                 columns="exam_name,date,class_id,student_id",
-                values=f"'{exam}','{QDate.currentDate().toString('dd/MM/yyyy') }',{self.class_id},{self.std_id}"
+                values=f"'{exam}','{QDate.currentDate().toString('yyyy/MM/dd') }',{self.class_id},{self.std_id}"
             )
             # self.db.conn.execute(
-            #     f"INSERT INTO exams (exam_name,date,class_id,student_id) VALUES ('{exam}','{QDate.currentDate().toString('dd/MM/yyyy') }',{self.class_id},{self.std_id})"
+            #     f"INSERT INTO exams (exam_name,date,class_id,student_id) VALUES ('{exam}','{QDate.currentDate().toString('yyyy/MM/dd') }',{self.class_id},{self.std_id})"
             # )
             exam_id = self.db.conn.execute(
                 f"SELECT id FROM exams order by id desc limit 1").fetchone()[0]

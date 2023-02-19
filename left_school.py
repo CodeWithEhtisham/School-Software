@@ -31,7 +31,7 @@ class LeftSchoolWindow(QMainWindow, FORM_MAIN):
         self.txt_leaving_date.setDate(QDate.currentDate())
         
     def left_school(self):
-        date = self.txt_leaving_date.date().toString("dd/MM/yyyy")
+        date = self.txt_leaving_date.date().toString("yyyy/MM/dd")
         reason = self.txt_leaving_purpose.text()
 
         if date and reason:

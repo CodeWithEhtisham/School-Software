@@ -37,7 +37,7 @@ class UpdateStudentWindow(QMainWindow, FORM_MAIN):
             ).fetchall()])
         student = self.db.conn.execute(
             f"SELECT addmission_date,addmission_no,name,f_name,dob,address,contact,gender,section,last_school,special_case,student_image FROM students WHERE id = {self.student_id}").fetchone()
-        self.txt_admission_date.setDate(QDate.fromString(student[0], "dd/MM/yyyy"))
+        self.txt_admission_date.setDate(QDate.fromString(student[0], "yyyy/MM/dd"))
         self.txt_admission_no.setText(student[1])
         self.txt_student_name.setText(student[2])
         self.txt_student_father_name.setText(student[3])
@@ -76,7 +76,7 @@ class UpdateStudentWindow(QMainWindow, FORM_MAIN):
             self.std_image.setAlignment(Qt.AlignCenter)
 
     def save(self):
-        addmission_date= self.txt_admission_date.date().toString("dd/MM/yyyy")
+        addmission_date= self.txt_admission_date.date().toString("yyyy/MM/dd")
         addmission_no= self.txt_admission_no.text()
         name = self.txt_student_name.text()
         father_name = self.txt_student_father_name.text()

@@ -39,7 +39,7 @@ class ExpensesWindow(QMainWindow, FORM_MAIN):
             self.txt_amount.setText("{:,}".format(int(amount)))
 
     def save_expense(self):
-        date=self.expense_date.date().toString("dd/MM/yyyy")
+        date=self.expense_date.date().toString("yyyy/MM/dd")
         head_of_account=self.select_hoa.currentText()
         amount=self.txt_amount.text().replace(",","")
         payment_type=self.txt_payment_type.text()

@@ -48,7 +48,7 @@ class UpdateExpensesWindow(QMainWindow, FORM_MAIN):
             condition=f"id={self.id}"
         )
         if expense:
-            self.expense_date.setDate(QDate.fromString(expense[0][1], "dd/MM/yyyy"))
+            self.expense_date.setDate(QDate.fromString(expense[0][1], "yyyy/MM/dd"))
             self.select_hoa.addItems(
                 [item[0] for item in self.db.select_all(table_name="expense_types", columns="head_of_account")]
             )
@@ -69,7 +69,7 @@ class UpdateExpensesWindow(QMainWindow, FORM_MAIN):
             QMessageBox.information(self, "Error", str(e))
 
     def update_expense(self):
-        date=self.expense_date.date().toString("dd/MM/yyyy")
+        date=self.expense_date.date().toString("yyyy/MM/dd")
         head_of_account=self.select_hoa.currentText()
         amount=self.txt_amount.text().replace(",","")
         payment_type=self.txt_payment_type.text()

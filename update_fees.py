@@ -44,7 +44,7 @@ class UpdatePayFeeWindow(QMainWindow, FORM_MAIN):
         if fee_details:
             fee_details = fee_details[-1]
             self.txt_paid_fee.setText(str(int(fee_details[0])))
-            self.txt_pay_fee_date.setDate(QtCore.QDate.fromString(fee_details[1], 'dd/MM/yyyy'))
+            self.txt_pay_fee_date.setDate(QtCore.QDate.fromString(fee_details[1], 'yyyy/MM/dd'))
             self.txt_challan_no.setText(str(fee_details[2]))
             self.txt_description.setText(str(fee_details[3]))
             # self.txt_remaining_fee.setText(str(fee_details[4]))
@@ -66,7 +66,7 @@ class UpdatePayFeeWindow(QMainWindow, FORM_MAIN):
     def pay_fee(self):
         try:
             paid_fee= float(self.txt_paid_fee.text())
-            date= self.txt_pay_fee_date.date().toString('dd/MM/yyyy')
+            date= self.txt_pay_fee_date.date().toString('yyyy/MM/dd')
             challan_no= self.txt_challan_no.text()
             description= self.txt_description.text()
             remaining_fee= float(self.txt_total_remaining.text())

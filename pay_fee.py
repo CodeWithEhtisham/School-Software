@@ -42,7 +42,7 @@ class PayFeeWindow(QMainWindow, FORM_MAIN):
     def pay_fee(self):
         try:
             paid_fee= float(self.txt_paid_fee.text())
-            date= self.txt_pay_fee_date.date().toString('dd/MM/yyyy')
+            date= self.txt_pay_fee_date.date().toString('yyyy/MM/dd')
             challan_no= self.txt_challan_no.text()
             description= self.txt_description.text()
             remaining_fee= float(self.txt_total_remaining.text())
