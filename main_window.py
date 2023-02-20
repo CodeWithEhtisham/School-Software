@@ -121,6 +121,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         from create_user import CreateUserWindow
         self.add_user_window = CreateUserWindow(1)
         self.add_user_window.show()
+        self.add_user_window.btn_save.clicked.connect(self.user_table_update)
 
     def user_status(self):
         if self.is_admin==0:

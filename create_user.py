@@ -51,9 +51,12 @@ class CreateUserWindow(QMainWindow, FORM_MAIN):
                 # successfull message box 
                 QMessageBox.information(self.centralwidget, "Info", "User has been created")
                 # self.clear()
-                self.login = LoginWindow()
-                self.login.show()
-                self.close_window()
+                if self.is_admin == 1:
+                    self.close_window()
+                else:
+                    self.login = LoginWindow()
+                    self.login.show()
+                    self.close_window()
             except:
                 QMessageBox.information(self.centralwidget, "Info", "User has not been created")
         else:
