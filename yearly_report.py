@@ -38,22 +38,82 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
             year = QDate.currentDate().year()
         # create a list of all the days in the month
 
-        days = [datetime(year, month, day).strftime('%d/%m/%Y') for month in range(1, 13)
+        days = [datetime(year, month, day).strftime('%Y/%m/%d') for month in range(1, 13)
                 for day in range(1, calendar.monthrange(year, month)[1]+1)]
-        report = [[]]
-        for day in days:
-            received = self.db.select(
-                table_name='transactions',
-                columns='sum(paid_fee)',
-                condition=f"date = '{day}'"
-            )
-            expense = self.db.select(
-                table_name='expenses',
-                columns='sum(amount)',
-                condition=f"date = '{day}'"
-            )
-            if received[0][0] or expense[0][0]:
-                report.append([day, received[0][0], expense[0][0]])
+        report = [[month] for month in ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']]
+        # print(report)
+        # for day in days:
+            # received = self.db.select(
+            #     table_name='transactions',
+            #     columns='sum(paid_fee)',
+            #     condition=f"date = '{day}'"
+            # )
+        received = self.db.conn.execute(
+            f"""SELECT 
+                substr(date, 6, 2) || '-' || substr(date, 1, 4) AS month, 
+                SUM(paid_fee) AS total_paid_fees,
+                CASE substr(date, 6, 2)
+                    WHEN '01' THEN 'January'
+                    WHEN '02' THEN 'February'
+                    WHEN '03' THEN 'March'
+                    WHEN '04' THEN 'April'
+                    WHEN '05' THEN 'May'
+                    WHEN '06' THEN 'June'
+                    WHEN '07' THEN 'July'
+                    WHEN '08' THEN 'August'
+                    WHEN '09' THEN 'September'
+                    WHEN '10' THEN 'October'
+                    WHEN '11' THEN 'November'
+                    WHEN '12' THEN 'December'
+                    ELSE 'Unknown'
+                END AS month_name
+                FROM transactions
+                GROUP BY substr(date, 1, 7)
+                ORDER BY date;
+            """
+        ).fetchall()
+        # print(received)
+        expense = self.db.conn.execute(
+            f"""SELECT
+                substr(date, 6, 2) || '-' || substr(date, 1, 4) AS month,
+                SUM(amount) AS total_expense,
+                CASE substr(date, 6, 2)
+                    WHEN '01' THEN 'January'
+                    WHEN '02' THEN 'February'
+                    WHEN '03' THEN 'March'
+                    WHEN '04' THEN 'April'
+                    WHEN '05' THEN 'May'
+                    WHEN '06' THEN 'June'
+                    WHEN '07' THEN 'July'
+                    WHEN '08' THEN 'August'
+                    WHEN '09' THEN 'September'
+                    WHEN '10' THEN 'October'
+                    WHEN '11' THEN 'November'
+                    WHEN '12' THEN 'December'
+                    ELSE 'Unknown'
+                END AS month_name
+                FROM expenses
+                GROUP BY substr(date, 1, 7)
+                ORDER BY date;
+            """
+        ).fetchall()
+        
+        if received:
+            for m in report:
+                for r in received:
+                    if m[0] == r[2]:
+                        m.append(r[1])
+                        break
+                else:
+                    m.append(0)
+        if expense:
+            for m in report:
+                for e in expense:
+                    if m[0] == e[2]:
+                        m.append(e[1])
+                        break
+                else:
+                    m.append(0)
 
         self.accounts_table.setRowCount(len(report))
         for index, row in enumerate(report):
@@ -61,8 +121,8 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
                 self.accounts_table.setItem(
                     index, col_index, QTableWidgetItem(str(item)))
 
-        start_date = datetime(year, 1, 1).strftime('%d/%m/%Y')
-        end_date = datetime(year, 12, 31).strftime('%d/%m/%Y')
+        start_date = datetime(year, 1, 1).strftime('%Y/%m/%d')
+        end_date = datetime(year, 12, 31).strftime('%Y/%m/%d')
         print(start_date, end_date)
         monthly_expense_report = self.db.conn.execute(
             f"SELECT date,hoa,SUM(amount) FROM expenses WHERE date BETWEEN '{start_date}' AND '{end_date}' GROUP BY hoa"

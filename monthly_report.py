@@ -43,9 +43,9 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
         # create a list of all the days in the month
         num_days = calendar.monthrange(year, month)[1]
 
-        days = [datetime(year, month, day).strftime('%d/%m/%Y')
+        days = [datetime(year, month, day).strftime('%Y/%m/%d')
                 for day in range(1, num_days+1)]
-        report = [[]]
+        report = []
         for day in days:
             received = self.db.select(
                 table_name='transactions',
@@ -57,26 +57,26 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
                 columns='sum(amount)',
                 condition=f"date = '{day}'"
             )
-            print(received, expense)
+            # print(received, expense)
             if received[0][0] or expense[0][0]:
                 report.append([day, received[0][0], expense[0][0]])
-        # print(report)
+
         self.monthly_accounts_table.setRowCount(len(report))
         for index, row in enumerate(report):
             for col_index, item in enumerate(row):
                 self.monthly_accounts_table.setItem(
                     index, col_index, QTableWidgetItem(str(item)))
 
-        start_date = datetime(year, month, 1).strftime('%d/%m/%Y')
-        end_date = datetime(year, month, num_days).strftime('%d/%m/%Y')
-        print(start_date, end_date)
+        start_date = datetime(year, month, 1).strftime('%Y/%m/%d')
+        end_date = datetime(year, month, num_days).strftime('%Y/%m/%d')
+        # print(start_date, end_date)
         monthly_expense_report = self.db.conn.execute(
             f"SELECT date,hoa,SUM(amount) FROM expenses WHERE date BETWEEN '{start_date}' AND '{end_date}' GROUP BY hoa"
         ).fetchall()
         for month in monthly_expense_report:
             if month[0] not in days:
                 monthly_expense_report.remove(month)
-        print(monthly_expense_report)
+        # print(monthly_expense_report)
         self.monthly_expense_table.setRowCount(len(monthly_expense_report))
         for index, row in enumerate(monthly_expense_report):
             for col_index, item in enumerate(row):
@@ -90,11 +90,13 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
         if not amount_received:
             amount_received = 0
         self.lbl_total_amount_received.setText(str(amount_received))
-        remaining = self.db.select(
-            table_name='transactions',
-            columns='sum(remaining_fee)',
-            condition=f"date BETWEEN '{start_date}' AND '{end_date}'"
-        )[0][0]
+        try:
+            remaining = self.db.select_all(
+                table_name='students',
+                columns='sum(remaining_fee)'
+            )[0][0]
+        except:
+            remaining = 0
         if not remaining:
             remaining = 0
         self.lbl_total_amount_remaining.setText(str(remaining))
@@ -105,7 +107,7 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
         )[0][0]
         if not expensees:
             expensees = 0
-        self.lbl_total_expense.setText(str(expensees))
+        self.lbl_total_expense.setText(str(f"{expensees:,}"))
         self.lbl_net_balance.setText(str(amount_received-expensees))
 
     # PRINT MONTHLY

@@ -115,6 +115,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.txt_search_report.textChanged.connect(self.search_report)
         self.btn_defaulters.clicked.connect(self.defaulters)
         self.btn_add_user.clicked.connect(self.add_user)
+        self.user_status()
         
 
     def add_user(self):
@@ -124,54 +125,32 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.add_user_window.btn_save.clicked.connect(self.user_table_update)
 
     def user_status(self):
-        if self.is_admin==0:
-            self.btn_edit_user.show()
-            self.btn_add_school_details.show()
-            # self.btn_add_user.show()
-        else:
+        if self.is_admin!=0:
             self.btn_edit_user.hide()
             self.btn_add_school_details.hide()
-            # self.btn_add_user.hide()
 
+            
     def defaulters(self):
-        # get only last transaction of each student
-        # reports = self.db.conn.execute(
-        #     f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,s.remaining_fee,t.date FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id ORDER BY s.remaining_fee DESC").fetchall()
         first_date_of_this_month = datetime.date.today().replace(day=1).strftime("%Y/%m/%d")
         print(first_date_of_this_month)
 
         query = f"""SELECT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, MAX(t.date) as last_transaction_date ,t.id
-FROM students s 
-LEFT JOIN fee f ON s.id = f.std_id 
-LEFT JOIN transactions t ON f.id = t.fee_id   
-INNER JOIN classes c ON s.class_id = c.id 
-WHERE t.date < '{first_date_of_this_month}' 
-  AND t.id = (SELECT MAX(id) FROM transactions WHERE fee_id = f.id)
-GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee;
-        """
-        print(query)
-# SELECT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, MAX(t.date) as last_transaction_date ,t.id
-# FROM students s 
-# LEFT JOIN fee f ON s.id = f.std_id 
-# LEFT JOIN transactions t ON f.id = t.fee_id   
-# INNER JOIN classes c ON s.class_id = c.id 
-# WHERE t.date < '2023/02/01' 
-#   AND t.id = (SELECT MAX(id) FROM transactions WHERE fee_id = f.id)
-# GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee;
+                    FROM students s 
+                    LEFT JOIN fee f ON s.id = f.std_id 
+                    LEFT JOIN transactions t ON f.id = t.fee_id   
+                    INNER JOIN classes c ON s.class_id = c.id 
+                    WHERE t.date < '{first_date_of_this_month}' 
+                    AND t.id = (SELECT MAX(id) FROM transactions WHERE fee_id = f.id)
+                    GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee;
+                """
         reports = self.db.conn.execute(query).fetchall()
-        print(reports)
+        print('defalter',reports)
         if reports:
             # reciceved = 0
             self.daily_reports_table.setRowCount(0)
             for row, form in enumerate(reports):
                 self.daily_reports_table.insertRow(row)
                 for column, item in enumerate(form):
-                    # if column == 4 or column == 3:
-                    #     self.daily_reports_table.setItem(
-                    #         row, column, QTableWidgetItem(str('-')))
-                    #     # continue
-                    # else:
-                        # reciceved += int(item)
                     self.daily_reports_table.setItem(
                         row, column, QTableWidgetItem(str(item)))
 
@@ -415,8 +394,9 @@ GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remai
     def update_daily_report_table(self, reports=None):
         if reports is None or reports == False:
             reports = self.db.conn.execute(
-                f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{QDate.currentDate().toString('yyyy/MM/dd')}' and t.paid_fee != 0").fetchall()
-        # print(reports)
+                f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{datetime.datetime.now().strftime('%Y/%m/%d')}' and t.paid_fee != 0").fetchall()
+        print('daily',reports)
+        
         if reports:
             reciceved = 0
             self.daily_reports_table.setRowCount(0)
@@ -433,8 +413,8 @@ GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remai
                 f"SELECT SUM(remaining_fee) FROM students").fetchone()
             self.lbl_total_amount_remaining.setText(str(remaining[0]))
             expense = self.db.conn.execute(
-                f"SELECT SUM(amount) FROM expenses WHERE date = '{QDate.currentDate().toString('yyyy/MM/dd')}'").fetchone()
-            # print(expense)
+                f"SELECT SUM(amount) FROM expenses WHERE date = '{datetime.datetime.now().strftime('%Y/%m/%d')}'").fetchone()
+            print(expense)
             if expense[0] is not None:
                 self.lbl_total_expense.setText(str(expense[0]))
                 self.lbl_net_balance.setText(str(reciceved-expense[0]))
