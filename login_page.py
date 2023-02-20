@@ -59,9 +59,15 @@ class LoginWindow(QMainWindow, FORM_MAIN):
                 db=DBHandler()
                 data=db.authenticate(username=username, password=password)
                 db.close()
-                print(data)
+                # print(data)
                 if data:
-                    self.mainpage = MainWindow()
+                    # check admin or user
+                    status = db.select(
+                        table_name="users",
+                        columns="is_admin",
+                        where=f"username='{username}' AND password='{password}'"
+                    )[0]
+                    self.mainpage = MainWindow(status)
                     self.mainpage.show()
                     self.close_window()
                 else:

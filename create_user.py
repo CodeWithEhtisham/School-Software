@@ -14,10 +14,11 @@ FORM_MAIN, _ = loadUiType('ui/create_user.ui')
 
 
 class CreateUserWindow(QMainWindow, FORM_MAIN):
-    def __init__(self):
+    def __init__(self, is_admin=0):
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.Handle_Buttons()
+        self.is_admin = is_admin
     
     def Handle_Buttons(self):
         self.btn_save.clicked.connect(self.save_user)
@@ -45,7 +46,7 @@ class CreateUserWindow(QMainWindow, FORM_MAIN):
         if name and email and contact and username and password != "":
             try:
                 db=DBHandler()
-                db.insert("users", "name, email, contact, username, password", f"'{name}', '{email}', '{contact}', '{username}','{password}'")
+                db.insert("users", "name, email, contact, username, password,is_admin", f"'{name}', '{email}', '{contact}', '{username}','{password}', '{self.is_admin}'")
                 db.close()
                 # successfull message box 
                 QMessageBox.information(self.centralwidget, "Info", "User has been created")

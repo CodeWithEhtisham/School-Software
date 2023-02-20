@@ -24,19 +24,20 @@ from pay_fee import PayFeeWindow
 from school_details import SchoolDetailsWindow
 from update_class import UpdateClassWindow
 from update_subject import UpdateSubjectWindow
-# from create_user import CreateUserWindow
 from db_handler import DBHandler
 from update_expense import UpdateExpensesWindow
 from update_student import UpdateStudentWindow
 import datetime
+
+
 FORM_MAIN, _ = loadUiType('ui/main_window.ui')
 
-
 class MainWindow(QMainWindow, FORM_MAIN):
-    def __init__(self):
+    def __init__(self,status):
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.db = DBHandler()
+        self.is_admin = status
         self.showMaximized()
         self.Handle_Buttons()
         # self.update()
@@ -113,6 +114,23 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.update_daily_report_table)
         self.txt_search_report.textChanged.connect(self.search_report)
         self.btn_defaulters.clicked.connect(self.defaulters)
+        self.btn_add_user.clicked.connect(self.add_user)
+        
+
+    def add_user(self):
+        from create_user import CreateUserWindow
+        self.add_user_window = CreateUserWindow(1)
+        self.add_user_window.show()
+
+    def user_status(self):
+        if self.is_admin==0:
+            self.btn_edit_user.show()
+            self.btn_add_school_details.show()
+            # self.btn_add_user.show()
+        else:
+            self.btn_edit_user.hide()
+            self.btn_add_school_details.hide()
+            # self.btn_add_user.hide()
 
     def defaulters(self):
         # get only last transaction of each student
@@ -121,16 +139,24 @@ class MainWindow(QMainWindow, FORM_MAIN):
         first_date_of_this_month = datetime.date.today().replace(day=1).strftime("%Y/%m/%d")
         print(first_date_of_this_month)
 
-        query = f"SELECT s.name, s.f_name, c.class_name,t.challan_no,t.paid_fee,s.remaining_fee, MAX(t.date) as last_transaction_date FROM students s LEFT JOIN fee f ON s.id = f.std_id LEFT JOIN transactions t ON f.id = t.fee_id   INNER JOIN classes c ON s.class_id = c.id WHERE t.date < '{first_date_of_this_month}' GROUP BY s.id;"
+        query = f"""SELECT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, MAX(t.date) as last_transaction_date ,t.id
+FROM students s 
+LEFT JOIN fee f ON s.id = f.std_id 
+LEFT JOIN transactions t ON f.id = t.fee_id   
+INNER JOIN classes c ON s.class_id = c.id 
+WHERE t.date < '{first_date_of_this_month}' 
+  AND t.id = (SELECT MAX(id) FROM transactions WHERE fee_id = f.id)
+GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee;
+        """
         print(query)
-#         SELECT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, MAX(t.date) as last_transaction_date ,t.id
+# SELECT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, MAX(t.date) as last_transaction_date ,t.id
 # FROM students s 
 # LEFT JOIN fee f ON s.id = f.std_id 
 # LEFT JOIN transactions t ON f.id = t.fee_id   
 # INNER JOIN classes c ON s.class_id = c.id 
-# -- WHERE t.date < '2023/02/01' 
-# -- AND (t.date >= '2023/02/01' OR t.date IS NULL)
-# GROUP BY s.id;
+# WHERE t.date < '2023/02/01' 
+#   AND t.id = (SELECT MAX(id) FROM transactions WHERE fee_id = f.id)
+# GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee;
         reports = self.db.conn.execute(query).fetchall()
         print(reports)
         if reports:
@@ -139,14 +165,14 @@ class MainWindow(QMainWindow, FORM_MAIN):
             for row, form in enumerate(reports):
                 self.daily_reports_table.insertRow(row)
                 for column, item in enumerate(form):
-                    if column == 4 or column == 3:
-                        self.daily_reports_table.setItem(
-                            row, column, QTableWidgetItem(str('-')))
-                        # continue
-                    else:
+                    # if column == 4 or column == 3:
+                    #     self.daily_reports_table.setItem(
+                    #         row, column, QTableWidgetItem(str('-')))
+                    #     # continue
+                    # else:
                         # reciceved += int(item)
-                        self.daily_reports_table.setItem(
-                            row, column, QTableWidgetItem(str(item)))
+                    self.daily_reports_table.setItem(
+                        row, column, QTableWidgetItem(str(item)))
 
             # self.lbl_total_amount_received.setText(str(reciceved))
             # remaining = self.db.conn.execute(
@@ -478,8 +504,22 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.stackedWidget.setCurrentWidget(self.expense_page)
         self.update_expense_table()
 
+    def user_table_update(self):
+        data = self.db.select(
+            table_name='users',
+            columns='name,email,contact,username,password',
+            condition=f"is_admin != 0"
+        )
+        self.users_table.setRowCount(0)
+        for row, form in enumerate(data):
+            self.users_table.insertRow(row)
+            for column, item in enumerate(form):
+                self.users_table.setItem(row, column, QTableWidgetItem(str(item)))
+
     def settings(self):
         self.stackedWidget.setCurrentWidget(self.settings_page)
+        self.user_table_update()
+
 
     def add_student(self):
         self.add_student_window = AddStudentWindow()
@@ -933,7 +973,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
 def main():
     app = QApplication(sys.argv)
-    window = MainWindow()
+    window = MainWindow(0)
     window.show()
     app.exec_()
 
