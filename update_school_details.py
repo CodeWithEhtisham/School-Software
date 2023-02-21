@@ -15,7 +15,7 @@ from PyQt5.uic import loadUiType
 FORM_MAIN, _ = loadUiType('ui/update_school_details.ui')
 
 
-class UpdateBusinessWindow(QMainWindow, FORM_MAIN):
+class UpdateSchoolDetailsWindow(QMainWindow, FORM_MAIN):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupUi(self)
@@ -24,7 +24,8 @@ class UpdateBusinessWindow(QMainWindow, FORM_MAIN):
         self.update()
 
     def update(self):
-        data=self.db.select(table_name='school_info',columns="*",condition="id=1")
+        data = self.db.select(table_name='school_info',
+                              columns="*", condition="id=1")
         if data:
             self.txt_business_name.setText(data[0][1])
             self.txt_business_contact.setText(data[0][2])
@@ -36,7 +37,7 @@ class UpdateBusinessWindow(QMainWindow, FORM_MAIN):
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Return:
             self.update_business()
-            
+
     def Handle_Buttons(self):
         self.btn_save.clicked.connect(self.update_business)
         self.btn_cancel.clicked.connect(self.close)
@@ -52,9 +53,9 @@ class UpdateBusinessWindow(QMainWindow, FORM_MAIN):
             self.txt_business_logo.setAlignment(Qt.AlignCenter)
 
     def update_business(self):
-        name=self.txt_business_name.text()
-        contact=self.txt_business_contact.text()
-        address=self.txt_business_address.text()
+        name = self.txt_business_name.text()
+        contact = self.txt_business_contact.text()
+        address = self.txt_business_address.text()
         logo = self.txt_business_logo.pixmap()
         logo.save('assets/business_logo.png')
 
@@ -62,16 +63,17 @@ class UpdateBusinessWindow(QMainWindow, FORM_MAIN):
             self.db.conn.execute("UPDATE school_info SET school_name=?, contact=?, address=?, logo=? WHERE id=1",
                                  (name, contact, address, 'assets/business_logo.png'))
             self.db.conn.commit()
-            QMessageBox.information(self, 'Success', 'Business details updated successfully')
+            QMessageBox.information(
+                self, 'Success', 'Business details updated successfully')
             self.close()
         else:
-            QMessageBox.information(self, 'Error', 'Please fill all the fields')
-
+            QMessageBox.information(
+                self, 'Error', 'Please fill all the fields')
 
 
 def main():
     app = QApplication(sys.argv)
-    window = UpdateBusinessWindow()
+    window = UpdateSchoolDetailsWindow()
     window.show()
     app.exec_()
 

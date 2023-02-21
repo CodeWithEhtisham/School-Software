@@ -27,6 +27,7 @@ from update_subject import UpdateSubjectWindow
 from db_handler import DBHandler
 from update_expense import UpdateExpensesWindow
 from update_student import UpdateStudentWindow
+from update_school_details import UpdateSchoolDetailsWindow
 import datetime
 
 
@@ -45,12 +46,12 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
         self.students_table.setColumnWidth(0, 120)
         self.students_table.setColumnWidth(1, 170)
-        self.students_table.setColumnWidth(2, 180)
-        self.students_table.setColumnWidth(3, 180)
-        self.students_table.setColumnWidth(4, 120)
-        self.students_table.setColumnWidth(5, 120)
+        self.students_table.setColumnWidth(2, 200)
+        self.students_table.setColumnWidth(3, 200)
+        self.students_table.setColumnWidth(4, 100)
+        self.students_table.setColumnWidth(5, 100)
         self.students_table.setColumnWidth(6, 140)
-        self.students_table.setColumnWidth(7, 120)
+        self.students_table.setColumnWidth(7, 100)
 
         # REPORTS TABLE
         self.daily_reports_table.setColumnWidth(0, 180)
@@ -70,6 +71,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.btn_change_password.clicked.connect(self.change_password)
         self.btn_edit_user.clicked.connect(self.edit_user)
         self.btn_add_school_details.clicked.connect(self.add_school_details)
+        self.btn_edit_school_details.clicked.connect(self.update_school_details)
         # self.btn_add_user.clicked.connect(self.add_users)
         self.btn_home.clicked.connect(self.home)
         self.btn_students.clicked.connect(self.students)
@@ -125,9 +127,17 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.add_user_window.btn_save.clicked.connect(self.user_table_update)
 
     def user_status(self):
-        if self.is_admin!=0:
+        if self.is_admin == 0:
+            self.btn_edit_user.show()
+            self.btn_add_user.show()
+        else:
             self.btn_edit_user.hide()
+            self.btn_add_user.hide()
             self.btn_add_school_details.hide()
+            self.btn_edit_school_details.hide()
+            self.users_table.hide()
+            self.btn_monthly.hide()
+            self.btn_yearly.hide()
 
             
     def defaulters(self):
@@ -389,7 +399,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
                 for column, item in enumerate(form):
                     self.expense_table.setItem(
                         row, column, QTableWidgetItem(str(item)))
-            self.total_expense.setText(str(amount))
+            self.total_expense.setText(str(f"{amount:,}"))
 
     def update_daily_report_table(self, reports=None):
         if reports is None or reports == False:
@@ -407,20 +417,20 @@ class MainWindow(QMainWindow, FORM_MAIN):
                         reciceved += int(item)
                     self.daily_reports_table.setItem(
                         row, column, QTableWidgetItem(str(item)))
-            self.lbl_total_amount_received.setText(str(reciceved))
+            self.lbl_total_amount_received.setText(str(f"{reciceved:,}"))
             remaining = self.db.conn.execute(
                 # f"SELECT SUM(remaining_fee) FROM transactions WHERE date = '{QDate.currentDate().toString('yyyy/MM/dd')}'").fetchone()
                 f"SELECT SUM(remaining_fee) FROM students").fetchone()
-            self.lbl_total_amount_remaining.setText(str(remaining[0]))
+            self.lbl_total_amount_remaining.setText(str(f"{remaining[0]:,}"))
             expense = self.db.conn.execute(
                 f"SELECT SUM(amount) FROM expenses WHERE date = '{datetime.datetime.now().strftime('%Y/%m/%d')}'").fetchone()
             print(expense)
             if expense[0] is not None:
-                self.lbl_total_expense.setText(str(expense[0]))
-                self.lbl_net_balance.setText(str(reciceved-expense[0]))
+                self.lbl_total_expense.setText(str(f"{expense[0]:,}"))
+                self.lbl_net_balance.setText(str(f"{reciceved-expense[0]:,}"))
             else:
                 self.lbl_total_expense.setText("0")
-                self.lbl_net_balance.setText(str(reciceved))
+                self.lbl_net_balance.setText(str(f"{reciceved:,}"))
 
     def search_date_report(self):
         from_date = self.report_from_date.date().toString('yyyy/MM/dd')
@@ -500,7 +510,10 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def settings(self):
         self.stackedWidget.setCurrentWidget(self.settings_page)
         self.user_table_update()
-
+        db = DBHandler()
+        data = db.select_all('school_info', "*")
+        if data:
+            self.btn_add_school_details.hide()
 
     def add_student(self):
         self.add_student_window = AddStudentWindow()
@@ -625,6 +638,10 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def add_school_details(self):
         self.add_school_window = SchoolDetailsWindow()
         self.add_school_window.show()
+        
+    def update_school_details(self):
+        self.update_school_window = UpdateSchoolDetailsWindow()
+        self.update_school_window.show()
 
     # def add_users(self):
     #     self.add_users_window = CreateUserWindow()

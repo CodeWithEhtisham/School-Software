@@ -44,7 +44,12 @@ QDateEdit {
 #label {
 	background-color: #4dd0e1;
 	padding: 10px;
-}</string>
+}
+#reports_bottom_widget, #label_21 {
+	background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                            stop:0 #ffffff, stop:1 #00bcd4);
+}
+</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
@@ -525,7 +530,6 @@ QDateEdit {
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
   <include location="../resources.qrc"/>

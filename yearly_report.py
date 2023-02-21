@@ -123,14 +123,13 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
 
         start_date = datetime(year, 1, 1).strftime('%Y/%m/%d')
         end_date = datetime(year, 12, 31).strftime('%Y/%m/%d')
-        print(start_date, end_date)
         monthly_expense_report = self.db.conn.execute(
             f"SELECT date,hoa,SUM(amount) FROM expenses WHERE date BETWEEN '{start_date}' AND '{end_date}' GROUP BY hoa"
         ).fetchall()
         for month in monthly_expense_report:
             if month[0] not in days:
                 monthly_expense_report.remove(month)
-        print(monthly_expense_report)
+
         self.expense_table.setRowCount(len(monthly_expense_report))
         for index, row in enumerate(monthly_expense_report):
             for col_index, item in enumerate(row):
@@ -143,15 +142,17 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
         )[0][0]
         if not amount_received:
             amount_received = 0
-        self.lbl_total_amount_received.setText(str(amount_received))
-        remaining = self.db.select(
-            table_name='transactions',
-            columns='sum(remaining_fee)',
-            condition=f"date BETWEEN '{start_date}' AND '{end_date}'"
-        )[0][0]
+        self.lbl_total_amount_received.setText(str(f"{amount_received:,}"))
+        try:
+            remaining = self.db.select_all(
+                table_name='students',
+                columns='sum(remaining_fee)'
+            )[0][0]
+        except:
+            remaining = 0
         if not remaining:
             remaining = 0
-        self.lbl_total_amount_remaining.setText(str(remaining))
+        self.lbl_total_amount_remaining.setText(str(f"{remaining:,}"))
         expensees = self.db.select(
             table_name='expenses',
             columns='sum(amount)',
@@ -159,8 +160,8 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
         )[0][0]
         if not expensees:
             expensees = 0
-        self.lbl_total_expense.setText(str(expensees))
-        self.lbl_net_balance.setText(str(amount_received-expensees))
+        self.lbl_total_expense.setText(str(f"{expensees:,}"))
+        self.lbl_net_balance.setText(str(f"{amount_received-expensees:,}"))
 
     # PRINT YEARLY
     def print_report(self):

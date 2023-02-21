@@ -69,7 +69,6 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
 
         start_date = datetime(year, month, 1).strftime('%Y/%m/%d')
         end_date = datetime(year, month, num_days).strftime('%Y/%m/%d')
-        # print(start_date, end_date)
         monthly_expense_report = self.db.conn.execute(
             f"SELECT date,hoa,SUM(amount) FROM expenses WHERE date BETWEEN '{start_date}' AND '{end_date}' GROUP BY hoa"
         ).fetchall()
@@ -89,7 +88,7 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
         )[0][0]
         if not amount_received:
             amount_received = 0
-        self.lbl_total_amount_received.setText(str(amount_received))
+        self.lbl_total_amount_received.setText(str(f"{amount_received:,}"))
         try:
             remaining = self.db.select_all(
                 table_name='students',
@@ -99,7 +98,7 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
             remaining = 0
         if not remaining:
             remaining = 0
-        self.lbl_total_amount_remaining.setText(str(remaining))
+        self.lbl_total_amount_remaining.setText(str(f"{remaining:,}"))
         expensees = self.db.select(
             table_name='expenses',
             columns='sum(amount)',
@@ -108,7 +107,7 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
         if not expensees:
             expensees = 0
         self.lbl_total_expense.setText(str(f"{expensees:,}"))
-        self.lbl_net_balance.setText(str(amount_received-expensees))
+        self.lbl_net_balance.setText(str(f"{amount_received-expensees:,}"))
 
     # PRINT MONTHLY
     def print_report(self):

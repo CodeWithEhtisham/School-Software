@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>UpdateBusinessWindow</class>
- <widget class="QMainWindow" name="UpdateBusinessWindow">
+ <class>UpdateSchoolDetailsWindow</class>
+ <widget class="QMainWindow" name="UpdateSchoolDetailsWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -427,7 +427,7 @@ QTextEdit {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_update">
+        <widget class="QPushButton" name="btn_save">
          <property name="font">
           <font>
            <family>Calibri</family>
