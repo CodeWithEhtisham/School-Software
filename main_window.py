@@ -38,7 +38,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.db = DBHandler()
-        self.is_admin = status
+        self.is_admin = status[0]
         self.showMaximized()
         self.Handle_Buttons()
         # self.update()
@@ -127,6 +127,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.add_user_window.btn_save.clicked.connect(self.user_table_update)
 
     def user_status(self):
+        print(self.is_admin)
         if self.is_admin == 0:
             self.btn_edit_user.show()
             self.btn_add_user.show()
