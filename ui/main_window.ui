@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1386</width>
+    <width>1401</width>
     <height>948</height>
    </rect>
   </property>
@@ -298,7 +298,7 @@ QDateEdit {
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="home_page">
        <property name="styleSheet">
@@ -838,7 +838,6 @@ QDateEdit {
           <attribute name="verticalHeaderMinimumSectionSize">
            <number>35</number>
           </attribute>
-         
           <column>
            <property name="text">
             <string>Adm Date</string>
@@ -2043,7 +2042,7 @@ QDateEdit {
              </property>
             </widget>
            </item>
-           <item>
+           <item alignment="Qt::AlignLeft">
             <widget class="QPushButton" name="btn_date_search">
              <property name="minimumSize">
               <size>
@@ -2507,7 +2506,7 @@ QDateEdit {
         <property name="bottomMargin">
          <number>0</number>
         </property>
-        <item>
+        <item alignment="Qt::AlignTop">
          <widget class="QLabel" name="lbl_settings">
           <property name="font">
            <font>
@@ -2528,7 +2527,7 @@ QDateEdit {
           </property>
          </widget>
         </item>
-        <item>
+        <item alignment="Qt::AlignTop">
          <widget class="QWidget" name="settings_upper_widget" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -2823,7 +2822,7 @@ QDateEdit {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1386</width>
+     <width>1401</width>
      <height>21</height>
     </rect>
    </property>

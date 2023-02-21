@@ -136,6 +136,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.users_table.show()
             self.btn_monthly.show()
             self.btn_yearly.show()
+            self.btn_change_password.show()
         else:
             self.btn_edit_user.hide()
             self.btn_add_user.hide()
@@ -144,6 +145,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.users_table.hide()
             self.btn_monthly.hide()
             self.btn_yearly.hide()
+            self.btn_change_password.hide()
 
             
     def defaulters(self):
