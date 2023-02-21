@@ -130,6 +130,11 @@ class MainWindow(QMainWindow, FORM_MAIN):
         if self.is_admin == 0:
             self.btn_edit_user.show()
             self.btn_add_user.show()
+            self.btn_add_school_details.show()
+            self.btn_edit_school_details.show()
+            self.users_table.show()
+            self.btn_monthly.show()
+            self.btn_yearly.show()
         else:
             self.btn_edit_user.hide()
             self.btn_add_user.hide()

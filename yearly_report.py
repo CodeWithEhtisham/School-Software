@@ -41,13 +41,7 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
         days = [datetime(year, month, day).strftime('%Y/%m/%d') for month in range(1, 13)
                 for day in range(1, calendar.monthrange(year, month)[1]+1)]
         report = [[month] for month in ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']]
-        # print(report)
-        # for day in days:
-            # received = self.db.select(
-            #     table_name='transactions',
-            #     columns='sum(paid_fee)',
-            #     condition=f"date = '{day}'"
-            # )
+        
         received = self.db.conn.execute(
             f"""SELECT 
                 substr(date, 6, 2) || '-' || substr(date, 1, 4) AS month, 
@@ -68,6 +62,7 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
                     ELSE 'Unknown'
                 END AS month_name
                 FROM transactions
+                WHERE date BETWEEN '{year}/01/01' AND '{year}/12/31'
                 GROUP BY substr(date, 1, 7)
                 ORDER BY date;
             """
@@ -93,27 +88,27 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
                     ELSE 'Unknown'
                 END AS month_name
                 FROM expenses
+                WHERE date BETWEEN '{year}/01/01' AND '{year}/12/31'
                 GROUP BY substr(date, 1, 7)
                 ORDER BY date;
             """
         ).fetchall()
         
-        if received:
-            for m in report:
-                for r in received:
-                    if m[0] == r[2]:
-                        m.append(r[1])
-                        break
-                else:
-                    m.append(0)
-        if expense:
-            for m in report:
-                for e in expense:
-                    if m[0] == e[2]:
-                        m.append(e[1])
-                        break
-                else:
-                    m.append(0)
+        for m in report:
+            for r in received:
+                if m[0] == r[2]:
+                    m.append(r[1])
+                    break
+            else:
+                m.append(0)
+        # if expense:
+        for m in report:
+            for e in expense:
+                if m[0] == e[2]:
+                    m.append(e[1])
+                    break
+            else:
+                m.append(0)
 
         self.accounts_table.setRowCount(len(report))
         for index, row in enumerate(report):
