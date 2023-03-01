@@ -34,11 +34,12 @@ import datetime
 FORM_MAIN, _ = loadUiType('ui/main_window.ui')
 
 class MainWindow(QMainWindow, FORM_MAIN):
-    def __init__(self,status):
+    def __init__(self,status,is_user_id):
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.db = DBHandler()
-        self.is_admin = status[0]
+        self.is_admin = status
+        self.is_user_id=is_user_id
         self.showMaximized()
         self.Handle_Buttons()
         # self.update()
@@ -635,7 +636,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def change_password(self):
         from update_password import ChangePasswordWindow
-        self.change_password_window = ChangePasswordWindow()
+        self.change_password_window = ChangePasswordWindow(self.is_user_id)
         self.change_password_window.show()
 
     def edit_user(self):

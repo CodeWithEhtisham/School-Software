@@ -65,12 +65,14 @@ class LoginWindow(QMainWindow, FORM_MAIN):
                 # print(data)
                 if data:
                     # check admin or user
-                    status = db.select(
+                    id,status = db.select(
                         table_name="users",
-                        columns="is_admin",
+                        columns="id,is_admin",
                         condition=f"username='{username}' AND password='{password}'"
                     )[0]
-                    self.mainpage = MainWindow(status)
+
+                    # print(type(data))
+                    self.mainpage = MainWindow(status,id)
                     self.mainpage.show()
                     self.close_window()
                 else:

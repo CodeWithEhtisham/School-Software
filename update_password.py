@@ -17,9 +17,10 @@ FORM_MAIN, _ = loadUiType('ui/update_password.ui')
 
 
 class ChangePasswordWindow(QMainWindow, FORM_MAIN):
-    def __init__(self):
+    def __init__(self,user_id):
         QMainWindow.__init__(self)
         self.setupUi(self)
+        self.user_id = user_id
         self.Handle_Buttons()
 
     def Handle_Buttons(self):
@@ -40,7 +41,7 @@ class ChangePasswordWindow(QMainWindow, FORM_MAIN):
         else: password = password[0]
         if password == old_password:
             if new_password == confirm_password:
-                db.conn.execute(f"UPDATE users SET password = '{new_password}' WHERE password = '{old_password}'")
+                db.conn.execute(f"UPDATE users SET password = '{new_password}' WHERE id = '{self.user_id}'")
                 db.conn.commit()
                 QMessageBox.information(self, "Success", "Password changed successfully")
                 self.Clear()
