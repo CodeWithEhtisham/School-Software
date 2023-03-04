@@ -41,6 +41,20 @@ class AddStudentWindow(QMainWindow, FORM_MAIN):
         self.btn_save.clicked.connect(self.save)
         self.btn_cancel.clicked.connect(self.close)
         self.std_image.mousePressEvent = self.select_image
+        self.txt_admission_no.textChanged.connect(self.check_admission_no)
+
+    def check_admission_no(self):
+        admission_no = self.txt_admission_no.text()
+        if admission_no:
+            # check if admission no already exists in database change border color to red if it does
+            if self.db.select(
+                    table_name='students',
+                    columns='addmission_no',
+                    condition=f"addmission_no='{admission_no}'"
+            ):
+                self.txt_admission_no.setStyleSheet("border: 2px solid red") 
+            else:
+                self.txt_admission_no.setStyleSheet("border: 2px solid green")
 
     def select_image(self, event):
         file_name, _ = QFileDialog.getOpenFileName(self, 'Select Image',
