@@ -11,7 +11,7 @@ import sys
 from os import path
 from PyQt5.uic import loadUiType
 import os
-FORM_MAIN,_= loadUiType('ui/add_student.ui')
+FORM_MAIN,_= loadUiType('ui/update_student.ui')
 
 
 class UpdateStudentWindow(QMainWindow, FORM_MAIN):
@@ -65,6 +65,21 @@ class UpdateStudentWindow(QMainWindow, FORM_MAIN):
         self.btn_save.clicked.connect(self.save)
         self.btn_cancel.clicked.connect(self.close)
         self.std_image.mousePressEvent = self.select_image
+        self.btn_delete.clicked.connect(self.delete)
+
+    def delete(self):
+        ret= QMessageBox.question(self, 'Delete Student', 'Are you sure you want to delete this student?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if ret == QMessageBox.Yes:
+            self.db.conn.execute(f"DELETE FROM students WHERE id = {self.student_id}")
+            fee_id = self.db.conn.execute(f"SELECT id FROM fee WHERE std_id = {self.student_id}").fetchall()
+            for i in fee_id:
+                self.db.conn.execute(f"DELETE FROM transactions WHERE fee_id = {i[0]}")
+            self.db.conn.execute(f"DELETE FROM fee WHERE std_id = {self.student_id}")
+            self.db.conn.commit()
+            self.close()
+            
+        else:
+            pass
 
     def select_image(self, event):
         file_name, _ = QFileDialog.getOpenFileName(self, 'Select Image',

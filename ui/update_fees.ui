@@ -443,6 +443,37 @@ QComboBox {
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="btn_delete">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Calibri</family>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Delete</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resources.qrc">
+           <normaloff>:/icons/assets/icons/save.png</normaloff>:/icons/assets/icons/save.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="btn_cancel">
          <property name="minimumSize">
           <size>

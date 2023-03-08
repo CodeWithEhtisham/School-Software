@@ -54,6 +54,34 @@ class UpdatePayFeeWindow(QMainWindow, FORM_MAIN):
         self.btn_save.clicked.connect(self.pay_fee)
         self.btn_cancel.clicked.connect(self.close)
         self.txt_paid_fee.textChanged.connect(self.remaining_fee)
+        self.btn_delete.clicked.connect(self.delete_fee)
+
+    def delete_fee(self):
+        ret = QMessageBox.question(self, 'Delete Fee', 'Are you sure you want to delete this fee?',
+                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if ret == QMessageBox.Yes:
+            after_ids = self.db.conn.execute(
+                f"SELECT id,paid_fee,remaining_fee from transactions where id> {self.trans_id} and fee_id = '{self.fee_id}' order by id asc").fetchall()
+            previous_remaining_fee = self.db.conn.execute(
+                f"SELECT remaining_fee from transactions where id<{self.trans_id} and fee_id = '{self.fee_id}' order by id desc limit 1").fetchall()
+            if previous_remaining_fee:
+                previous_remaining_fee = previous_remaining_fee[-1][0]
+            else:
+                previous_remaining_fee = 0
+            if after_ids:
+                for fee in after_ids:
+                    remaining_fee = previous_remaining_fee - fee[1]
+                    self.db.conn.execute(
+                        f"UPDATE transactions SET remaining_fee = '{remaining_fee}' WHERE id = '{fee[0]}'")
+                    self.db.conn.commit()
+                    previous_remaining_fee = remaining_fee
+            self.db.conn.execute(
+                f"DELETE FROM transactions where id = {self.trans_id}")
+            self.db.conn.commit()
+            self.close()
+        else:
+            return
+
 
     def remaining_fee(self):
         try:

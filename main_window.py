@@ -201,6 +201,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.edit_student_window.show()
         self.edit_student_window.btn_save.clicked.connect(
             self.update_student_table)
+        self.edit_student_window.btn_delete.clicked.connect(
+            self.update_student_table)
 
     def edit_expense(self):
         row = self.expense_table.currentRow()
@@ -980,7 +982,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
 def main():
     app = QApplication(sys.argv)
-    window = MainWindow(0)
+    window = MainWindow(0,1)
     window.show()
     app.exec_()
 

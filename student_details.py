@@ -110,6 +110,7 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
         self.edit_fee_window = UpdatePayFeeWindow(self.std_id, fee_id[1], fee_id[0])
         self.edit_fee_window.show()
         self.edit_fee_window.btn_save.clicked.connect(self.update_fee)
+        self.edit_fee_window.btn_delete.clicked.connect(self.update_fee)
 
 
     def update_fee(self):
