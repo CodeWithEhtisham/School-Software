@@ -77,6 +77,9 @@ class UpdatePayFeeWindow(QMainWindow, FORM_MAIN):
                     previous_remaining_fee = remaining_fee
             self.db.conn.execute(
                 f"DELETE FROM transactions where id = {self.trans_id}")
+            self.db.conn.execute(
+                f"UPDATE students SET remaining_fee = '{previous_remaining_fee}' WHERE id = '{self.std_id}'"
+            )
             self.db.conn.commit()
             self.close()
         else:

@@ -309,6 +309,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
                     # self.students_table.setItem(
                         # row, column, QTableWidgetItem(str(item)))
             self.lbl_total_students.setText(ln)
+        else:
+            self.students_table.setRowCount(0)
+            self.lbl_total_students.setText('0')
 
     def update_student_table_x_button(self, students=None):
         # if students == None or students == False or QtGui.QCloseEvent == False:
