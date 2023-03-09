@@ -445,6 +445,12 @@ class MainWindow(QMainWindow, FORM_MAIN):
             else:
                 self.lbl_total_expense.setText("0")
                 self.lbl_net_balance.setText(str(f"{reciceved:,}"))
+        else:
+            self.daily_reports_table.setRowCount(0)
+            self.lbl_total_amount_received.setText("0")
+            self.lbl_total_amount_remaining.setText("0")
+            self.lbl_total_expense.setText("0")
+            self.lbl_net_balance.setText("0")
 
     def search_date_report(self):
         from_date = self.report_from_date.date().toString('yyyy/MM/dd')
