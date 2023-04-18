@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AddFeeWindow</class>
- <widget class="QMainWindow" name="AddFeeWindow">
+ <class>UpdateAddFeeWindow</class>
+ <widget class="QMainWindow" name="UpdateAddFeeWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Add Fees</string>
+   <string>Update Add Fees</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
@@ -133,7 +133,7 @@ QComboBox {
           </font>
          </property>
          <property name="text">
-          <string>Add Fee</string>
+          <string>Update Add Fee</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -834,7 +834,7 @@ QComboBox {
           <cursorShape>OpenHandCursor</cursorShape>
          </property>
          <property name="text">
-          <string>Save</string>
+          <string>UPDATE</string>
          </property>
          <property name="icon">
           <iconset resource="../resources.qrc">

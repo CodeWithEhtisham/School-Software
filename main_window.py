@@ -232,8 +232,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         subject_name = self.subjects_table.item(row, 0).text()
         row = self.class_table.currentRow()
         class_name = self.class_table.item(row, 0).text()
-        class_id = self.db.conn.execute(
-            f"SELECT id FROM classes WHERE class_name='{class_name}'").fetchone()[0]
+        class_id = self.db.conn.execute(f"SELECT id FROM classes WHERE class_name='{class_name}'").fetchone()[0]
         subject_id = self.db.conn.execute(
             f"SELECT id FROM subjects WHERE subject_name='{subject_name}' and class_id={class_id}").fetchone()[0]
         self.edit_subject_window = UpdateSubjectWindow(subject_id)

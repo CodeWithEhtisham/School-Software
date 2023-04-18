@@ -89,11 +89,6 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
                 self.lbl_obtain_marks.setText(str('0'))
         except Exception as e:
             QMessageBox.warning(self, "Error", f"no data found {e}")
-                
-            
-
-
-
 
     def edit_fee(self):
         row = self.fees_table.currentRow()
@@ -119,17 +114,28 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
                 table_name='fee',
                 columns="*",
                 condition=f"std_id = '{self.std_id}'")[-1]
-
+            self.lbl_jan_fee.setText(str(fee[2]))
+            self.lbl_feb_fee.setText(str(fee[3]))
+            self.lbl_march_fee.setText(str(fee[4]))
+            self.lbl_april_fee.setText(str(fee[5]))
+            self.lbl_may_fee.setText(str(fee[6]))
+            self.lbl_june_fee.setText(str(fee[7]))
+            self.lbl_july_fee.setText(str(fee[8]))
+            self.lbl_august_fee.setText(str(fee[9]))
+            self.lbl_sep_fee.setText(str(fee[10]))
+            self.lbl_oct_fee.setText(str(fee[11]))
+            self.lbl_nov_fee.setText(str(fee[12]))
+            self.lbl_dec_fee.setText(str(fee[13]))
             self.lbl_addmission_fee.setText(str(fee[1]))
-            self.lbl_monthly_fee.setText(str(fee[2]))
-            self.lbl_annual_fund.setText(str(fee[3]))
-            self.lbl_comp_lab_fee.setText(str(fee[4]))
-            self.lbl_sci_lab_fee.setText(str(fee[5]))
-            self.lbl_total_fee.setText(str(fee[7]))
+            # self.lbl_monthly_fee.setText(str(fee[2]))
+            self.lbl_annual_fund.setText(str(fee[14]))
+            self.lbl_comp_lab_fee.setText(str(fee[15]))
+            self.lbl_sci_lab_fee.setText(str(fee[16]))
+            self.lbl_total_fee.setText(str(fee[18]))
 
             transactions = self.db.select(
                 table_name='transactions',
-                columns="date,paid_fee,challan_no,description,remaining_fee",
+                columns="date,paid_fee,discount,challan_no,description,remaining_fee",
                 condition=f"fee_id = '{fee[0]}'")
 
             self.fees_table.setRowCount(0)
@@ -137,7 +143,7 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
             for row_number, row_data in enumerate(transactions):
                 self.fees_table.insertRow(row_number)
                 for column_number, data in enumerate(row_data):
-                    if column_number == 4:
+                    if column_number == 5:
                         remaining_fee = data
                     self.fees_table.setItem(
                         row_number, column_number, QTableWidgetItem(str(data)))

@@ -42,6 +42,7 @@ class PayFeeWindow(QMainWindow, FORM_MAIN):
     def pay_fee(self):
         try:
             paid_fee= float(self.txt_paid_fee.text())
+            discount= float(self.txt_discount.text())
             date= self.txt_pay_fee_date.date().toString('yyyy/MM/dd')
             challan_no= self.txt_challan_no.text()
             description= self.txt_description.text()
@@ -56,8 +57,8 @@ class PayFeeWindow(QMainWindow, FORM_MAIN):
                     fee_id = fee_id[-1][0]
                     self.db.insert(
                         table_name='transactions',
-                        columns='fee_id,paid_fee,date,challan_no,description,remaining_fee',
-                        values=f"'{fee_id}','{paid_fee}','{date}','{challan_no}','{description}','{remaining_fee}'"
+                        columns='fee_id,paid_fee,discount,date,challan_no,description,remaining_fee',
+                        values=f"'{fee_id}','{paid_fee}','{discount}','{date}','{challan_no}','{description}','{remaining_fee}'"
                     )
                     self.db.update(
                         table_name='students',
