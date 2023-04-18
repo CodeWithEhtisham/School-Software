@@ -21,8 +21,9 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.db = DBHandler()
+        self.select_month.setDate(QtCore.QDate.currentDate())
         self.Handle_Buttons()
-        self.update(month=None, year=None)
+        self.update(month=None, year=None,number_of_days=None)
         
         self.monthly_accounts_table.setSizePolicy(
             QSizePolicy.Expanding, QSizePolicy.Fixed)
@@ -34,17 +35,19 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
     def month_changed(self):
         month = self.select_month.date().month()
         year = self.select_month.date().year()
-        self.update(month, year)
+        day= self.select_month.date().day()
+        self.update(month, year,day)
 
-    def update(self, month, year):
+    def update(self, month, year,number_of_days):
         if not month or not year:
             month = QDate.currentDate().month()
             year = QDate.currentDate().year()
         # create a list of all the days in the month
-        num_days = calendar.monthrange(year, month)[1]
+        if not number_of_days:
+            number_of_days = calendar.monthrange(year, month)[1]
 
         days = [datetime(year, month, day).strftime('%Y/%m/%d')
-                for day in range(1, num_days+1)]
+                for day in range(1, number_of_days+1)]
         report = []
         for day in days:
             received = self.db.select(
@@ -68,7 +71,7 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
                     index, col_index, QTableWidgetItem(str(item)))
 
         start_date = datetime(year, month, 1).strftime('%Y/%m/%d')
-        end_date = datetime(year, month, num_days).strftime('%Y/%m/%d')
+        end_date = datetime(year, month, number_of_days).strftime('%Y/%m/%d')
         monthly_expense_report = self.db.conn.execute(
             f"SELECT date,hoa,SUM(amount) FROM expenses WHERE date BETWEEN '{start_date}' AND '{end_date}' GROUP BY hoa"
         ).fetchall()

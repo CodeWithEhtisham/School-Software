@@ -56,6 +56,24 @@ class AddFeesWindow(QMainWindow, FORM_MAIN):
         self.txt_oct.textChanged.connect(self.calculate_total)
         self.txt_nov.textChanged.connect(self.calculate_total)
         self.txt_dec.textChanged.connect(self.calculate_total)
+        self.txt_monthly_fee.textChanged.connect(self.fill_months)
+
+    def fill_months(self):
+        monthly_fee = self.txt_monthly_fee.text()
+        if monthly_fee == "" or monthly_fee == "0" or monthly_fee == None:
+            monthly_fee = ""
+        self.txt_jan.setText(monthly_fee)
+        self.txt_feb.setText(monthly_fee)
+        self.txt_march.setText(monthly_fee)
+        self.txt_april.setText(monthly_fee)
+        self.txt_may.setText(monthly_fee)
+        self.txt_june.setText(monthly_fee)
+        self.txt_july.setText(monthly_fee)
+        self.txt_august.setText(monthly_fee)
+        self.txt_sep.setText(monthly_fee)
+        self.txt_oct.setText(monthly_fee)
+        self.txt_nov.setText(monthly_fee)
+        self.txt_dec.setText(monthly_fee)
         
     
     # def show_months_frame(self, state):
@@ -66,7 +84,7 @@ class AddFeesWindow(QMainWindow, FORM_MAIN):
     
     def calculate_total(self):
         try:
-            # monthly_fee = self.txt_monthly_fee.text()
+            monthly_fee = self.txt_monthly_fee.text()
             #
             # self.txt_jan.setText(monthly_fee)
             # self.txt_feb.setText(monthly_fee)
@@ -193,7 +211,7 @@ class AddFeesWindow(QMainWindow, FORM_MAIN):
 
 def main():
     app = QApplication(sys.argv)
-    window = AddFeesWindow()
+    window = AddFeesWindow(1)
     window.show()
     app.exec_()
 

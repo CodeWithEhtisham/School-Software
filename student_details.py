@@ -96,8 +96,9 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
             QMessageBox.warning(self, "Error", "Please select a row")
             return
         date = self.fees_table.item(row, 0).text()
-        challan_no = self.fees_table.item(row, 2).text()
-        description = self.fees_table.item(row, 3).text()
+        challan_no = self.fees_table.item(row, 3).text()
+        description = self.fees_table.item(row, 4).text()
+        print(date, challan_no, description)
         fee_id = self.db.select(
             table_name='transactions',
             columns="id,fee_id",
