@@ -33,37 +33,45 @@ import datetime
 
 FORM_MAIN, _ = loadUiType('ui/main_window.ui')
 
+
 class MainWindow(QMainWindow, FORM_MAIN):
-    def __init__(self,status,is_user_id):
+    def __init__(self, status, is_user_id):
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.db = DBHandler()
         self.is_admin = status
-        self.is_user_id=is_user_id
+        self.is_user_id = is_user_id
         self.showMaximized()
         self.Handle_Buttons()
         # self.update()
         self.home()
 
         self.students_table.setColumnWidth(0, 120)
-        self.students_table.setColumnWidth(1, 170)
-        self.students_table.setColumnWidth(2, 200)
-        self.students_table.setColumnWidth(3, 200)
+        self.students_table.setColumnWidth(1, 150)
+        self.students_table.setColumnWidth(2, 250)
+        self.students_table.setColumnWidth(3, 250)
         self.students_table.setColumnWidth(4, 100)
         self.students_table.setColumnWidth(5, 100)
         self.students_table.setColumnWidth(6, 140)
         self.students_table.setColumnWidth(7, 100)
+
+        # studentsTable_scrollBar = self.students_table.verticalScrollBar()
+        # studentsTable_scrollBar.rangeChanged.connect(
+        #     lambda: studentsTable_scrollBar.setValue(studentsTable_scrollBar.maximum()))
 
         # REPORTS TABLE
         self.daily_reports_table.setColumnWidth(0, 180)
         self.daily_reports_table.setColumnWidth(1, 180)
 
         # EXPENSE TABLE
+        self.expense_table.setColumnWidth(1, 300)
         self.expense_table.setColumnWidth(3, 200)
         self.expense_table.setColumnWidth(4, 200)
         self.expense_table.setColumnWidth(5, 300)
         self.report_from_date.setDate(QDate.currentDate())
         self.report_to_date.setDate(QDate.currentDate())
+        self.expense_from_date.setDate(QDate.currentDate())
+        self.expense_to_date.setDate(QDate.currentDate())
 
      # HANDLE BUTTONS
 
@@ -72,7 +80,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.btn_change_password.clicked.connect(self.change_password)
         self.btn_edit_user.clicked.connect(self.edit_user)
         self.btn_add_school_details.clicked.connect(self.add_school_details)
-        self.btn_edit_school_details.clicked.connect(self.update_school_details)
+        self.btn_edit_school_details.clicked.connect(
+            self.update_school_details)
         # self.btn_add_user.clicked.connect(self.add_users)
         self.btn_home.clicked.connect(self.home)
         self.btn_students.clicked.connect(self.students)
@@ -108,6 +117,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.txt_search_student.textChanged.connect(self.search_student)
         self.select_class.currentIndexChanged.connect(
             self.student_search_class)
+
         self.btn_edit_class.clicked.connect(self.edit_class)
         self.btn_edit_subject.clicked.connect(self.edit_subject)
         self.btn_edit_expense.clicked.connect(self.edit_expense)
@@ -118,8 +128,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.txt_search_report.textChanged.connect(self.search_report)
         self.btn_defaulters.clicked.connect(self.defaulters)
         self.btn_add_user.clicked.connect(self.add_user)
+        self.btn_search_expense.clicked.connect(self.search_date_expense)
         self.user_status()
-        
 
     def add_user(self):
         from create_user import CreateUserWindow
@@ -148,7 +158,6 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.btn_yearly.hide()
             self.btn_change_password.hide()
 
-            
     def defaulters(self):
         first_date_of_this_month = datetime.date.today().replace(day=1).strftime("%Y/%m/%d")
         print(first_date_of_this_month)
@@ -163,7 +172,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
                     GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee;
                 """
         reports = self.db.conn.execute(query).fetchall()
-        print('defalter',reports)
+        print('defalter', reports)
         if reports:
             # reciceved = 0
             self.daily_reports_table.setRowCount(0)
@@ -232,7 +241,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
         subject_name = self.subjects_table.item(row, 0).text()
         row = self.class_table.currentRow()
         class_name = self.class_table.item(row, 0).text()
-        class_id = self.db.conn.execute(f"SELECT id FROM classes WHERE class_name='{class_name}'").fetchone()[0]
+        class_id = self.db.conn.execute(
+            f"SELECT id FROM classes WHERE class_name='{class_name}'").fetchone()[0]
         subject_id = self.db.conn.execute(
             f"SELECT id FROM subjects WHERE subject_name='{subject_name}' and class_id={class_id}").fetchone()[0]
         self.edit_subject_window = UpdateSubjectWindow(subject_id)
@@ -399,9 +409,10 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def update_expense_table(self, expense=None):
         if expense is None or expense == False:
-            expense = self.db.select_all(
+            expense = self.db.select(
                 table_name='expenses',
                 columns="date,hoa,amount,payment_type,recipient_name,comment",
+                condition=f"date = '{datetime.datetime.now().strftime('%Y/%m/%d')}'",
             )
         if expense:
             amount = 0
@@ -418,8 +429,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
         if reports is None or reports == False:
             reports = self.db.conn.execute(
                 f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{datetime.datetime.now().strftime('%Y/%m/%d')}' and t.paid_fee != 0").fetchall()
-        print('daily',reports)
-        
+        # print('daily',reports)
+
         if reports:
             reciceved = 0
             self.daily_reports_table.setRowCount(0)
@@ -437,7 +448,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.lbl_total_amount_remaining.setText(str(f"{remaining[0]:,}"))
             expense = self.db.conn.execute(
                 f"SELECT SUM(amount) FROM expenses WHERE date = '{datetime.datetime.now().strftime('%Y/%m/%d')}'").fetchone()
-            print(expense)
+            # print(expense)
             if expense[0] is not None:
                 self.lbl_total_expense.setText(str(f"{expense[0]:,}"))
                 self.lbl_net_balance.setText(str(f"{reciceved-expense[0]:,}"))
@@ -458,12 +469,28 @@ class MainWindow(QMainWindow, FORM_MAIN):
             f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date BETWEEN '{from_date}' and '{to_date}' and t.paid_fee != 0").fetchall()
         if reports:
             self.update_daily_report_table(reports)
+            expense = self.db.conn.execute(
+                f"SELECT SUM(amount) FROM expenses WHERE date BETWEEN '{from_date}' and '{to_date}'").fetchone()
+            self.lbl_total_expense.setText(
+                f"{expense[0]:,}" if expense[0] else "0")
+
         else:
             self.daily_reports_table.setRowCount(0)
             self.lbl_total_amount_received.setText("0")
             self.lbl_total_amount_remaining.setText("0")
             self.lbl_total_expense.setText("0")
             self.lbl_net_balance.setText("0")
+
+    def search_date_expense(self):
+        from_date = self.expense_from_date.date().toString('yyyy/MM/dd')
+        to_date = self.expense_to_date.date().toString('yyyy/MM/dd')
+        expense = self.db.conn.execute(
+            f"SELECT date,hoa,amount,payment_type,recipient_name,comment FROM expenses WHERE date BETWEEN '{from_date}' and '{to_date}'").fetchall()
+        if expense:
+            self.update_expense_table(expense)
+        else:
+            self.expense_table.setRowCount(0)
+            self.total_expense.setText("0")
 
     def search_report(self):
         search = self.txt_search_report.text()
@@ -524,7 +551,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
         for row, form in enumerate(data):
             self.users_table.insertRow(row)
             for column, item in enumerate(form):
-                self.users_table.setItem(row, column, QTableWidgetItem(str(item)))
+                self.users_table.setItem(
+                    row, column, QTableWidgetItem(str(item)))
 
     def settings(self):
         self.stackedWidget.setCurrentWidget(self.settings_page)
@@ -657,7 +685,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def add_school_details(self):
         self.add_school_window = SchoolDetailsWindow()
         self.add_school_window.show()
-        
+
     def update_school_details(self):
         self.update_school_window = UpdateSchoolDetailsWindow()
         self.update_school_window.show()
@@ -990,7 +1018,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
 def main():
     app = QApplication(sys.argv)
-    window = MainWindow(0,1)
+    window = MainWindow(0, 1)
     window.show()
     app.exec_()
 

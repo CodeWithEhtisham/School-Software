@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
+    <width>1280</width>
     <height>700</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1200</width>
+    <width>1280</width>
     <height>700</height>
    </size>
   </property>
@@ -240,7 +240,7 @@ QComboBox {
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="student_page">
        <property name="styleSheet">
@@ -971,7 +971,7 @@ QComboBox {
                 </property>
                </widget>
               </item>
-              <item alignment="Qt::AlignRight">
+              <!-- <item alignment="Qt::AlignRight">
                <widget class="QPushButton" name="pushButton">
                 <property name="minimumSize">
                  <size>
@@ -1001,7 +1001,7 @@ QComboBox {
                  </size>
                 </property>
                </widget>
-              </item>
+              </item> -->
              </layout>
             </widget>
            </item>
@@ -1341,7 +1341,7 @@ QComboBox {
                    </property>
                   </widget>
                  </item>
-                 <item>
+                 <!-- <item>
                   <widget class="QLabel" name="label_5">
                    <property name="font">
                     <font>
@@ -1353,7 +1353,7 @@ QComboBox {
                     <string>Monthly Fee</string>
                    </property>
                   </widget>
-                 </item>
+                 </item> -->
                  <item>
                   <widget class="QLabel" name="label_10">
                    <property name="font">
@@ -1589,7 +1589,7 @@ QComboBox {
                    </property>
                   </widget>
                  </item>
-                 <item>
+                 <!-- <item>
                   <widget class="QLabel" name="lbl_monthly_fee">
                    <property name="font">
                     <font>
@@ -1601,7 +1601,7 @@ QComboBox {
                     <string>0</string>
                    </property>
                   </widget>
-                 </item>
+                 </item> -->
                  <item>
                   <widget class="QLabel" name="lbl_annual_fund">
                    <property name="font">

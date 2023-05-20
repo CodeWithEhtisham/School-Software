@@ -24,9 +24,7 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
         self.select_month.setDate(QtCore.QDate.currentDate())
         self.Handle_Buttons()
         self.update(month=None, year=None,number_of_days=None)
-        
-        self.monthly_accounts_table.setSizePolicy(
-            QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.showMaximized()
 
     def Handle_Buttons(self):
         self.select_month.dateChanged.connect(self.month_changed)

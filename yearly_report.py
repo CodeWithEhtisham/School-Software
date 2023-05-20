@@ -23,6 +23,8 @@ class YearlyReportWindow(QMainWindow, FORM_MAIN):
         self.setupUi(self)
         self.db = DBHandler()
         self.Handle_Buttons()
+        self.showMaximized()
+        
         self.update(year=None)
 
     def Handle_Buttons(self):

@@ -79,7 +79,7 @@ QDateEdit {
         <widget class="QPushButton" name="btn_home">
          <property name="minimumSize">
           <size>
-           <width>120</width>
+           <width>40</width>
            <height>40</height>
           </size>
          </property>
@@ -92,7 +92,7 @@ QDateEdit {
           </font>
          </property>
          <property name="text">
-          <string>Home</string>
+          <string/>
          </property>
          <property name="icon">
           <iconset resource="../resources.qrc">
@@ -107,158 +107,185 @@ QDateEdit {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_students">
-         <property name="minimumSize">
-          <size>
-           <width>150</width>
-           <height>40</height>
-          </size>
+        <widget class="QFrame" name="frame_10">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
          </property>
-         <property name="font">
-          <font>
-           <family>Calibri</family>
-           <pointsize>14</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
          </property>
-         <property name="text">
-          <string>Students</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../resources.qrc">
-           <normaloff>:/icons/assets/icons/customers_blue.png</normaloff>:/icons/assets/icons/customers_blue.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_class">
-         <property name="minimumSize">
-          <size>
-           <width>150</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Calibri</family>
-           <pointsize>14</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Class</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../resources.qrc">
-           <normaloff>:/icons/assets/icons/products.png</normaloff>:/icons/assets/icons/products.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_reports">
-         <property name="minimumSize">
-          <size>
-           <width>150</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Calibri</family>
-           <pointsize>14</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Reports</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../resources.qrc">
-           <normaloff>:/icons/assets/icons/reports.png</normaloff>:/icons/assets/icons/reports.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_expense">
-         <property name="minimumSize">
-          <size>
-           <width>150</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Calibri</family>
-           <pointsize>14</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Expense</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../resources.qrc">
-           <normaloff>:/icons/assets/icons/reports.png</normaloff>:/icons/assets/icons/reports.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_settings">
-         <property name="minimumSize">
-          <size>
-           <width>150</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Calibri</family>
-           <pointsize>14</pointsize>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Settings</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../resources.qrc">
-           <normaloff>:/icons/assets/icons/settings.png</normaloff>:/icons/assets/icons/settings.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_18">
+          <property name="spacing">
+           <number>5</number>
+          </property>
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="btn_students">
+            <property name="minimumSize">
+             <size>
+              <width>130</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>14</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Students</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources.qrc">
+              <normaloff>:/icons/assets/icons/customers_blue.png</normaloff>:/icons/assets/icons/customers_blue.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_class">
+            <property name="minimumSize">
+             <size>
+              <width>130</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>14</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Class</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources.qrc">
+              <normaloff>:/icons/assets/icons/products.png</normaloff>:/icons/assets/icons/products.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_reports">
+            <property name="minimumSize">
+             <size>
+              <width>130</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>14</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Reports</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources.qrc">
+              <normaloff>:/icons/assets/icons/reports.png</normaloff>:/icons/assets/icons/reports.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_expense">
+            <property name="minimumSize">
+             <size>
+              <width>130</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>14</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Expense</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources.qrc">
+              <normaloff>:/icons/assets/icons/reports.png</normaloff>:/icons/assets/icons/reports.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_settings">
+            <property name="minimumSize">
+             <size>
+              <width>130</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>14</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Settings</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources.qrc">
+              <normaloff>:/icons/assets/icons/settings.png</normaloff>:/icons/assets/icons/settings.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item alignment="Qt::AlignRight">
@@ -298,7 +325,7 @@ QDateEdit {
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="home_page">
        <property name="styleSheet">
@@ -513,7 +540,10 @@ QDateEdit {
       </widget>
       <widget class="QWidget" name="students_page">
        <property name="styleSheet">
-        <string notr="true">
+        <string notr="true">QHeaderView::section {
+    background-color: #40c4ff;
+    color: white;
+}
 #lbl_students {
 	background-color: #81d4fa;
 	padding: 10px;
@@ -707,7 +737,7 @@ QDateEdit {
             <widget class="QPushButton" name="btn_pay_fee">
              <property name="minimumSize">
               <size>
-               <width>120</width>
+               <width>100</width>
                <height>35</height>
               </size>
              </property>
@@ -735,72 +765,131 @@ QDateEdit {
             </widget>
            </item>
            <item alignment="Qt::AlignRight">
-            <widget class="QPushButton" name="btn_edit_student">
-             <property name="minimumSize">
-              <size>
-               <width>35</width>
-               <height>35</height>
-              </size>
+            <widget class="QFrame" name="frame_7">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
              </property>
-             <property name="text">
-              <string/>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
              </property>
-             <property name="icon">
-              <iconset resource="../resources.qrc">
-               <normaloff>:/icons/assets/icons/edit.png</normaloff>:/icons/assets/icons/edit.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item alignment="Qt::AlignRight">
-            <widget class="QPushButton" name="btn_print_student">
-             <property name="minimumSize">
-              <size>
-               <width>35</width>
-               <height>35</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../resources.qrc">
-               <normaloff>:/icons/assets/icons/print.png</normaloff>:/icons/assets/icons/print.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item alignment="Qt::AlignRight">
-            <widget class="QPushButton" name="btn_refresh_student">
-             <property name="minimumSize">
-              <size>
-               <width>35</width>
-               <height>35</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../resources.qrc">
-               <normaloff>:/icons/assets/icons/refresh.png</normaloff>:/icons/assets/icons/refresh.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_15">
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QComboBox" name="select_students_range">
+                <property name="minimumSize">
+                 <size>
+                  <width>35</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Verdana</family>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>10</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>25</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>50</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>100</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>All</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_edit_student">
+                <property name="minimumSize">
+                 <size>
+                  <width>35</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../resources.qrc">
+                  <normaloff>:/icons/assets/icons/edit.png</normaloff>:/icons/assets/icons/edit.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_print_student">
+                <property name="minimumSize">
+                 <size>
+                  <width>35</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../resources.qrc">
+                  <normaloff>:/icons/assets/icons/print.png</normaloff>:/icons/assets/icons/print.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_refresh_student">
+                <property name="minimumSize">
+                 <size>
+                  <width>35</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../resources.qrc">
+                  <normaloff>:/icons/assets/icons/refresh.png</normaloff>:/icons/assets/icons/refresh.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
@@ -988,7 +1077,11 @@ QDateEdit {
       </widget>
       <widget class="QWidget" name="expense_page">
        <property name="styleSheet">
-        <string notr="true">
+        <string notr="true">QHeaderView::section {
+    background-color: #40c4ff;
+    color: white;
+}
+
 #lbl_expenses {
 	background-color: #81d4fa;
 	padding: 10px;
@@ -1079,7 +1172,7 @@ QDateEdit {
             <widget class="QLineEdit" name="txt_expense_search">
              <property name="minimumSize">
               <size>
-               <width>400</width>
+               <width>300</width>
                <height>35</height>
               </size>
              </property>
@@ -1094,7 +1187,109 @@ QDateEdit {
              </property>
             </widget>
            </item>
-           <item alignment="Qt::AlignLeft">
+           <item alignment="Qt::AlignRight">
+            <widget class="QFrame" name="frame_8">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_16">
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label_55">
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>From</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDateEdit" name="expense_from_date">
+                <property name="minimumSize">
+                 <size>
+                  <width>120</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="calendarPopup">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_99">
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>To</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDateEdit" name="expense_to_date">
+                <property name="minimumSize">
+                 <size>
+                  <width>120</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="calendarPopup">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_search_expense">
+                <property name="minimumSize">
+                 <size>
+                  <width>35</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="icon">
+                 <iconset resource="../resources.qrc">
+                  <normaloff>:/icons/assets/icons/search.png</normaloff>:/icons/assets/icons/search.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignRight">
             <widget class="QPushButton" name="btn_expense_type">
              <property name="minimumSize">
               <size>
@@ -1117,8 +1312,8 @@ QDateEdit {
              </property>
              <property name="iconSize">
               <size>
-               <width>30</width>
-               <height>30</height>
+               <width>28</width>
+               <height>28</height>
               </size>
              </property>
             </widget>
@@ -1133,7 +1328,7 @@ QDateEdit {
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_13">
               <property name="spacing">
-               <number>20</number>
+               <number>10</number>
               </property>
               <property name="leftMargin">
                <number>0</number>
@@ -1241,6 +1436,9 @@ QDateEdit {
           </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>150</number>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
           </attribute>
           <column>
            <property name="text">
@@ -1873,7 +2071,10 @@ QDateEdit {
       </widget>
       <widget class="QWidget" name="reports_page">
        <property name="styleSheet">
-        <string notr="true">
+        <string notr="true">QHeaderView::section {
+    background-color: #40c4ff;
+    color: white;
+}
 #lbl_reports {
 	background-color: #81d4fa;
 	padding: 10px;
@@ -1928,11 +2129,32 @@ QDateEdit {
         <item>
          <widget class="QWidget" name="reports_upper_widget" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_12">
+           <item>
+            <widget class="QComboBox" name="select_class_report">
+             <property name="minimumSize">
+              <size>
+               <width>130</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Verdana</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <item>
+              <property name="text">
+               <string>Select Class</string>
+              </property>
+             </item>
+            </widget>
+           </item>
            <item alignment="Qt::AlignLeft">
             <widget class="QPushButton" name="btn_defaulters">
              <property name="minimumSize">
               <size>
-               <width>220</width>
+               <width>180</width>
                <height>35</height>
               </size>
              </property>
@@ -1953,8 +2175,8 @@ QDateEdit {
              </property>
              <property name="iconSize">
               <size>
-               <width>32</width>
-               <height>32</height>
+               <width>28</width>
+               <height>28</height>
               </size>
              </property>
             </widget>
@@ -1963,7 +2185,7 @@ QDateEdit {
             <widget class="QLineEdit" name="txt_search_report">
              <property name="minimumSize">
               <size>
-               <width>400</width>
+               <width>300</width>
                <height>35</height>
               </size>
              </property>
@@ -1978,95 +2200,122 @@ QDateEdit {
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QLabel" name="label_5">
-             <property name="font">
-              <font>
-               <family>Calibri</family>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>From</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QDateEdit" name="report_from_date">
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>35</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Calibri</family>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="calendarPopup">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_9">
-             <property name="font">
-              <font>
-               <family>Calibri</family>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>To</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QDateEdit" name="report_to_date">
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>35</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Calibri</family>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="calendarPopup">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
            <item alignment="Qt::AlignLeft">
-            <widget class="QPushButton" name="btn_date_search">
-             <property name="minimumSize">
-              <size>
-               <width>35</width>
-               <height>35</height>
-              </size>
+            <widget class="QFrame" name="frame_9">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
              </property>
-             <property name="icon">
-              <iconset resource="../resources.qrc">
-               <normaloff>:/icons/assets/icons/search.png</normaloff>:/icons/assets/icons/search.png</iconset>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
              </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_17">
+              <property name="spacing">
+               <number>5</number>
+              </property>
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label_5">
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>From</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDateEdit" name="report_from_date">
+                <property name="minimumSize">
+                 <size>
+                  <width>120</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="calendarPopup">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_9">
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>To</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDateEdit" name="report_to_date">
+                <property name="minimumSize">
+                 <size>
+                  <width>120</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Calibri</family>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="calendarPopup">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_date_search">
+                <property name="minimumSize">
+                 <size>
+                  <width>35</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="icon">
+                 <iconset resource="../resources.qrc">
+                  <normaloff>:/icons/assets/icons/search.png</normaloff>:/icons/assets/icons/search.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="btn_monthly">
              <property name="minimumSize">
               <size>
-               <width>120</width>
+               <width>90</width>
                <height>35</height>
               </size>
              </property>
@@ -2087,8 +2336,8 @@ QDateEdit {
              </property>
              <property name="iconSize">
               <size>
-               <width>32</width>
-               <height>32</height>
+               <width>28</width>
+               <height>28</height>
               </size>
              </property>
             </widget>
@@ -2097,7 +2346,7 @@ QDateEdit {
             <widget class="QPushButton" name="btn_yearly">
              <property name="minimumSize">
               <size>
-               <width>120</width>
+               <width>90</width>
                <height>35</height>
               </size>
              </property>
@@ -2118,56 +2367,83 @@ QDateEdit {
              </property>
              <property name="iconSize">
               <size>
-               <width>32</width>
-               <height>32</height>
+               <width>28</width>
+               <height>28</height>
               </size>
              </property>
             </widget>
            </item>
            <item alignment="Qt::AlignRight">
-            <widget class="QPushButton" name="btn_reports_print">
-             <property name="minimumSize">
-              <size>
-               <width>35</width>
-               <height>35</height>
-              </size>
+            <widget class="QFrame" name="frame_6">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
              </property>
-             <property name="text">
-              <string/>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
              </property>
-             <property name="icon">
-              <iconset resource="../resources.qrc">
-               <normaloff>:/icons/assets/icons/print.png</normaloff>:/icons/assets/icons/print.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item alignment="Qt::AlignLeft">
-            <widget class="QPushButton" name="btn_reports_refresh">
-             <property name="minimumSize">
-              <size>
-               <width>35</width>
-               <height>35</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset resource="../resources.qrc">
-               <normaloff>:/icons/assets/icons/refresh.png</normaloff>:/icons/assets/icons/refresh.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_14">
+              <property name="spacing">
+               <number>5</number>
+              </property>
+              <property name="leftMargin">
+               <number>2</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>2</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item alignment="Qt::AlignRight">
+               <widget class="QPushButton" name="btn_reports_print">
+                <property name="minimumSize">
+                 <size>
+                  <width>35</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../resources.qrc">
+                  <normaloff>:/icons/assets/icons/print.png</normaloff>:/icons/assets/icons/print.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item alignment="Qt::AlignRight">
+               <widget class="QPushButton" name="btn_reports_refresh">
+                <property name="minimumSize">
+                 <size>
+                  <width>35</width>
+                  <height>35</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../resources.qrc">
+                  <normaloff>:/icons/assets/icons/refresh.png</normaloff>:/icons/assets/icons/refresh.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
@@ -2319,6 +2595,12 @@ QDateEdit {
         <item>
          <widget class="QWidget" name="reports_bottom_widget" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_11">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QLabel" name="label">
              <property name="sizePolicy">
@@ -2826,7 +3108,61 @@ QDateEdit {
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuManagement">
+    <property name="title">
+     <string>Management</string>
+    </property>
+    <addaction name="actionExpense_Type"/>
+    <addaction name="actionList_of_Expense_Type"/>
+   </widget>
+   <widget class="QMenu" name="menuExit">
+    <property name="title">
+     <string>Exit</string>
+    </property>
+    <addaction name="actionLogout"/>
+   </widget>
+   <widget class="QMenu" name="menuReports">
+    <property name="title">
+     <string>Reports</string>
+    </property>
+    <addaction name="actionCooming_Soon"/>
+   </widget>
+   <addaction name="menuManagement"/>
+   <addaction name="menuExit"/>
+   <addaction name="menuReports"/>
   </widget>
+  <action name="actionExpense_Type">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/assets/icons/sales.png</normaloff>:/icons/assets/icons/sales.png</iconset>
+   </property>
+   <property name="text">
+    <string>Expense Type</string>
+   </property>
+  </action>
+  <action name="actionLogout">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/assets/icons/logout.png</normaloff>:/icons/assets/icons/logout.png</iconset>
+   </property>
+   <property name="text">
+    <string>Logout</string>
+   </property>
+  </action>
+  <action name="actionList_of_Expense_Type">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/assets/icons/reports.png</normaloff>:/icons/assets/icons/reports.png</iconset>
+   </property>
+   <property name="text">
+    <string>List of Expense Type</string>
+   </property>
+  </action>
+  <action name="actionCooming_Soon">
+   <property name="text">
+    <string>Cooming Soon</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../resources.qrc"/>

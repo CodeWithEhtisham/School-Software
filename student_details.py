@@ -33,7 +33,13 @@ class StudentDetailWindow(QMainWindow, FORM_MAIN):
                 condition=f"id = '{self.std_id}'")[0][0])
         self.Handle_Buttons()
         self.update_student_details()
-
+        
+        self.fees_table.setColumnWidth(0, 120)
+        self.fees_table.setColumnWidth(1, 120)
+        self.fees_table.setColumnWidth(2, 120)
+        self.fees_table.setColumnWidth(3, 120)
+        self.fees_table.setColumnWidth(4, 350)
+        self.fees_table.setColumnWidth(5, 120)
 
     def Handle_Buttons(self):
         self.btn_student.clicked.connect(self.student)
