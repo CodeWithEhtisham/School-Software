@@ -52,7 +52,7 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
         self.update(month, year,day)
         
 
-        def update(self, month, year,number_of_days):
+    def update(self, month, year,number_of_days):
             if not month or not year:
                 month = QDate.currentDate().month()
                 year = QDate.currentDate().year()

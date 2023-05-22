@@ -173,7 +173,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
                     LEFT JOIN fee f ON s.id = f.std_id 
                     LEFT JOIN transactions t ON f.id = t.fee_id   
                     INNER JOIN classes c ON s.class_id = c.id 
-                    WHERE t.date < '{first_date_of_this_month}' and t.paid_fee != 0
+                    WHERE t.date < '{first_date_of_this_month}' and t.remaining_fee != 0
                     AND t.id = (SELECT MAX(id) FROM transactions WHERE fee_id = f.id)
                     GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee;
                 """
@@ -183,7 +183,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
                     LEFT JOIN fee f ON s.id = f.std_id 
                     LEFT JOIN transactions t ON f.id = t.fee_id   
                     INNER JOIN classes c ON s.class_id = c.id 
-                    WHERE t.date < '{first_date_of_this_month}'  and t.paid_fee != 0
+                    WHERE t.date < '{first_date_of_this_month}'  and t.remaining_fee != 0
                     AND t.id = (SELECT MAX(id) FROM transactions WHERE fee_id = f.id)
                     AND c.class_name = '{selected_class}'
                     GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee;
