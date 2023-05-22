@@ -312,6 +312,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         # print('update student table', students)
         select_range_of_students = self.select_students_range.currentText()
         if students == None or students == False or QtGui.QCloseEvent == False:
+            self.select_class.setCurrentIndex(0)
             students = self.db.conn.execute(
                 f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id order by s.id desc").fetchall()
         if select_range_of_students != 'All':
@@ -455,9 +456,10 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def update_daily_report_table(self, reports=None):
         if reports is None or reports == False:
+            self.select_class_report.setCurrentIndex(0)
             reports = self.db.conn.execute(
                 f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{datetime.datetime.now().strftime('%Y/%m/%d')}' and t.paid_fee != 0").fetchall()
-        # print('daily',reports)
+        print('daily',reports)
 
         if reports:
             reciceved = 0
