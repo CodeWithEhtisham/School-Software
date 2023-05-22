@@ -143,7 +143,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.add_user_window.btn_save.clicked.connect(self.user_table_update)
 
     def user_status(self):
-        print(self.is_admin)
+        # print(self.is_admin)
         if self.is_admin == 0:
             self.btn_edit_user.show()
             self.btn_add_user.show()
@@ -309,13 +309,13 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.update_student_table()
 
     def update_student_table(self, students=None):
-        print('update student table', students)
+        # print('update student table', students)
         select_range_of_students = self.select_students_range.currentText()
         if students == None or students == False or QtGui.QCloseEvent == False:
             students = self.db.conn.execute(
                 f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id order by s.id desc").fetchall()
         if select_range_of_students != 'All':
-            print(select_range_of_students)
+            # print(select_range_of_students)
             students = students[:int(select_range_of_students)]
         if students:
             ln = str(len(students))

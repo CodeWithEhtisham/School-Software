@@ -29,87 +29,126 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
     def Handle_Buttons(self):
         self.select_month.dateChanged.connect(self.month_changed)
         self.btn_print.clicked.connect(self.print_report)
+        self.month_list=[
+            'jan_fee',
+            'feb_fee',
+            'march_fee',
+            'april_fee',
+            'may_fee',
+            'june_fee',
+            'july_fee',
+            'augest_fee',
+            'sep_fee',
+            'oct_fee',
+            'nov_fee',
+            'dec_fee'
+
+        ]
 
     def month_changed(self):
         month = self.select_month.date().month()
         year = self.select_month.date().year()
         day= self.select_month.date().day()
         self.update(month, year,day)
+        
 
-    def update(self, month, year,number_of_days):
-        if not month or not year:
-            month = QDate.currentDate().month()
-            year = QDate.currentDate().year()
-        self.lbl_month.setText(calendar.month_name[month])
-        # create a list of all the days in the month
-        if not number_of_days:
-            number_of_days = calendar.monthrange(year, month)[1]
+        def update(self, month, year,number_of_days):
+            if not month or not year:
+                month = QDate.currentDate().month()
+                year = QDate.currentDate().year()
+            month_name = calendar.month_name[month]
+            self.lbl_month.setText(f"{month_name} {year}")
+            # create a list of all the days in the month
+            if not number_of_days:
+                number_of_days = calendar.monthrange(year, month)[1]
 
-        days = [datetime(year, month, day).strftime('%Y/%m/%d')
-                for day in range(1, number_of_days+1)]
-        report = []
-        for day in days:
-            received = self.db.select(
+            days = [datetime(year, month, day).strftime('%Y/%m/%d')
+                    for day in range(1, number_of_days+1)]
+            report = []
+            for day in days:
+                received = self.db.select(
+                    table_name='transactions',
+                    columns='sum(paid_fee)',
+                    condition=f"date = '{day}'"
+                )
+                expense = self.db.select(
+                    table_name='expenses',
+                    columns='sum(amount)',
+                    condition=f"date = '{day}'"
+                )
+                # print(received, expense)
+                if received[0][0] or expense[0][0]:
+                    report.append([day, received[0][0], expense[0][0]])
+
+            self.monthly_accounts_table.setRowCount(len(report))
+            for index, row in enumerate(report):
+                for col_index, item in enumerate(row):
+                    self.monthly_accounts_table.setItem(
+                        index, col_index, QTableWidgetItem(str(item)))
+
+            start_date = datetime(year, month, 1).strftime('%Y/%m/%d')
+            end_date = datetime(year, month, number_of_days).strftime('%Y/%m/%d')
+            monthly_expense_report = self.db.conn.execute(
+                f"SELECT date,hoa,SUM(amount) FROM expenses WHERE date BETWEEN '{start_date}' AND '{end_date}' GROUP BY hoa"
+            ).fetchall()
+            for months in monthly_expense_report:
+                if months[0] not in days:
+                    monthly_expense_report.remove(months)
+            # print(monthly_expense_report)
+            self.monthly_expense_table.setRowCount(len(monthly_expense_report))
+            for index, row in enumerate(monthly_expense_report):
+                for col_index, item in enumerate(row):
+                    self.monthly_expense_table.setItem(
+                        index, col_index, QTableWidgetItem(str(item)))
+            amount_received = self.db.select(
                 table_name='transactions',
                 columns='sum(paid_fee)',
-                condition=f"date = '{day}'"
-            )
-            expense = self.db.select(
+                condition=f"date BETWEEN '{start_date}' AND '{end_date}'"
+            )[0][0]
+            if not amount_received:
+                amount_received = 0
+            self.lbl_total_amount_received.setText(str(f"{amount_received:,}"))
+            try:
+                remaining = self.db.select_all(
+                    table_name='students',
+                    columns='sum(remaining_fee)'
+                )[0][0]
+            except:
+                remaining = 0
+            if not remaining:
+                remaining = 0
+            self.lbl_total_amount_remaining.setText(str(f"{remaining:,}"))
+            expensees = self.db.select(
                 table_name='expenses',
                 columns='sum(amount)',
-                condition=f"date = '{day}'"
-            )
-            # print(received, expense)
-            if received[0][0] or expense[0][0]:
-                report.append([day, received[0][0], expense[0][0]])
-
-        self.monthly_accounts_table.setRowCount(len(report))
-        for index, row in enumerate(report):
-            for col_index, item in enumerate(row):
-                self.monthly_accounts_table.setItem(
-                    index, col_index, QTableWidgetItem(str(item)))
-
-        start_date = datetime(year, month, 1).strftime('%Y/%m/%d')
-        end_date = datetime(year, month, number_of_days).strftime('%Y/%m/%d')
-        monthly_expense_report = self.db.conn.execute(
-            f"SELECT date,hoa,SUM(amount) FROM expenses WHERE date BETWEEN '{start_date}' AND '{end_date}' GROUP BY hoa"
-        ).fetchall()
-        for month in monthly_expense_report:
-            if month[0] not in days:
-                monthly_expense_report.remove(month)
-        # print(monthly_expense_report)
-        self.monthly_expense_table.setRowCount(len(monthly_expense_report))
-        for index, row in enumerate(monthly_expense_report):
-            for col_index, item in enumerate(row):
-                self.monthly_expense_table.setItem(
-                    index, col_index, QTableWidgetItem(str(item)))
-        amount_received = self.db.select(
-            table_name='transactions',
-            columns='sum(paid_fee)',
-            condition=f"date BETWEEN '{start_date}' AND '{end_date}'"
-        )[0][0]
-        if not amount_received:
-            amount_received = 0
-        self.lbl_total_amount_received.setText(str(f"{amount_received:,}"))
-        try:
-            remaining = self.db.select_all(
-                table_name='students',
-                columns='sum(remaining_fee)'
+                condition=f"date BETWEEN '{start_date}' AND '{end_date}'"
             )[0][0]
-        except:
-            remaining = 0
-        if not remaining:
-            remaining = 0
-        self.lbl_total_amount_remaining.setText(str(f"{remaining:,}"))
-        expensees = self.db.select(
-            table_name='expenses',
-            columns='sum(amount)',
-            condition=f"date BETWEEN '{start_date}' AND '{end_date}'"
-        )[0][0]
-        if not expensees:
-            expensees = 0
-        self.lbl_total_expense.setText(str(f"{expensees:,}"))
-        self.lbl_net_balance.setText(str(f"{amount_received-expensees:,}"))
+            if not expensees:
+                expensees = 0
+            self.lbl_total_expense.setText(str(f"{expensees:,}"))
+            self.lbl_net_balance.setText(str(f"{amount_received-expensees:,}"))
+
+            # get complete year amount which will be received
+            year_start_date = datetime(year, 1, 1).strftime('%Y/%m/%d')
+            year_end_date = datetime(year, 12, 31).strftime('%Y/%m/%d')
+            amount_received = self.db.select(
+                table_name='fee',
+                columns='sum(total)',
+                condition=f"date BETWEEN '{year_start_date}' AND '{year_end_date}'"
+            )
+            self.lbl_total_amount.setText(str(f"{amount_received[0][0] if amount_received[0][0] else 0:,}"))
+            # this mount total amount which will be received
+            # month_start_date = datetime(year, month, 1).strftime('%Y/%m/%d')
+            # month_end_date = datetime(year, month, number_of_days).strftime('%Y/%m/%d')
+            # print(month_start_date, month_end_date)
+
+            amount_received = self.db.select(
+                table_name='fee',
+                columns=f'sum({self.month_list[month-1]})',
+                condition=f"date BETWEEN '{year_start_date}' AND '{year_end_date}'"
+            )
+            self.lbl_total_this_month.setText(str(f"{amount_received[0][0] if amount_received[0][0] else 0:,}"))
+            self.lbl_remaining_this_month.setText(str(f"{amount_received[0][0]-expensees if amount_received[0][0] else 0:,}"))
 
     # PRINT MONTHLY
     def print_report(self):
