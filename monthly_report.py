@@ -40,6 +40,7 @@ class MonthlyReportWindow(QMainWindow, FORM_MAIN):
         if not month or not year:
             month = QDate.currentDate().month()
             year = QDate.currentDate().year()
+        self.lbl_month.setText(calendar.month_name[month])
         # create a list of all the days in the month
         if not number_of_days:
             number_of_days = calendar.monthrange(year, month)[1]

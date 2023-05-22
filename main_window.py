@@ -118,6 +118,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.select_class.currentIndexChanged.connect(
             self.student_search_class)
 
+        self.select_students_range.currentIndexChanged.connect(
+            self.update_student_table_range)
+
         self.btn_edit_class.clicked.connect(self.edit_class)
         self.btn_edit_subject.clicked.connect(self.edit_subject)
         self.btn_edit_expense.clicked.connect(self.edit_expense)
@@ -130,7 +133,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.btn_add_user.clicked.connect(self.add_user)
         self.btn_search_expense.clicked.connect(self.search_date_expense)
         self.user_status()
-
+    
+    def update_student_table_range(self):
+        self.update_student_table()
     def add_user(self):
         from create_user import CreateUserWindow
         self.add_user_window = CreateUserWindow(1)
@@ -160,19 +165,31 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def defaulters(self):
         first_date_of_this_month = datetime.date.today().replace(day=1).strftime("%Y/%m/%d")
-        print(first_date_of_this_month)
-
-        query = f"""SELECT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, MAX(t.date) as last_transaction_date ,t.id
+        # print(first_date_of_this_month)
+        selected_class= self.select_class_report.currentText()
+        if selected_class == 'Select Class':
+            query = f"""SELECT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, MAX(t.date) as last_transaction_date ,t.id
                     FROM students s 
                     LEFT JOIN fee f ON s.id = f.std_id 
                     LEFT JOIN transactions t ON f.id = t.fee_id   
                     INNER JOIN classes c ON s.class_id = c.id 
-                    WHERE t.date < '{first_date_of_this_month}' 
+                    WHERE t.date < '{first_date_of_this_month}' and t.paid_fee != 0
                     AND t.id = (SELECT MAX(id) FROM transactions WHERE fee_id = f.id)
                     GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee;
                 """
+        else:
+            query = f"""SELECT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, MAX(t.date) as last_transaction_date ,t.id
+                    FROM students s 
+                    LEFT JOIN fee f ON s.id = f.std_id 
+                    LEFT JOIN transactions t ON f.id = t.fee_id   
+                    INNER JOIN classes c ON s.class_id = c.id 
+                    WHERE t.date < '{first_date_of_this_month}'  and t.paid_fee != 0
+                    AND t.id = (SELECT MAX(id) FROM transactions WHERE fee_id = f.id)
+                    AND c.class_name = '{selected_class}'
+                    GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee;
+                """
         reports = self.db.conn.execute(query).fetchall()
-        print('defalter', reports)
+        # print('defalter', reports)
         if reports:
             # reciceved = 0
             self.daily_reports_table.setRowCount(0)
@@ -292,9 +309,14 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.update_student_table()
 
     def update_student_table(self, students=None):
+        print('update student table', students)
+        select_range_of_students = self.select_students_range.currentText()
         if students == None or students == False or QtGui.QCloseEvent == False:
             students = self.db.conn.execute(
-                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id").fetchall()
+                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id order by s.id desc").fetchall()
+        if select_range_of_students != 'All':
+            print(select_range_of_students)
+            students = students[:int(select_range_of_students)]
         if students:
             ln = str(len(students))
             self.students_table.setRowCount(0)
@@ -409,11 +431,17 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def update_expense_table(self, expense=None):
         if expense is None or expense == False:
+            current_month = datetime.datetime.now().strftime('%Y/%m')
             expense = self.db.select(
                 table_name='expenses',
                 columns="date,hoa,amount,payment_type,recipient_name,comment",
-                condition=f"date = '{datetime.datetime.now().strftime('%Y/%m/%d')}'",
+                condition=f"date LIKE '%{current_month}%'",
             )
+            # expense = self.db.select(
+            #     table_name='expenses',
+            #     columns="date,hoa,amount,payment_type,recipient_name,comment",
+            #     condition=f"date = '{datetime.datetime.now().strftime('%Y/%m/%d')}'",
+            # )
         if expense:
             amount = 0
             self.expense_table.setRowCount(0)
@@ -534,6 +562,11 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.update_class_table()
 
     def reports(self):
+        classes=self.db.conn.execute(
+            f"SELECT class_name FROM classes").fetchall()
+        if classes:
+            for i in classes:
+                self.select_class_report.addItem(i[0])
         self.stackedWidget.setCurrentWidget(self.reports_page)
         self.update_daily_report_table()
 
@@ -657,14 +690,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         # when pressin red x button on student details window
         self.student_details_window.closeEvent = self.update_student_table_x_button
 
-        # self.student_details_window.edit_fee_window.btn_save.clicked.connect(
-        #     self.update_student_table)
-        # self.add_fees_window.btn_save.clicked.connect(
-        #     self.update_student_table)
-        # self.pay_fee_window.btn_save.clicked.connect(
-        #     self.update_student_table)
-        # self.school_leaving_window.btn_save.clicked.connect(
-        #     self.update_student_table)
+
 
     def logout(self):
         self.close()
