@@ -76,7 +76,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
      # HANDLE BUTTONS
 
     def Handle_Buttons(self):
-        self.btn_logout.clicked.connect(self.logout)
+        # self.btn_logout.clicked.connect(self.logout)
+        self.action_logout.triggered.connect(self.logout)
         self.btn_change_password.clicked.connect(self.change_password)
         self.btn_edit_user.clicked.connect(self.edit_user)
         self.btn_add_school_details.clicked.connect(self.add_school_details)
@@ -101,8 +102,10 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.btn_add_expense.clicked.connect(self.add_expense)
         self.btn_expense_type.clicked.connect(self.expense_type)
 
-        self.btn_monthly.clicked.connect(self.monthly_report)
-        self.btn_yearly.clicked.connect(self.yearly_report)
+        # self.btn_monthly.clicked.connect(self.monthly_report)
+        # self.btn_yearly.clicked.connect(self.yearly_report)
+        self.action_monthly.triggered.connect(self.monthly_report)
+        self.action_yearly.triggered.connect(self.yearly_report)
 
         self.btn_reports_print.clicked.connect(self.print_daily_report)
         self.btn_print_expense.clicked.connect(self.print_expense)
@@ -150,8 +153,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.btn_add_school_details.show()
             self.btn_edit_school_details.show()
             self.users_table.show()
-            self.btn_monthly.show()
-            self.btn_yearly.show()
+            # self.btn_monthly.show()
+            # self.btn_yearly.show()
             self.btn_change_password.show()
         else:
             self.btn_edit_user.hide()
@@ -159,8 +162,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.btn_add_school_details.hide()
             self.btn_edit_school_details.hide()
             self.users_table.hide()
-            self.btn_monthly.hide()
-            self.btn_yearly.hide()
+            # self.btn_monthly.hide()
+            # self.btn_yearly.hide()
             self.btn_change_password.hide()
 
     def defaulters(self):
@@ -314,7 +317,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
         if students == None or students == False or QtGui.QCloseEvent == False:
             self.select_class.setCurrentIndex(0)
             students = self.db.conn.execute(
-                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id order by s.id desc").fetchall()
+                f"SELECT s.addmission_date,s.addmission_no,s.name,s.f_name,c.class_name,s.student_image,s.remaining_fee,status FROM students s INNER JOIN classes c ON s.class_id=c.id order by c.id asc").fetchall()
         if select_range_of_students != 'All':
             # print(select_range_of_students)
             students = students[:int(select_range_of_students)]
@@ -928,6 +931,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
                     </tbody>
     
                 </table>
+                <hr>
+                <h2>Total Expense:-    """+self.total_expense.text()+"""</h2>
             </body>
             </html>
             """
