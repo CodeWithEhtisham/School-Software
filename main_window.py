@@ -420,11 +420,14 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def search_expense(self):
         search = self.txt_expense_search.text()
+        if search == "":
+            self.update_expense_table()
+            return
         data = self.db.select(
             table_name='expenses',
             columns="date,hoa,amount,payment_type,recipient_name,comment",
             condition=f"date LIKE '%{search}%' OR hoa LIKE '%{search}%' OR amount LIKE '%{search}%' OR payment_type LIKE '%{search}%' OR recipient_name LIKE '%{search}%' OR comment LIKE '%{search}%'")
-        if data:
+        if data :
             self.update_expense_table(data)
         else:
             self.expense_table.setRowCount(0)
