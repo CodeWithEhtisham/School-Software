@@ -456,6 +456,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
                     self.expense_table.setItem(
                         row, column, QTableWidgetItem(str(item)))
             self.total_expense.setText(str(f"{amount:,}"))
+        else:
+            self.expense_table.setRowCount(0)
+            self.total_expense.setText("0")
 
     def update_daily_report_table(self, reports=None):
         if reports is None or reports == False:
@@ -498,8 +501,13 @@ class MainWindow(QMainWindow, FORM_MAIN):
     def search_date_report(self):
         from_date = self.report_from_date.date().toString('yyyy/MM/dd')
         to_date = self.report_to_date.date().toString('yyyy/MM/dd')
-        reports = self.db.conn.execute(
-            f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date BETWEEN '{from_date}' and '{to_date}' and t.paid_fee != 0").fetchall()
+        class_name = self.select_class_report.currentText()
+        if class_name =="Select Class":
+            reports = self.db.conn.execute(
+                f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date BETWEEN '{from_date}' and '{to_date}' and t.paid_fee != 0").fetchall()
+        else:
+            reports = self.db.conn.execute(
+                f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date BETWEEN '{from_date}' and '{to_date}' and t.paid_fee != 0 and c.class_name='{class_name}'").fetchall()
         if reports:
             self.update_daily_report_table(reports)
             expense = self.db.conn.execute(
@@ -799,7 +807,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
                 <p> """+school_info[0][2]+""" </p>
                 <h2> Contact : """+school_info[0][1]+""" </h2>
                 <h1> Daily Report </h1>
-                <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>
+                <h3>Print Date: """+str(self.report_from_date.text())+""" - """+str(self.report_to_date.text())+"""</h3>
                 <table>
                     <thead>
                         <tr>
