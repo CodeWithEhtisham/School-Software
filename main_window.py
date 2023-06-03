@@ -199,6 +199,19 @@ class MainWindow(QMainWindow, FORM_MAIN):
             for row, form in enumerate(reports):
                 self.daily_reports_table.insertRow(row)
                 for column, item in enumerate(form):
+                    if column == 6:
+                        # get the student id
+                        fee_id = reports[row][7]
+                        # get description of tha all transactions of that fee id
+                        description = self.db.conn.execute(
+                            f"SELECT description FROM transactions WHERE fee_id = {fee_id}").fetchall()
+                        # if Add Fee is in the description then remove it with empty string
+                        description = [i[0] if 'Add Fee' not in i[0] else '' for i in description]
+                        # description = [i[0] for i in description]
+                        description = ', '.join(description)
+                        item= f"{item} {description}"
+                        
+                        
                     self.daily_reports_table.setItem(
                         row, column, QTableWidgetItem(str(item)))
 
