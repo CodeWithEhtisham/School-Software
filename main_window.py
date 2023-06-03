@@ -548,9 +548,14 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.lbl_total_amount_remaining.setText("0")
             self.lbl_total_expense.setText("0")
             self.lbl_net_balance.setText("0")
-
+    def reset_button_colors(self):
+        for button in self.findChildren(QPushButton):
+            button.setStyleSheet("")
+            
     def home(self):
         self.stackedWidget.setCurrentWidget(self.home_page)
+        self.reset_button_colors()
+        self.btn_home.setStyleSheet("background-color: #4681f4; color: #FFFFFF;")
         school_info = self.db.select_all(
             table_name='school_info',
             columns="school_name,contact,address,logo",
@@ -570,11 +575,17 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def students(self):
         self.stackedWidget.setCurrentWidget(self.students_page)
+        self.reset_button_colors()
+        self.btn_students.setStyleSheet(
+            "background-color: #4681f4; color: #FFFFFF;")
         self.add_select_class()
         self.update_student_table()
 
     def student_class(self):
         self.stackedWidget.setCurrentWidget(self.class_page)
+        self.reset_button_colors()
+        self.btn_class.setStyleSheet(
+            "background-color: #4681f4; color: #FFFFFF;")
         self.update_class_table()
 
     def reports(self):
@@ -584,10 +595,16 @@ class MainWindow(QMainWindow, FORM_MAIN):
             for i in classes:
                 self.select_class_report.addItem(i[0])
         self.stackedWidget.setCurrentWidget(self.reports_page)
+        self.reset_button_colors()
+        self.btn_reports.setStyleSheet(
+            "background-color: #4681f4; color: #FFFFFF;")
         self.update_daily_report_table()
 
     def expenses(self):
         self.stackedWidget.setCurrentWidget(self.expense_page)
+        self.reset_button_colors()
+        self.btn_expense.setStyleSheet(
+            "background-color: #4681f4; color: #FFFFFF;")
         self.update_expense_table()
 
     def user_table_update(self):
@@ -605,6 +622,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
 
     def settings(self):
         self.stackedWidget.setCurrentWidget(self.settings_page)
+        self.reset_button_colors()
+        self.btn_settings.setStyleSheet(
+            "background-color: #4681f4; color: #FFFFFF;")
         self.user_table_update()
         db = DBHandler()
         data = db.select_all('school_info', "*")
@@ -810,7 +830,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
                 <p> """+school_info[0][2]+""" </p>
                 <h2> Contact : """+school_info[0][1]+""" </h2>
                 <h1> Daily Report </h1>
-                <h3>Print Date: """+str(self.report_from_date.text())+""" - """+str(self.report_to_date.text())+"""</h3>
+                <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>
+                <h3>Selected Date: From: """+str(self.report_from_date.text())+""" To: """+str(self.report_to_date.text())+"""</h3>
                 <table>
                     <thead>
                         <tr>
