@@ -167,6 +167,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.btn_change_password.hide()
 
     def defaulters(self):
+        self.lbl_reports.setText("Defaulters")
         first_date_of_this_month = datetime.date.today().replace(day=1).strftime("%Y/%m/%d")
         # print(first_date_of_this_month)
         selected_class= self.select_class_report.currentText()
@@ -477,6 +478,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.total_expense.setText("0")
 
     def update_daily_report_table(self, reports=None):
+        self.lbl_reports.setText("Reports")
         if reports is None or reports == False:
             self.select_class_report.setCurrentIndex(0)
             reports = self.db.conn.execute(
@@ -515,6 +517,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.lbl_net_balance.setText("0")
 
     def search_date_report(self):
+        self.lbl_reports.setText("Daily Reports")
         from_date = self.report_from_date.date().toString('yyyy/MM/dd')
         to_date = self.report_to_date.date().toString('yyyy/MM/dd')
         class_name = self.select_class_report.currentText()
@@ -842,7 +845,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
                 <h1> """+school_info[0][0]+"""</h1>
                 <p> """+school_info[0][2]+""" </p>
                 <h2> Contact : """+school_info[0][1]+""" </h2>
-                <h1> Daily Report </h1>
+                <h1> """+str(self.lbl_reports.text())+""" </h1>
                 <h3>Print Date: """+str(QDate.currentDate().toString('dd-MM-yyyy'))+"""</h3>
                 <h3>Selected Date: From: """+str(self.report_from_date.text())+""" To: """+str(self.report_to_date.text())+"""</h3>
                 <table>
