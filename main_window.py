@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtGui, QtPrintSupport
 import sys
+import re
 from os import path
 from PyQt5.uic import loadUiType
 from add_student import AddStudentWindow
@@ -72,7 +73,26 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.report_to_date.setDate(QDate.currentDate())
         self.expense_from_date.setDate(QDate.currentDate())
         self.expense_to_date.setDate(QDate.currentDate())
-
+        self.fee_list = [
+            'january',
+            'february',
+            'march',
+            'april',
+            'may',
+            'june',
+            'july',
+            'august',
+            'september',
+            'october',
+            'november',
+            'december'
+            'admission_fee',
+            'annual_fund',
+            'computer_fee',
+            'science_fee',
+            'activity_fee',
+        ]
+        self.separator_pattern = r'[\s+\-,\s]'
      # HANDLE BUTTONS
 
     def Handle_Buttons(self):
@@ -210,13 +230,24 @@ class MainWindow(QMainWindow, FORM_MAIN):
                             f"SELECT description FROM transactions WHERE fee_id = {fee_id}").fetchall()
                         # if Add Fee is in the description then remove it with empty string
                         description = [i[0] if 'Add Fee' not in i[0] else '' for i in description]
-
-                        # description = [i[0] for i in description]
-                        # print(fee_id)
-                        # print name
-                        # print(form[1])
-                        # print(description)
+                        string=''
+                        remain=self.fee_list.copy()
                         description = ' '.join(description)
+                        description= re.split(self.separator_pattern, description)
+                        description=" ".join(description)
+                        for i in description.split():
+                            print(i)
+                            if i.lower() in remain:
+                                remain.remove(i.lower())
+                        # check class
+                        if form[2] in ['NURSERY', 'MONTI']:
+                            remain.remove('computer_fee')
+                            remain.remove('science_fee')
+                        else:
+                            remain.remove('activity_fee')
+                        # if row[2]
+                        description= " ".join(remain)
+                        print(description)
                         item= description
                         
                         
