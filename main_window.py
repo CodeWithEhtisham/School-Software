@@ -216,8 +216,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
                         # print name
                         # print(form[1])
                         # print(description)
-                        description = ', '.join(description)
-                        item= f"{item} {description}"
+                        description = ' '.join(description)
+                        item= description
                         
                         
                     self.daily_reports_table.setItem(
