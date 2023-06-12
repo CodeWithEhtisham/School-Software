@@ -63,6 +63,10 @@ class MainWindow(QMainWindow, FORM_MAIN):
         # REPORTS TABLE
         self.daily_reports_table.setColumnWidth(0, 180)
         self.daily_reports_table.setColumnWidth(1, 180)
+        self.daily_reports_table.setColumnWidth(2, 100)
+        self.daily_reports_table.setColumnWidth(3, 100)
+        self.daily_reports_table.setColumnWidth(4, 110)
+        self.daily_reports_table.setColumnWidth(5, 110)
 
         # EXPENSE TABLE
         self.expense_table.setColumnWidth(1, 300)
@@ -74,23 +78,23 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.expense_from_date.setDate(QDate.currentDate())
         self.expense_to_date.setDate(QDate.currentDate())
         self.fee_list = [
-            'january',
-            'february',
-            'march',
-            'april',
-            'may',
-            'june',
-            'july',
-            'august',
-            'september',
-            'october',
-            'november',
-            'december'
-            'admission_fee',
-            'annual_fund',
-            'computer_fee',
-            'science_fee',
-            'activity_fee',
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+            'Admission_fee',
+            'Annual_fund',
+            'Computer_fee',
+            'Science_fee',
+            'Activity_fee',
         ]
         self.separator_pattern = r'[\s+\-,\s]'
      # HANDLE BUTTONS
@@ -199,7 +203,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
                     INNER JOIN classes c ON s.class_id = c.id 
                     WHERE t.date < '{first_date_of_this_month}' and t.remaining_fee != 0
                     AND t.id = (SELECT MAX(id) FROM transactions WHERE fee_id = f.id)
-                    GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee;
+                    GROUP BY s.id, s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee
+                    ORDER BY c.id;
                 """
         else:
             query = f"""SELECT s.name, s.f_name, c.class_name, t.challan_no, t.paid_fee, s.remaining_fee, MAX(t.date) as last_transaction_date ,t.id
@@ -236,18 +241,18 @@ class MainWindow(QMainWindow, FORM_MAIN):
                         description= re.split(self.separator_pattern, description)
                         description=" ".join(description)
                         for i in description.split():
-                            print(i)
+                            # print(i)
                             if i.lower() in remain:
                                 remain.remove(i.lower())
                         # check class
-                        if form[2] in ['NURSERY', 'MONTI']:
-                            remain.remove('computer_fee')
-                            remain.remove('science_fee')
+                        if form[2] in ['NURSERY', 'MONTI', 'ONE', 'TWO']:
+                            remain.remove('Computer_fee')
+                            remain.remove('Science_fee')
                         else:
-                            remain.remove('activity_fee')
+                            remain.remove('Activity_fee')
                         # if row[2]
                         description= " ".join(remain)
-                        print(description)
+                        # print(description)
                         item= description
                         
                         
@@ -521,7 +526,7 @@ class MainWindow(QMainWindow, FORM_MAIN):
             self.select_class_report.setCurrentIndex(0)
             reports = self.db.conn.execute(
                 f"SELECT s.name,s.f_name,c.class_name,t.challan_no,t.paid_fee,t.remaining_fee,t.description FROM students s INNER JOIN classes c ON s.class_id=c.id INNER JOIN fee f ON s.id=f.std_id INNER JOIN transactions t ON f.id=t.fee_id WHERE t.date = '{datetime.datetime.now().strftime('%Y/%m/%d')}' and t.paid_fee != 0").fetchall()
-        print('daily',reports)
+        # print('daily',reports)
 
         if reports:
             reciceved = 0
