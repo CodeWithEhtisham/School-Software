@@ -27,6 +27,38 @@ class UpdatePayFeeWindow(QMainWindow, FORM_MAIN):
         self.txt_pay_fee_date.setDate(QtCore.QDate.currentDate())
         self.Handle_Buttons()
         self.update_fee_details()
+        
+        # Create a list of all the checkboxes
+        self.checkboxes = [
+            self.jan_cb,
+            self.feb_cb,
+            self.march_cb,
+            self.april_cb,
+            self.may_cb,
+            self.june_cb,
+            self.july_cb,
+            self.aug_cb,
+            self.sep_cb,
+            self.oct_cb,
+            self.nov_cb,
+            self.dec_cb,
+            self.adm_cb,
+            self.annual_cb,
+            self.comp_cb,
+            self.sci_cb,
+            self.activity_cb
+        ]
+        for checkbox in self.checkboxes:
+            checkbox.stateChanged.connect(self.update_description)
+
+    def update_description(self, state):
+        description = ""
+        for checkbox in self.checkboxes:
+            if checkbox.isChecked():
+                month = checkbox.text().capitalize()
+                description += month + " "
+        self.txt_description.setText(description.strip())
+
 
     def update_fee_details(self):
         # get previous fee details
@@ -99,7 +131,7 @@ class UpdatePayFeeWindow(QMainWindow, FORM_MAIN):
             paid_fee= float(self.txt_paid_fee.text())
             date= self.txt_pay_fee_date.date().toString('yyyy/MM/dd')
             challan_no= self.txt_challan_no.text()
-            description= self.txt_description.text()
+            description = self.txt_description.toPlainText()
             remaining_fee= float(self.txt_total_remaining.text())
             if paid_fee and date and challan_no and description and remaining_fee:
                 self.db.conn.execute(

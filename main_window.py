@@ -67,6 +67,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
         self.daily_reports_table.setColumnWidth(3, 100)
         self.daily_reports_table.setColumnWidth(4, 110)
         self.daily_reports_table.setColumnWidth(5, 110)
+        self.daily_reports_table.setWordWrap(True)
+        
 
         # EXPENSE TABLE
         self.expense_table.setColumnWidth(1, 300)
@@ -96,9 +98,9 @@ class MainWindow(QMainWindow, FORM_MAIN):
             'Science_fee',
             'Activity_fee',
         ]
-        self.separator_pattern = r'[\s+\-,\s]'
-     # HANDLE BUTTONS
-
+        self.separator_pattern = r'[\s+\-,\s ]'
+        
+    # HANDLE BUTTONS
     def Handle_Buttons(self):
         # self.btn_logout.clicked.connect(self.logout)
         self.action_logout.triggered.connect(self.logout)
@@ -238,8 +240,8 @@ class MainWindow(QMainWindow, FORM_MAIN):
                         string=''
                         remain=self.fee_list.copy()
                         description = ' '.join(description)
-                        description= re.split(self.separator_pattern, description)
-                        description=" ".join(description)
+                        description = re.split(self.separator_pattern, description)
+                        description = ' '.join(description)
                         for i in description.split():
                             # print(i)
                             if i.lower() in remain:
@@ -251,13 +253,11 @@ class MainWindow(QMainWindow, FORM_MAIN):
                         else:
                             remain.remove('Activity_fee')
                         # if row[2]
-                        description= " ".join(remain)
+                        description = ' '.join(remain)
                         # print(description)
-                        item= description
+                        item = description
                         
-                        
-                    self.daily_reports_table.setItem(
-                        row, column, QTableWidgetItem(str(item)))
+                    self.daily_reports_table.setItem(row, column, QTableWidgetItem(str(item)))
 
             # self.lbl_total_amount_received.setText(str(reciceved))
             # remaining = self.db.conn.execute(
