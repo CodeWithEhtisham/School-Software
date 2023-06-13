@@ -123,6 +123,7 @@ class PayFeeWindow(QMainWindow, FORM_MAIN):
             date = self.txt_pay_fee_date.date().toString('yyyy/MM/dd')
             challan_no = self.txt_challan_no.text()
             description = self.txt_description.toPlainText()
+            print(description)
             remaining_fee = float(self.txt_total_remaining.text())
             if paid_fee and date and challan_no and description:
                 fee_id = self.db.select(

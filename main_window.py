@@ -239,13 +239,16 @@ class MainWindow(QMainWindow, FORM_MAIN):
                         description = [i[0] if 'Add Fee' not in i[0] else '' for i in description]
                         string=''
                         remain=self.fee_list.copy()
+                        # print(description)
+                        # print(form[0])
                         description = ' '.join(description)
                         description = re.split(self.separator_pattern, description)
                         description = ' '.join(description)
+                        # print(description)
                         for i in description.split():
                             # print(i)
-                            if i.lower() in remain:
-                                remain.remove(i.lower())
+                            if i in remain:
+                                remain.remove(i)
                         # check class
                         if form[2] in ['NURSERY', 'MONTI', 'ONE', 'TWO']:
                             remain.remove('Computer_fee')
